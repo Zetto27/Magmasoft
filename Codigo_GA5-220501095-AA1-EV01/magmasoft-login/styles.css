@@ -1,0 +1,127 @@
+/* RESET BASICO */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* FUENTE GENERAL */
+body {
+  font-family: "Poppins", sans-serif;
+  background: #eef1f5; /* fondo suave */
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* CONTENEDOR */
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* TARJETA LOGIN */
+.login-card {
+  background: white;
+  padding: 40px;
+  width: 380px;
+
+  border-radius: 20px;
+
+  /* sombra moderna */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+
+  text-align: center;
+}
+
+/* LOGO */
+.logo img {
+  width: 280px;
+  margin-bottom: 15px;
+}
+
+/* TITULO */
+.login-card h2 {
+  margin-bottom: 25px;
+  font-weight: 500;
+  color: #333;
+}
+
+/* INPUTS */
+.input-group {
+  margin-bottom: 15px;
+}
+
+/* CAMPOS */
+.input-group input {
+  width: 100%;
+  padding: 14px;
+
+  border-radius: 12px;
+  border: 1px solid #ddd;
+
+  font-size: 15px;
+
+  outline: none;
+}
+
+/* EFECTO AL HACER CLICK */
+.input-group input:focus {
+  border-color: #2f6fed;
+}
+
+/* OPCIONES */
+.options {
+  text-align: left;
+  margin: 10px 0 20px 0;
+
+  font-size: 14px;
+}
+
+/* BOTON LOGIN */
+.login-btn {
+  width: 100%;
+  padding: 14px;
+
+  border: none;
+
+  border-radius: 12px;
+
+  background: linear-gradient(90deg, #2f6fed, #1c4db4);
+
+  color: white;
+  font-size: 16px;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+/* EFECTO HOVER */
+.login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* LINKS */
+.links {
+  margin-top: 20px;
+
+  display: flex;
+  justify-content: space-between;
+
+  font-size: 14px;
+}
+
+/* ESTILO LINKS */
+.links a {
+  text-decoration: none;
+  color: #2f6fed;
+}
+
+/* HOVER */
+.links a:hover {
+  text-decoration: underline;
+}
