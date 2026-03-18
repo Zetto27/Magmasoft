@@ -23,7 +23,7 @@ body {
 
 /* TARJETA */
 .register-card {
-  background: #f5f6f8;
+  background: white;
   padding: 45px 40px;
   border-radius: 20px;
   width: 380px;
@@ -55,7 +55,7 @@ h2 {
   padding: 14px 40px;
   border-radius: 12px;
   border: 1px solid #dcdcdc;
-  background: #f7f7f7;
+  background: white;
   font-size: 14px;
   outline: none;
   transition: 0.3s;
