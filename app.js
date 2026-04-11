@@ -15,7 +15,7 @@ app.use("/resources", express.static("public"));
 app.use("/resources", express.static(__dirname + "/public"));
 
 // 5 Motor de plantillas
-app.set("view engine", "ejs");
+coapp.set("view engine", "ejs");
 
 // 6 invocamos a bcryptjs para encriptar las contraseñas
 const bcryptjs = require("bcryptjs");
@@ -25,7 +25,7 @@ const session = require("express-session");
 app.use(
   session({
     secret: "secret",
-    resave: true,
+    resave: false,
     saveUninitialized: true,
   }),
 );
