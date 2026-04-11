@@ -15,7 +15,7 @@ app.use("/resources", express.static("public"));
 app.use("/resources", express.static(__dirname + "/public"));
 
 // 5 Motor de plantillas
-coapp.set("view engine", "ejs");
+app.set("view engine", "ejs");
 
 // 6 invocamos a bcryptjs para encriptar las contraseñas
 const bcryptjs = require("bcryptjs");
@@ -29,8 +29,9 @@ app.use(
     saveUninitialized: true,
   }),
 );
+// 8 Invocamos a la conexion de la BD
+const connection = require("./Database/db");
 
-console.log(__dirname);
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
