@@ -7,6 +7,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // 3 Invocamos a dotenv para cargar las variables de entorno
+const dotenv = require("dotenv");
+dotenv.config({ path: "./env/.env" });
+
+// 4 Dirección de la carpeta pública
+app.use("/resources", express.static("public"));
+app.use("/resources", express.static(__dirname + "/public"));
+
+console.log(__dirname);
+
+// 5 Rutas
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
