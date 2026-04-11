@@ -14,10 +14,23 @@ dotenv.config({ path: "./env/.env" });
 app.use("/resources", express.static("public"));
 app.use("/resources", express.static(__dirname + "/public"));
 
+// 5 Motor de plantillas
+app.set("view engine", "ejs");
+
+// 6 invocamos a bcryptjs para encriptar las contraseñas
+const bcryptjs = require("bcryptjs");
+
+// 7 var de sesiones
+const session = require("express-session");
+app.use(
+  session({
+    secret: "secret",
+    resave: true,
+    saveUninitialized: true,
+  }),
+);
+
 console.log(__dirname);
-
-// 5 Rutas
-
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
