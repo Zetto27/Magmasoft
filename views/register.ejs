@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Registro - MagmaSoft</title>
+
+    <link rel="stylesheet" href="resources/css/registro.css" />
+
+    <!-- ICONOS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <!-- FUENTE -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="register-card">
+        <img src="resources/css/img/logo.png" class="logo" />
+
+        <h2>Registro de usuario</h2>
+
+        <form action="register" method="POST">
+          <div class="input-group">
+            <i class="fa fa-user"></i>
+            <input type="text" placeholder="Nombre" name="user" required />
+          </div>
+
+          <div class="input-group">
+            <i class="fa fa-user"></i>
+            <input type="password" placeholder="Contraseña" name="pass" required />
+          </div>
+
+          <div class="input-group">
+            <i class="fa fa-id-card"></i>
+            <input type="text" placeholder="Cédula" required />
+          </div>
+
+          <div class="input-group">
+            <i class="fa fa-envelope"></i>
+            <input type="email" placeholder="Correo electrónico" required />
+          </div>
+
+          <div class="input-group">
+            <i class="fa fa-phone"></i>
+            <input type="tel" placeholder="Número de teléfono" required />
+          </div>
+
+          <input type="submit" value="Guardar" class="register-btn" />
+
+          <p class="login-link">
+            ¿Ya tienes una cuenta?
+            <a href="/login">Iniciar sesión</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

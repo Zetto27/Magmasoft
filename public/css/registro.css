@@ -24,7 +24,7 @@ body {
 /* TARJETA */
 .register-card {
   background: white;
-  padding: 45px 40px;
+  padding: 0px 40px 30px 40px;
   border-radius: 20px;
   width: 380px;
   text-align: center;
@@ -34,7 +34,7 @@ body {
 /* LOGO */
 .logo {
   width: 270px;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
 
 /* TITULO */
