@@ -32,6 +32,8 @@ app.use(
 // 8 Invocamos a la conexion de la BD
 const connection = require("./Database/db");
 
+// 9 Rutas
+
 app.get("/login", (req, res) => {
   res.render("login");
 });
@@ -39,6 +41,8 @@ app.get("/login", (req, res) => {
 app.get("/registro", (req, res) => {
   res.render("register");
 });
+
+// 10 Ruta para registrar usuarios
 
 app.listen(3000, () => {
   console.log("Server is running in http://localhost:3000");
