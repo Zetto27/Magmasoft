@@ -31,8 +31,17 @@ app.use(
 );
 // 8 Invocamos a la conexion de la BD
 const connection = require("./Database/db");
+const e = require("express");
 
 // 9 Rutas
+
+app.get("/", (req, res) => {
+  res.redirect("/login");
+});
+
+app.get("/index", (req, res) => {
+  res.render("index");
+});
 
 app.get("/login", (req, res) => {
   res.render("login");
@@ -100,6 +109,47 @@ app.post("/register", async (req, res) => {
       });
     },
   );
+});
+
+// 11 Ruta para autenticar usuarios
+app.post("/auth", async (req, res) => {
+  const document = req.body.document;
+  const pass = req.body.pass;
+
+  if (document && pass) {
+    connection.query("SELECT * FROM users WHERE document = ?", [document], async (error, results) => {
+      if (error) {
+        console.log(error);
+        return res.send("Error del servidor");
+      }
+
+      if (results.length == 0 || !(await bcryptjs.compare(pass, results[0].pass))) {
+        return res.render("login", {
+          alert: true,
+          alertTitle: "Error",
+          alertMessage: "Usuario o contraseña incorrecta",
+          alertIcon: "error",
+          showConfirmButton: true,
+          timer: false,
+          ruta: "/login",
+        });
+      }
+
+      req.session.rol = results[0].rol;
+
+      return res.render("login", {
+        alert: true,
+        alertTitle: "Conexión exitosa",
+        alertMessage: "¡Bienvenido " + results[0].user,
+        alertIcon: "success",
+        showConfirmButton: false,
+        timer: 1500,
+        ruta: "/index",
+      });
+    });
+  } else {
+    return res.send("Faltan datos");
+  }
 });
 
 app.listen(3000, () => {

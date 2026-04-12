@@ -24,18 +24,15 @@
         <h2>Inicio de sesión</h2>
 
         <!-- FORMULARIO -->
-        <form action="auth" method="POST">
-          <!-- CAMPO USERNAME -->
+        <form action="/auth" method="POST">
           <div class="input-group">
-            <input type="text" name="'user" id="'user" placeholder="Usuario" required />
+            <input type="text" name="document" id="document" placeholder="Cedula" required />
           </div>
 
-          <!-- CAMPO PASSWORD -->
           <div class="input-group">
             <input type="password" name="pass" id="pass" placeholder="Contraseña" required />
           </div>
 
-          <!-- CHECKBOX -->
           <div class="options">
             <label>
               <input type="checkbox" />
@@ -43,10 +40,8 @@
             </label>
           </div>
 
-          <!-- BOTON LOGIN -->
-          <button value="login" class="login-btn">Iniciar sesión</button>
+          <button type="submit" class="login-btn">Iniciar sesión</button>
 
-          <!-- LINKS -->
           <div class="links">
             <a href="#">¿Olvidaste tu contraseña?</a>
             <a href="/registro">Registrarse</a>
@@ -54,5 +49,19 @@
         </form>
       </div>
     </div>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<% if (typeof alert !== "undefined") { %>
+<script>
+  Swal.fire({
+    title: '<%= alertTitle %>',
+    text: '<%= alertMessage %>',
+    icon: '<%= alertIcon %>',
+    showConfirmButton: <%= showConfirmButton %>,
+    timer: <%= timer %>
+  }).then(() => {
+    window.location.href ='<%= ruta %>';
+  });
+</script>
+<% } %>
   </body>
 </html>
