@@ -27,8 +27,8 @@ body {
   background: white;
   padding: 40px;
   width: 380px;
-
   border-radius: 20px;
+  padding-top: 0; /* eliminamos el padding superior para el logo */
 
   /* sombra moderna */
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
@@ -39,7 +39,7 @@ body {
 /* LOGO */
 .logo img {
   width: 280px;
-  margin-bottom: 15px;
+  margin: 0;
 }
 
 /* TITULO */

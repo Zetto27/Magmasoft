@@ -32,8 +32,8 @@ app.use(
 // 8 Invocamos a la conexion de la BD
 const connection = require("./Database/db");
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
+app.get("/login", (req, res) => {
+  res.render("login");
 });
 
 app.listen(3000, () => {

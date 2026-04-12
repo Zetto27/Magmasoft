@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>MagmaSoft Login</title>
+
+    <!-- Conectamos el archivo CSS -->
+    <link rel="stylesheet" href="resources/css/login.css" />
+    <!-- Fuente moderna de Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  </head>
+
+  <body>
+    <!-- CONTENEDOR PRINCIPAL -->
+    <div class="container">
+      <!-- TARJETA DE LOGIN -->
+      <div class="login-card">
+        <!-- LOGO -->
+        <div class="logo">
+          <img src="resources/css/img/Logo.png" alt="MagmaSoft" />
+        </div>
+
+        <!-- TITULO -->
+        <h2>Inicio de sesión</h2>
+
+        <!-- FORMULARIO -->
+        <form action="auth" method="POST">
+          <!-- CAMPO USERNAME -->
+          <div class="input-group">
+            <input type="text" name="'user" id="'user" placeholder="Usuario" required />
+          </div>
+
+          <!-- CAMPO PASSWORD -->
+          <div class="input-group">
+            <input type="password" name="pass" id="pass" placeholder="Contraseña" required />
+          </div>
+
+          <!-- CHECKBOX -->
+          <div class="options">
+            <label>
+              <input type="checkbox" />
+              Recordar sesión
+            </label>
+          </div>
+
+          <!-- BOTON LOGIN -->
+          <button value="login" class="login-btn">Iniciar sesión</button>
+
+          <!-- LINKS -->
+          <div class="links">
+            <a href="#">¿Olvidaste tu contraseña?</a>
+            <a href="/Codigo_GA5-220501095-AA1-EV01/registro-magmasoft/registro.html">Registrarse</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
