@@ -1,8 +1,44 @@
-<html>
-  <head>
-    <title>MagmaSoft</title>
-  </head>
-  <body>
-    <h1>Bienvenido a MagmaSoft</h1>
-  </body>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>MagmaSoft</title>
+
+  <link rel="stylesheet" href="resources/css/index.css">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<% if (login) { %>
+
+  <h1>Bienvenido a MagmaSoft</h1>
+  <p>Has iniciado sesión como: <strong><%= user %></strong></p>
+  <a href="/logout">Cerrar sesión</a>
+
+<% } else { %>
+
+  <div class="logout-container">
+
+    <div class="content">
+      <img src="resources/css/img/Logo.png" alt="MagmaSoft" class="logo">
+
+      <h1>
+        Bienvenido a <span>MagmaSoft</span>
+      </h1>
+
+      <div class="line"></div>
+
+      <p>Debe iniciar sesión para acceder</p>
+
+      <a href="/login" class="login-link">Iniciar sesión</a>
+    </div>
+
+    <img src="resources/css/img/mountains.png" alt="Montañas" class="mountains">
+
+  </div>
+
+<% } %>
+
+</body>
 </html>

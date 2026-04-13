@@ -4,33 +4,60 @@
     <meta charset="UTF-8" />
     <title>MagmaSoft Login</title>
 
-    <!-- Conectamos el archivo CSS -->
     <link rel="stylesheet" href="resources/css/login.css" />
-    <!-- Fuente moderna de Google -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
-    <!-- CONTENEDOR PRINCIPAL -->
     <div class="container">
-      <!-- TARJETA DE LOGIN -->
+
+      <!-- PANEL IZQUIERDO -->
+      <div class="left-panel">
+        <img src="resources/css/img/Logo.png" alt="MagmaSoft" class="brand-logo" />
+
+        <h1>
+          Bienvenido a <br />
+          <span>MagmaSoft</span>
+        </h1>
+
+        <div class="line"></div>
+
+        <p>
+          Sistema de gestión inteligente para<br />
+          administrar y optimizar procesos<br />
+          de tu empresa.
+        </p>
+      </div>
+
+      <!-- TARJETA LOGIN -->
       <div class="login-card">
-        <!-- LOGO -->
         <div class="logo">
-          <img src="resources/css/img/Logo.png" alt="MagmaSoft" />
         </div>
 
-        <!-- TITULO -->
         <h2>Inicio de sesión</h2>
 
-        <!-- FORMULARIO -->
         <form action="/auth" method="POST">
           <div class="input-group">
-            <input type="text" name="document" id="document" placeholder="Cedula" required />
+            <input
+              type="text"
+              name="document"
+              id="document"
+              placeholder="Cédula"
+              required
+            />
           </div>
 
           <div class="input-group">
-            <input type="password" name="pass" id="pass" placeholder="Contraseña" required />
+            <input
+              type="password"
+              name="pass"
+              id="pass"
+              placeholder="Contraseña"
+              required
+            />
           </div>
 
           <div class="options">
@@ -40,28 +67,31 @@
             </label>
           </div>
 
-          <button type="submit" class="login-btn">Iniciar sesión</button>
+          <button type="submit" class="login-btn">
+            Iniciar sesión
+          </button>
 
           <div class="links">
-            <a href="#">¿Olvidaste tu contraseña?</a>
             <a href="/registro">Registrarse</a>
           </div>
         </form>
       </div>
     </div>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<% if (typeof alert !== "undefined") { %>
-<script>
-  Swal.fire({
-    title: '<%= alertTitle %>',
-    text: '<%= alertMessage %>',
-    icon: '<%= alertIcon %>',
-    showConfirmButton: <%= showConfirmButton %>,
-    timer: <%= timer %>
-  }).then(() => {
-    window.location.href ='<%= ruta %>';
-  });
-</script>
-<% } %>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <% if (typeof alert !== "undefined") { %>
+    <script>
+      Swal.fire({
+        title: '<%= alertTitle %>',
+        text: '<%= alertMessage %>',
+        icon: '<%= alertIcon %>',
+        showConfirmButton: <%= showConfirmButton %>,
+        timer: <%= timer %>
+      }).then(() => {
+        window.location.href = '/<%= ruta %>';
+      });
+    </script>
+    <% } %>
   </body>
 </html>

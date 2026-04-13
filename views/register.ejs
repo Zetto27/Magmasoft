@@ -25,12 +25,12 @@
         <form action="/register" method="POST">
           <div class="input-group">
             <i class="fa fa-user"></i>
-            <input type="text" placeholder="Name" name="user" required />
+            <input type="text" placeholder="Nombre" name="user" required />
           </div>
 
           <div class="select-container">
             <i class="fas fa-key icon"></i>
-            <select name="rol" id="rol" required>
+            <select name="rol" id="rol" required>x
               <option disabled selected>Selecciona una opción</option>
               <option>Administrador</option>
               <option>Supervisor</option>
@@ -58,11 +58,6 @@
           </div>
 
           <input type="submit" value="Guardar" class="register-btn" />
-
-          <p class="login-link">
-            ¿Ya tienes una cuenta?
-            <a href="/login">Iniciar sesión</a>
-          </p>
         </form>
       </div>
     </div>
@@ -76,7 +71,7 @@
     showConfirmButton: <%= showConfirmButton %>,
     timer: <%= timer %>
   }).then(() => {
-    window.location.href = '<%= ruta %>';
+    window.location.href = /'<%= ruta %>';
   });
 </script>
 <% } %>

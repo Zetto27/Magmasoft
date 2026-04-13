@@ -35,14 +35,6 @@ const e = require("express");
 
 // 9 Rutas
 
-app.get("/", (req, res) => {
-  res.redirect("/login");
-});
-
-app.get("/index", (req, res) => {
-  res.render("index");
-});
-
 app.get("/login", (req, res) => {
   res.render("login");
 });
@@ -134,8 +126,9 @@ app.post("/auth", async (req, res) => {
           ruta: "/login",
         });
       }
-
+      req.session.loggedin = true;
       req.session.rol = results[0].rol;
+      req.session.user = results[0].user;
 
       return res.render("login", {
         alert: true,
@@ -144,12 +137,34 @@ app.post("/auth", async (req, res) => {
         alertIcon: "success",
         showConfirmButton: false,
         timer: 1500,
-        ruta: "/index",
+        ruta: "",
       });
     });
   } else {
     return res.send("Faltan datos");
   }
+});
+
+// 12 Ruta para cerrar sesión
+app.get("/", (req, res) => {
+  if (req.session.loggedin) {
+    res.render("index", {
+      login: true,
+      rol: req.session.rol,
+      user: req.session.user,
+    });
+  } else {
+    res.render("index", {
+      login: false,
+      message: "Debe iniciar sesión para acceder",
+    });
+  }
+});
+// 13 Iniciamos el servidor
+app.get("/logout", (req, res) => {
+  req.session.destroy(() => {
+    res.redirect("/");
+  });
 });
 
 app.listen(3000, () => {
