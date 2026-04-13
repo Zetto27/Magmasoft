@@ -123,7 +123,7 @@ app.post("/auth", async (req, res) => {
           alertIcon: "error",
           showConfirmButton: true,
           timer: false,
-          ruta: "/login",
+          ruta: "/",
         });
       }
       req.session.loggedin = true;
@@ -168,16 +168,6 @@ app.get("/logout", (req, res) => {
 });
 
 // RUTA ESPRES
-app.get("/", (req, res) => {
-  if (!req.session.loggedin) {
-    return res.redirect("/login");
-  }
-
-  res.render("dashboard", {
-    user: req.session.user,
-    page: "dashboard",
-  });
-});
 
 app.get("/users", (req, res) => {
   if (!req.session.loggedin) {
