@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mensajes</title>
+    <link rel="stylesheet" href="/resources/css/index.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  </head>
+  <body>
+    <div class="dashboard-layout">
+      <%- include('partials/sidebar') %>
+
+      <main class="dashboard-content">
+        <%- include('partials/topbar') %>
+
+        <section class="dashboard-header">
+          <h2>Mensajes</h2>
+          <p>Centro de comunicaciones del sistema</p>
+        </section>
+
+        <section class="map-card">
+          <h3>Contenido de Mensajes</h3>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const layout = document.querySelector(".dashboard-layout");
+
+      function toggleSidebar() {
+        layout.classList.toggle("collapsed");
+
+        localStorage.setItem("sidebarCollapsed", layout.classList.contains("collapsed"));
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        if (localStorage.getItem("sidebarCollapsed") === "true") {
+          layout.classList.add("collapsed");
+        }
+      });
+    </script>
+  </body>
+</html>

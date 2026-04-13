@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Usuarios</title>
+    <script>
+      if (localStorage.getItem("sidebarCollapsed") === "true") {
+        document.documentElement.classList.add("sidebar-collapsed");
+      }
+    </script>
+    <link rel="stylesheet" href="/resources/css/index.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  </head>
+  <body>
+    <div class="dashboard-layout">
+      <%- include('partials/sidebar') %>
+
+      <main class="dashboard-content">
+        <%- include('partials/topbar') %>
+
+        <section class="dashboard-header">
+          <h2>Usuarios</h2>
+          <p>Gestión de usuarios del sistema</p>
+        </section>
+
+        <section class="map-card">
+          <h3>Aquí irá tu tabla de usuarios</h3>
+        </section>
+      </main>
+    </div>
+    <script>
+      const layout = document.querySelector(".dashboard-layout");
+
+      if (document.documentElement.classList.contains("sidebar-collapsed")) {
+        layout.classList.add("collapsed");
+      }
+
+      function toggleSidebar() {
+        layout.classList.toggle("collapsed");
+
+        const collapsed = layout.classList.contains("collapsed");
+
+        localStorage.setItem("sidebarCollapsed", collapsed);
+
+        document.documentElement.classList.toggle("sidebar-collapsed", collapsed);
+      }
+
+      /* ACTIVE AUTOMÁTICO */
+      document.querySelectorAll(".nav-link").forEach((link) => {
+        if (link.href === window.location.href) {
+          link.classList.add("active");
+        }
+      });
+    </script>
+  </body>
+</html>

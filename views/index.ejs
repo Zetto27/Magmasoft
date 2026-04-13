@@ -3,42 +3,99 @@
 <head>
   <meta charset="UTF-8">
   <title>MagmaSoft</title>
+  <script>
+  if (localStorage.getItem("sidebarCollapsed") === "true") {
+    document.documentElement.classList.add("sidebar-collapsed");
+  }
+</script>
 
   <link rel="stylesheet" href="resources/css/index.css">
 
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
 <% if (login) { %>
 
-  <h1>Bienvenido a MagmaSoft</h1>
-  <p>Has iniciado sesión como: <strong><%= user %></strong></p>
-  <a href="/logout">Cerrar sesión</a>
+<div class="dashboard-layout">
+
+  <!-- SIDEBAR REUTILIZABLE -->
+  <%- include('partials/sidebar') %>
+
+  <main class="dashboard-content">
+
+    <header class="topbar">
+      <div></div>
+
+      <div class="user-badge">
+        <img src="resources/css/img/user-avatar.png" alt="Usuario">
+        <span><%= user %></span>
+      </div>
+    </header>
+
+    <section class="dashboard-header">
+      <h2>Dashboard</h2>
+      <p>Bienvenido, <strong><%= user %></strong></p>
+    </section>
+
+    <section class="map-card">
+      <img src="resources/css/img/dashboard-map.png" alt="Mapa">
+    </section>
+
+  </main>
+
+</div>
 
 <% } else { %>
 
-  <div class="logout-container">
+<div class="logout-container">
 
-    <div class="content">
-      <img src="resources/css/img/Logo.png" alt="MagmaSoft" class="logo">
+  <div class="content">
+    <img src="resources/css/img/Logo.png" alt="MagmaSoft" class="logo">
 
-      <h1>
-        Bienvenido a <span>MagmaSoft</span>
-      </h1>
+    <h1>
+      Bienvenido a <span>MagmaSoft</span>
+    </h1>
 
-      <div class="line"></div>
+    <div class="line"></div>
 
-      <p>Debe iniciar sesión para acceder</p>
+    <p>Debe iniciar sesión para acceder</p>
 
-      <a href="/login" class="login-link">Iniciar sesión</a>
-    </div>
-
-    <img src="resources/css/img/mountains.png" alt="Montañas" class="mountains">
-
+    <a href="/login" class="login-link">Iniciar sesión</a>
   </div>
 
+  <img src="resources/css/img/mountains.png" alt="Montañas" class="mountains">
+
+</div>
+
 <% } %>
+
+<script>
+const layout = document.querySelector(".dashboard-layout");
+
+if (document.documentElement.classList.contains("sidebar-collapsed")) {
+    layout.classList.add("collapsed");
+}
+
+function toggleSidebar() {
+    layout.classList.toggle("collapsed");
+
+    const collapsed = layout.classList.contains("collapsed");
+
+    localStorage.setItem("sidebarCollapsed", collapsed);
+
+    document.documentElement.classList.toggle("sidebar-collapsed", collapsed);
+}
+
+/* ACTIVE AUTOMÁTICO */
+document.querySelectorAll(".nav-link").forEach(link => {
+    if (link.href === window.location.href) {
+        link.classList.add("active");
+    }
+});
+</script>
 
 </body>
 </html>

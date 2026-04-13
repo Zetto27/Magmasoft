@@ -167,6 +167,56 @@ app.get("/logout", (req, res) => {
   });
 });
 
+// RUTA ESPRES
+app.get("/", (req, res) => {
+  if (!req.session.loggedin) {
+    return res.redirect("/login");
+  }
+
+  res.render("dashboard", {
+    user: req.session.user,
+    page: "dashboard",
+  });
+});
+
+app.get("/users", (req, res) => {
+  if (!req.session.loggedin) {
+    return res.redirect("/login");
+  }
+
+  res.render("users", {
+    user: req.session.user,
+    page: "users",
+  });
+});
+
+app.get("/trabajos", (req, res) => {
+  if (!req.session.loggedin) return res.redirect("/login");
+
+  res.render("trabajos", {
+    user: req.session.user,
+    page: "trabajos",
+  });
+});
+
+app.get("/reportes", (req, res) => {
+  if (!req.session.loggedin) return res.redirect("/login");
+
+  res.render("reportes", {
+    user: req.session.user,
+    page: "reportes",
+  });
+});
+
+app.get("/mensajes", (req, res) => {
+  if (!req.session.loggedin) return res.redirect("/login");
+
+  res.render("mensajes", {
+    user: req.session.user,
+    page: "mensajes",
+  });
+});
+
 app.listen(3000, () => {
   console.log("Server is running in http://localhost:3000");
 });
