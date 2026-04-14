@@ -3,29 +3,227 @@
   <head>
     <meta charset="UTF-8" />
     <title>Gestión de Trabajos</title>
+
+    <link rel="stylesheet" href="/resources/css/index.css" />
+    <link rel="stylesheet" href="/resources/css/trabajos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
     <script>
       if (localStorage.getItem("sidebarCollapsed") === "true") {
         document.documentElement.classList.add("sidebar-collapsed");
       }
     </script>
-    <link rel="stylesheet" href="/resources/css/index.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   </head>
+
   <body>
     <div class="dashboard-layout">
       <%- include('partials/sidebar') %>
 
       <main class="dashboard-content">
+        <!-- TOPBAR FIJA -->
         <%- include('partials/topbar') %>
 
-        <section class="dashboard-header">
-          <h2>Gestión de Trabajos</h2>
-          <p>Administra los trabajos registrados en el sistema</p>
-        </section>
+        <!-- ÁREA SCROLLEABLE -->
+        <div class="dashboard-scroll">
+          <!-- HEADER STICKY -->
+          <section class="dashboard-header">
+            <h2>Gestión de Trabajos</h2>
+            <p>Administra los trabajos registrados en el sistema</p>
+          </section>
 
-        <section class="map-card">
-          <h3>Contenido de Gestión de Trabajos</h3>
-        </section>
+          <section class="map-card">
+            <!-- TOOLBAR -->
+            <section class="trabajos-toolbar">
+              <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Buscar por código, cliente u óptica..." />
+              </div>
+
+              <button class="btn-filter">
+                <i class="fas fa-filter"></i>
+                Filtros
+              </button>
+
+              <button class="btn-primary">
+                <i class="fas fa-plus"></i>
+                Nueva orden
+              </button>
+            </section>
+
+            <!-- TABLA -->
+            <section class="trabajos-card">
+              <table class="trabajos-table">
+                <thead>
+                  <tr>
+                    <th>Código / QR</th>
+                    <th>Cliente / Óptica</th>
+                    <th>Tipo de lente</th>
+                    <th>Etapa actual</th>
+                    <th>Estado</th>
+                    <th>Operario</th>
+                    <th>Fecha creación</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr class="active-row">
+                    <td>MAG-000125</td>
+                    <td>Óptica Visión Total</td>
+                    <td>Monofocal</td>
+                    <td><span class="badge blue">En proceso</span></td>
+                    <td>Tallado</td>
+                    <td>Juan Pérez</td>
+                    <td>24/05/2025 10:30</td>
+                    <td class="actions">
+                      <i class="fas fa-eye"></i>
+                      <i class="fas fa-pen"></i>
+                      <i class="fas fa-ellipsis-v"></i>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>MAG-000124</td>
+                    <td>Óptica Central</td>
+                    <td>Progresivo</td>
+                    <td><span class="badge yellow">Pendiente</span></td>
+                    <td>Tratamiento</td>
+                    <td>María Gómez</td>
+                    <td>24/05/2025 09:45</td>
+                    <td class="actions">
+                      <i class="fas fa-eye"></i>
+                      <i class="fas fa-pen"></i>
+                      <i class="fas fa-ellipsis-v"></i>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+
+            <!-- DETALLE -->
+            <section class="trabajo-detalle-grid">
+              <div class="detalle-card">
+                <h3>Detalle del trabajo: MAG-000125</h3>
+
+                <div class="timeline">
+                  <div class="timeline-step done">
+                    <div class="circle">
+                      <i class="fas fa-check"></i>
+                    </div>
+                    <span>Recepción</span>
+                  </div>
+
+                  <div class="timeline-step active">
+                    <div class="circle">2</div>
+                    <span>Tallado</span>
+                  </div>
+
+                  <div class="timeline-step">
+                    <div class="circle">3</div>
+                    <span>Tratamiento</span>
+                  </div>
+
+                  <div class="timeline-step">
+                    <div class="circle">4</div>
+                    <span>Pulido</span>
+                  </div>
+
+                  <div class="timeline-step">
+                    <div class="circle">5</div>
+                    <span>Ensamble</span>
+                  </div>
+
+                  <div class="timeline-step">
+                    <div class="circle">6</div>
+                    <span>Validación</span>
+                  </div>
+
+                  <div class="timeline-step">
+                    <div class="circle">7</div>
+                    <span>Entregado</span>
+                  </div>
+                </div>
+
+                <div class="detalle-info">
+                  <div>
+                    <p>
+                      <strong>Cliente / Óptica:</strong>
+                      Óptica Visión Total
+                    </p>
+                    <p>
+                      <strong>Tipo de lente:</strong>
+                      Monofocal
+                    </p>
+                    <p>
+                      <strong>Observaciones:</strong>
+                      Ninguna
+                    </p>
+                  </div>
+
+                  <div>
+                    <p>
+                      <strong>Operario actual:</strong>
+                      Juan Pérez
+                    </p>
+                    <p>
+                      <strong>Fecha estimada entrega:</strong>
+                      27/05/2025
+                    </p>
+                    <p>
+                      <strong>Tiempo en etapa actual:</strong>
+                      1h 15m
+                    </p>
+                  </div>
+                </div>
+
+                <button class="btn-primary update-btn">Actualizar etapa</button>
+              </div>
+
+              <!-- PANEL DERECHO -->
+              <div class="side-panel">
+                <div class="comments-card">
+                  <h4>Historial de comentarios</h4>
+
+                  <div class="comment-item">
+                    <strong>Juan Pérez</strong>
+                    <span>24/05 10:30</span>
+                    <p>Inicia tallado del lente.</p>
+                  </div>
+
+                  <div class="comment-item">
+                    <strong>Claudia Mogollon</strong>
+                    <span>24/05 09:30</span>
+                    <p>Trabajo recibido correctamente.</p>
+                  </div>
+                </div>
+
+                <div class="info-card">
+                  <h4>Información adicional</h4>
+                  <p>
+                    <strong>Código / QR:</strong>
+                    MAG-000125
+                  </p>
+                  <p>
+                    <strong>Teléfono cliente:</strong>
+                    310 123 4567
+                  </p>
+                  <p>
+                    <strong>Fecha creación:</strong>
+                    24/05/2025
+                  </p>
+                  <p>
+                    <strong>Material:</strong>
+                    CR-39
+                  </p>
+                  <p>
+                    <strong>Color:</strong>
+                    Transparente
+                  </p>
+                </div>
+              </div>
+            </section>
+          </section>
+        </div>
       </main>
     </div>
 
@@ -46,7 +244,6 @@
         document.documentElement.classList.toggle("sidebar-collapsed", collapsed);
       }
 
-      /* ACTIVE AUTOMÁTICO */
       document.querySelectorAll(".nav-link").forEach((link) => {
         if (link.href === window.location.href) {
           link.classList.add("active");

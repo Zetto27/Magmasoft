@@ -9,6 +9,7 @@
       }
     </script>
     <link rel="stylesheet" href="/resources/css/index.css" />
+    <link rel="stylesheet" href="/resources/css/reportes.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   </head>
   <body>
@@ -18,14 +19,16 @@
       <main class="dashboard-content">
         <%- include('partials/topbar') %>
 
-        <section class="dashboard-header">
-          <h2>Reportes</h2>
-          <p>Consulta reportes y estadísticas del sistema</p>
-        </section>
+        <div class="dashboard-scroll">
+          <section class="dashboard-header">
+            <h2>Reportes</h2>
+            <p>Consulta reportes y estadísticas del sistema</p>
+          </section>
 
-        <section class="map-card">
-          <h3>Contenido de Reportes</h3>
-        </section>
+          <section class="map-card">
+            <h3>Contenido de Reportes</h3>
+          </section>
+        </div>
       </main>
     </div>
     <script>

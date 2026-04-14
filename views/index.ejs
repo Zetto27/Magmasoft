@@ -24,27 +24,22 @@
   <!-- SIDEBAR REUTILIZABLE -->
   <%- include('partials/sidebar') %>
 
-  <main class="dashboard-content">
+ 
 
-    <header class="topbar">
-      <div></div>
 
-      <div class="user-badge">
-        <img src="resources/css/img/user-avatar.png" alt="Usuario">
-        <span><%= user %></span>
-      </div>
-    </header>
+        <main class="dashboard-content">
+        <%- include('partials/topbar') %>
 
-    <section class="dashboard-header">
-      <h2>Dashboard</h2>
-      <p>Bienvenido, <strong><%= user %></strong></p>
-    </section>
+        <div class="dashboard-scroll">
+          <section class="dashboard-header">
+            <h2>Dashboard</h2>
+          </section>
 
-    <section class="map-card">
-      <img src="resources/css/img/dashboard-map.png" alt="Mapa">
-    </section>
-
-  </main>
+          <section class="map-card">
+            <h3>Contenido</h3>
+          </section>
+        </div>
+      </main>
 
 </div>
 
