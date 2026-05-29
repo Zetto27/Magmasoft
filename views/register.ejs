@@ -20,7 +20,7 @@
       <div class="register-card">
         <img src="resources/css/img/logo.png" class="logo" />
 
-        <h2>Registro de usuario</h2>
+        <h2>Crear usuario</h2>
 
         <form action="/register" method="POST">
           <div class="input-group">
@@ -30,11 +30,11 @@
 
           <div class="select-container">
             <i class="fas fa-key icon"></i>
-            <select name="rol" id="rol" required>x
+            <select name="rol" id="rol" required>
               <option disabled selected>Selecciona una opción</option>
               <option>Administrador</option>
               <option>Supervisor</option>
-              <option>Operarios</option>
+              <option>Operario</option>
             </select>
           </div>
 
@@ -57,7 +57,15 @@
             <input type="password" placeholder="Contraseña" name="pass" required />
           </div>
 
-          <input type="submit" value="Guardar" class="register-btn" />
+          <div class="buttons-container">
+          <button type="submit" class="register-btn">
+            Guardar
+          </button>
+
+          <a href="/users" class="register-btn">
+            Cancelar
+          </a>
+        </div>
         </form>
       </div>
     </div>
@@ -71,7 +79,7 @@
     showConfirmButton: <%= showConfirmButton %>,
     timer: <%= timer %>
   }).then(() => {
-    window.location.href = /'<%= ruta %>';
+    window.location.href = '<%= ruta %>';
   });
 </script>
 <% } %>

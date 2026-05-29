@@ -97,10 +97,140 @@ app.post("/register", async (req, res) => {
         alertIcon: "success",
         showConfirmButton: false,
         timer: 1500,
-        ruta: "/login",
+        ruta: "/users",
       });
     },
   );
+});
+app.post("/users/create", async (req, res) => {
+  const user = req.body.user;
+  const rol = req.body.rol;
+  const document = req.body.document;
+  const email = req.body.email;
+  const celular = req.body.celular;
+  const pass = req.body.pass;
+
+  let passwordHash = await bcryptjs.hash(pass, 8);
+
+  connection.query(
+    "INSERT INTO users SET ?",
+    {
+      user,
+      rol,
+      document,
+      email,
+      celular,
+      pass: passwordHash,
+    },
+    (error) => {
+      if (error) {
+        console.log(error);
+        return res.redirect("/users");
+      }
+
+      res.redirect("/users");
+    },
+  );
+});
+// Editar usuario creado
+app.get("/users/edit/:id", (req, res) => {
+  if (!req.session.loggedin) {
+    return res.redirect("/login");
+  }
+
+  const id = req.params.id;
+
+  connection.query("SELECT * FROM users WHERE id = ?", [id], (error, results) => {
+    if (error) {
+      console.log(error);
+      return res.send("Error");
+    }
+
+    if (results.length === 0) {
+      return res.redirect("/users");
+    }
+
+    res.render("edit-user", {
+      usuario: results[0],
+    });
+  });
+});
+
+app.post("/users/update/:id", async (req, res) => {
+  const id = req.params.id;
+
+  const { user, rol, document, email, celular, pass } = req.body;
+
+  try {
+    // Si no escribieron contraseña
+    if (!pass || pass.trim() === "") {
+      connection.query(
+        `
+        UPDATE users
+        SET
+          user = ?,
+          rol = ?,
+          document = ?,
+          email = ?,
+          celular = ?
+        WHERE id = ?
+        `,
+        [user, rol, document, email, celular, id],
+        (error) => {
+          if (error) {
+            console.log(error);
+            return res.send("Error al actualizar");
+          }
+
+          res.redirect("/users");
+        },
+      );
+    } else {
+      // Si escribieron nueva contraseña
+      const passwordHash = await bcryptjs.hash(pass, 8);
+
+      connection.query(
+        `
+        UPDATE users
+        SET
+          user = ?,
+          rol = ?,
+          document = ?,
+          email = ?,
+          celular = ?,
+          pass = ?
+        WHERE id = ?
+        `,
+        [user, rol, document, email, celular, passwordHash, id],
+        (error) => {
+          if (error) {
+            console.log(error);
+            return res.send("Error al actualizar");
+          }
+
+          res.redirect("/users");
+        },
+      );
+    }
+  } catch (error) {
+    console.log(error);
+    res.send("Error al actualizar usuario");
+  }
+});
+
+// Elimiar usuario
+app.get("/users/delete/:id", (req, res) => {
+  const id = req.params.id;
+
+  connection.query("DELETE FROM users WHERE id = ?", [id], (error) => {
+    if (error) {
+      console.log(error);
+
+      return res.redirect("/users");
+    }
+
+    res.redirect("/users");
+  });
 });
 
 // 11 Ruta para autenticar usuarios
@@ -174,9 +304,17 @@ app.get("/users", (req, res) => {
     return res.redirect("/login");
   }
 
-  res.render("users", {
-    user: req.session.user,
-    page: "users",
+  connection.query("SELECT id,user,rol,document,email,celular FROM users ORDER BY id DESC", (error, results) => {
+    if (error) {
+      console.log(error);
+      return res.send("Error al consultar usuarios");
+    }
+
+    res.render("users", {
+      user: req.session.user,
+      page: "users",
+      usuarios: results,
+    });
   });
 });
 
@@ -204,6 +342,15 @@ app.get("/mensajes", (req, res) => {
   res.render("mensajes", {
     user: req.session.user,
     page: "mensajes",
+  });
+});
+
+app.get("/configuracion", (req, res) => {
+  if (!req.session.loggedin) return res.redirect("/login");
+
+  res.render("configuracion", {
+    user: req.session.user,
+    page: "configuracion",
   });
 });
 

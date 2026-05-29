@@ -274,3 +274,60 @@ h1 span {
   border-radius: 24px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
 }
+/* =========================
+   MODALES
+========================= */
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.45);
+
+  justify-content: center;
+  align-items: center;
+
+  z-index: 9999;
+}
+
+.modal-content {
+  width: 550px;
+  max-width: 90%;
+
+  background: #fff;
+
+  border-radius: 20px;
+
+  padding: 30px;
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h3 {
+  color: #153d7a;
+  margin-bottom: 20px;
+}
+
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.modal-content input,
+.modal-content select {
+  width: 100%;
+  padding: 12px 15px;
+
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
+
+  outline: none;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}

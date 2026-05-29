@@ -9,7 +9,10 @@
       }
     </script>
     <link rel="stylesheet" href="/resources/css/index.css" />
+    <link rel="stylesheet" href="/resources/css/trabajos.css"
+/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body>
     <div class="dashboard-layout">
@@ -18,14 +21,246 @@
       <main class="dashboard-content">
         <%- include('partials/topbar') %>
 
-        <section class="dashboard-header">
-          <h2>Usuarios</h2>
-          <p>Gestión de usuarios del sistema</p>
-        </section>
+        <div class="dashboard-scroll">
+          <section class="dashboard-header">
+            <h2>Usuarios</h2>
+            <p>Gestión de usuarios del sistema</p>
+          </section>
 
-        <section class="map-card">
-          <h3>Aquí irá tu tabla de usuarios</h3>
-        </section>
+          <section class="map-card">
+            <!-- Tcodigo para esta seccion -->
+                    
+                    <div class="trabajos-toolbar">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input
+              type="text"
+              id="buscarUsuario"
+              placeholder="Buscar usuario..."
+            />
+          </div>
+  <button
+  class="btn-primary"
+  onclick="abrirModalRegistro()"
+>
+  <i class="fas fa-plus"></i>
+  Nuevo Usuario
+</button>
+        </div>
+
+        <br />
+
+        <table class="trabajos-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Usuario</th>
+              <th>Rol</th>
+              <th>Documento</th>
+              <th>Email</th>
+              <th>Celular</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+                    <tr id="sinResultados" style="display: none;">
+          <td colspan="7" style="text-align:center; padding: 30px;">
+            No se encontraron usuarios
+          </td>
+        </tr>
+            <% usuarios.forEach(usuario => { %>
+
+           <tr class="fila-usuario">
+              <td><%= usuario.id %></td>
+
+              <td><%= usuario.user %></td>
+
+              <td><%= usuario.rol %></td>
+
+              <td><%= usuario.document %></td>
+
+              <td><%= usuario.email %></td>
+
+              <td><%= usuario.celular %></td>
+              <td class="actions">
+                  <i
+                    class="fas fa-pen"
+                    onclick="editarUsuario(
+                      '<%= usuario.id %>',
+                      '<%= usuario.user %>',
+                      '<%= usuario.rol %>',
+                      '<%= usuario.document %>',
+                      '<%= usuario.email %>',
+                      '<%= usuario.celular %>'
+                    )"
+                  ></i>
+                <i
+                  class="fas fa-trash"
+                  onclick="eliminarUsuario('<%= usuario.id %>')"
+                ></i>
+              </td>
+            </tr>
+
+            <% }) %>
+          </tbody>
+        </table>
+        <!-- MODAL NUEVO USUARIO -->
+
+<div id="registerModal" class="modal">
+  <div class="modal-content">
+
+    <h3>Nuevo Usuario</h3>
+
+    <form action="/users/create" method="POST">
+
+      <input
+        type="text"
+        name="user"
+        placeholder="Nombre completo"
+        required
+      >
+
+      <select name="rol" required>
+        <option value="">Seleccione un rol</option>
+        <option value="Administrador">Administrador</option>
+        <option value="Supervisor">Supervisor</option>
+        <option value="Operario">Operario</option>
+      </select>
+
+      <input
+        type="text"
+        name="document"
+        placeholder="Documento"
+        required
+      >
+
+      <input
+        type="email"
+        name="email"
+        placeholder="Correo electrónico"
+        required
+      >
+
+      <input
+        type="text"
+        name="celular"
+        placeholder="Celular"
+        required
+      >
+
+      <input
+        type="password"
+        name="pass"
+        placeholder="Contraseña"
+        required
+      >
+
+      <div class="modal-buttons">
+
+        <button
+          type="submit"
+          class="btn-primary"
+        >
+          Guardar
+        </button>
+
+        <button
+          type="button"
+          class="btn-primary"
+          onclick="cerrarModalRegistro()"
+        >
+          Cancelar
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+</div>
+<div id="editModal" class="modal">
+
+  <div class="modal-content">
+
+    <h3>Editar Usuario</h3>
+
+    <form id="editForm" method="POST">
+
+      <input
+        id="editUser"
+        type="text"
+        name="user"
+        required
+      >
+
+      <select
+        id="editRol"
+        name="rol"
+        required
+      >
+        <option value="Administrador">Administrador</option>
+        <option value="Supervisor">Supervisor</option>
+        <option value="Operario">Operario</option>
+      </select>
+
+      <input
+        id="editDocument"
+        type="text"
+        name="document"
+        required
+      >
+
+      <input
+        id="editEmail"
+        type="email"
+        name="email"
+        required
+      >
+
+      <input
+        id="editCelular"
+        type="text"
+        name="celular"
+        required
+      >
+      <small>
+        Deja este campo vacío si no deseas cambiar la contraseña
+      </small>
+
+      <input
+        id="editPass"
+        type="password"
+        name="pass"
+        placeholder="Nueva contraseña"
+      >
+
+      <div class="modal-buttons">
+
+        <button
+          type="submit"
+          class="btn-primary"
+        >
+          Actualizar
+        </button>
+
+        <button
+          type="button"
+          class="btn-primary"
+          onclick="cerrarModalEditar()"
+        >
+          Cancelar
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+          </section>
+        </div>
       </main>
     </div>
     <script>
@@ -45,12 +280,131 @@
         document.documentElement.classList.toggle("sidebar-collapsed", collapsed);
       }
 
-      /* ACTIVE AUTOMÁTICO */
       document.querySelectorAll(".nav-link").forEach((link) => {
         if (link.href === window.location.href) {
           link.classList.add("active");
         }
       });
     </script>
+    <script>
+
+function abrirModalRegistro() {
+  document.getElementById("registerModal").style.display = "flex";
+}
+
+function cerrarModalRegistro() {
+  document.getElementById("registerModal").style.display = "none";
+}
+
+</script>
+<script>
+
+function editarUsuario(
+  id,
+  user,
+  rol,
+  documento,
+  email,
+  celular
+) {
+
+  document.getElementById("editUser").value = user;
+
+  document.getElementById("editRol").value = rol;
+
+  document.getElementById("editDocument").value = documento;
+
+  document.getElementById("editEmail").value = email;
+
+  document.getElementById("editCelular").value = celular;
+
+  document.getElementById("editForm").action =
+    "/users/update/" + id;
+
+  document.getElementById("editModal").style.display =
+    "flex";
+}
+
+function cerrarModalEditar() {
+
+  document.getElementById("editModal").style.display =
+    "none";
+
+}
+
+</script>
+<script>
+
+function eliminarUsuario(id) {
+
+  Swal.fire({
+    title: "¿Eliminar usuario?",
+    text: "Esta acción no se puede deshacer",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#dc2626",
+    cancelButtonColor: "#6b7280",
+    confirmButtonText: "Eliminar",
+    cancelButtonText: "Cancelar"
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      window.location.href =
+        "/users/delete/" + id;
+
+    }
+
+  });
+
+}
+
+</script><script>
+
+const buscador = document.getElementById("buscarUsuario");
+
+buscador.addEventListener("keyup", function () {
+
+  const texto = this.value.toLowerCase();
+
+  const filas =
+    document.querySelectorAll(".fila-usuario");
+
+  let encontrados = 0;
+
+  filas.forEach((fila) => {
+
+    const contenido =
+      fila.textContent.toLowerCase();
+
+    if (contenido.includes(texto)) {
+
+      fila.style.display = "";
+      encontrados++;
+
+    } else {
+
+      fila.style.display = "none";
+
+    }
+
+  });
+
+  const mensaje =
+    document.getElementById("sinResultados");
+
+  if (encontrados === 0) {
+
+    mensaje.style.display = "";
+
+  } else {
+
+    mensaje.style.display = "none";
+
+  }
+
+});
+</script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </body>
 </html>

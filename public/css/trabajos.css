@@ -1,7 +1,7 @@
 /* =========================
    CONTENEDOR MODULO
 ========================= */
-.map-card {
+.trabajos-container {
   display: flex;
   flex-direction: column;
   gap: 25px;
@@ -209,4 +209,11 @@
   border-radius: 10px;
   cursor: pointer;
   font-weight: 600;
+}
+
+.btn-primary {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
