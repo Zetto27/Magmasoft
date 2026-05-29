@@ -133,29 +133,6 @@ app.post("/users/create", async (req, res) => {
   );
 });
 // Editar usuario creado
-app.get("/users/edit/:id", (req, res) => {
-  if (!req.session.loggedin) {
-    return res.redirect("/login");
-  }
-
-  const id = req.params.id;
-
-  connection.query("SELECT * FROM users WHERE id = ?", [id], (error, results) => {
-    if (error) {
-      console.log(error);
-      return res.send("Error");
-    }
-
-    if (results.length === 0) {
-      return res.redirect("/users");
-    }
-
-    res.render("edit-user", {
-      usuario: results[0],
-    });
-  });
-});
-
 app.post("/users/update/:id", async (req, res) => {
   const id = req.params.id;
 
@@ -319,12 +296,104 @@ app.get("/users", (req, res) => {
 });
 
 app.get("/trabajos", (req, res) => {
-  if (!req.session.loggedin) return res.redirect("/login");
+  if (!req.session.loggedin) {
+    return res.redirect("/login");
+  }
 
-  res.render("trabajos", {
-    user: req.session.user,
-    page: "trabajos",
+  connection.query(
+    `
+    SELECT *
+    FROM vista_trabajos_completa
+    ORDER BY id DESC
+    `,
+    (error, trabajos) => {
+      if (error) {
+        console.log(error);
+        return res.send("Error al cargar trabajos");
+      }
+
+      connection.query(
+        `
+        SELECT id, user, rol
+        FROM users
+        WHERE rol IN ('Operario','Supervisor')
+        ORDER BY user
+        `,
+        (error, operarios) => {
+          if (error) {
+            console.log(error);
+            return res.send("Error al cargar operarios");
+          }
+
+          connection.query(
+            `
+            SELECT *
+            FROM opticas
+            ORDER BY nombre
+            `,
+            (error, opticas) => {
+              if (error) {
+                console.log(error);
+                return res.send("Error al cargar ópticas");
+              }
+
+              res.render("trabajos", {
+                user: req.session.user,
+                page: "trabajos",
+                trabajos,
+                operarios,
+                opticas,
+              });
+            },
+          );
+        },
+      );
+    },
+  );
+});
+// elimiar orden de trabajo
+app.get("/trabajos/delete/:id", (req, res) => {
+  const id = req.params.id;
+
+  connection.query("DELETE FROM trabajos WHERE id = ?", [id], (error) => {
+    if (error) {
+      console.log(error);
+
+      return res.send("Error al eliminar trabajo");
+    }
+
+    res.redirect("/trabajos");
   });
+});
+
+// vista detalle de trabajo
+app.get("/trabajos/:id", (req, res) => {
+  const id = req.params.id;
+
+  connection.query(
+    `
+    SELECT *
+    FROM vista_trabajos_completa
+    WHERE id = ?
+    `,
+    [id],
+    (error, resultado) => {
+      if (error) {
+        console.log(error);
+
+        return res.send("Error al cargar trabajo");
+      }
+
+      if (resultado.length === 0) {
+        return res.send("Trabajo no encontrado");
+      }
+
+      res.render("detalle-trabajo", {
+        user: req.session.user,
+        trabajo: resultado[0],
+      });
+    },
+  );
 });
 
 app.get("/reportes", (req, res) => {

@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title>Gestión de Trabajos</title>
+    
 
     <link rel="stylesheet" href="/resources/css/index.css" />
     <link rel="stylesheet" href="/resources/css/trabajos.css" />
@@ -13,6 +14,14 @@
       if (localStorage.getItem("sidebarCollapsed") === "true") {
         document.documentElement.classList.add("sidebar-collapsed");
       }
+      function generarCodigoTrabajo(id) {
+
+  return (
+    "TR-" +
+    String(id).padStart(3, "0")
+  );
+
+}
     </script>
   </head>
 
@@ -35,27 +44,35 @@
           <section class="map-card trabajos-container">
             <!-- TOOLBAR -->
             <section class="trabajos-toolbar">
-              <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="Buscar por código, cliente u óptica..." />
-              </div>
+<div class="search-box">
+  <i class="fas fa-search"></i>
+
+  <input
+    type="text"
+    id="buscarTrabajo"
+    placeholder="Buscar por código, cliente u óptica..."
+  />
+</div>
 
               <button class="btn-filter">
                 <i class="fas fa-filter"></i>
                 Filtros
               </button>
 
-              <button class="btn-primary">
-                <i class="fas fa-plus"></i>
-                Nueva orden
-              </button>
+<button
+  class="btn-primary"
+  onclick="abrirModalNuevaOrden()"
+>
+  <i class="fas fa-plus"></i>
+  Nueva orden
+</button>
             </section>
 
             <!-- TABLA -->
             <section class="trabajos-card">
               <table class="trabajos-table">
                 <thead>
-                  <tr>
+               <tr>
                     <th>Código / QR</th>
                     <th>Cliente / Óptica</th>
                     <th>Tipo de lente</th>
@@ -67,37 +84,98 @@
                   </tr>
                 </thead>
 
-                <tbody>
-                  <tr class="active-row">
-                    <td>MAG-000125</td>
-                    <td>Óptica Visión Total</td>
-                    <td>Monofocal</td>
-                    <td><span class="badge blue">En proceso</span></td>
-                    <td>Tallado</td>
-                    <td>Juan Pérez</td>
-                    <td>24/05/2025 10:30</td>
-                    <td class="actions">
-                      <i class="fas fa-eye"></i>
-                      <i class="fas fa-pen"></i>
-                      <i class="fas fa-ellipsis-v"></i>
-                    </td>
-                  </tr>
+<tbody>
 
-                  <tr>
-                    <td>MAG-000124</td>
-                    <td>Óptica Central</td>
-                    <td>Progresivo</td>
-                    <td><span class="badge yellow">Pendiente</span></td>
-                    <td>Tratamiento</td>
-                    <td>María Gómez</td>
-                    <td>24/05/2025 09:45</td>
-                    <td class="actions">
-                      <i class="fas fa-eye"></i>
-                      <i class="fas fa-pen"></i>
-                      <i class="fas fa-ellipsis-v"></i>
-                    </td>
-                  </tr>
-                </tbody>
+  <% if (trabajos.length > 0) { %>
+
+    <tr id="sinTrabajos" style="display:none;">
+  <td colspan="8" style="text-align:center;padding:30px;">
+    No se encontraron trabajos
+  </td>
+</tr>
+    <% trabajos.forEach(trabajo => { %>
+
+      <tr class="fila-trabajo">
+
+        <td><%= trabajo.codigo %></td>
+
+        <td><%= trabajo.cliente_nombre %></td>
+
+        <td><%= trabajo.tipo_lente %></td>
+
+        <td>
+
+          <% if (trabajo.estado === 'En proceso') { %>
+
+            <span class="badge blue">
+              <%= trabajo.estado %>
+            </span>
+
+          <% } else if (trabajo.estado === 'Pendiente') { %>
+
+            <span class="badge yellow">
+              <%= trabajo.estado %>
+            </span>
+
+          <% } else { %>
+
+            <span class="badge">
+              <%= trabajo.estado %>
+            </span>
+
+          <% } %>
+
+        </td>
+
+        <td><%= trabajo.etapa_actual || 'Sin etapa' %></td>
+
+        <td><%= trabajo.operario_nombre || 'Sin asignar' %></td>
+
+        <td>
+
+         <%= new Date(trabajo.fecha_creacion).toLocaleDateString('es-CO') %>
+
+        </td>
+
+      <td class="actions">
+
+      <a href="/trabajos/<%= trabajo.id %>">
+
+  <i class="fas fa-eye"></i>
+
+</a>
+
+        <i class="fas fa-pen"></i>
+
+        <i
+          class="fas fa-trash"
+          onclick="eliminarTrabajo(
+            '<%= trabajo.id %>',
+            '<%= trabajo.codigo %>'
+          )"
+        ></i>
+
+</td>
+
+      </tr>
+
+    <% }) %>
+
+  <% } else { %>
+
+    <tr>
+
+      <td colspan="8" style="text-align:center;padding:30px;">
+
+        No existen trabajos registrados
+
+      </td>
+
+    </tr>
+
+  <% } %>
+
+</tbody>
               </table>
             </section>
 
@@ -251,5 +329,314 @@
         }
       });
     </script>
+    <script>
+
+const buscadorTrabajo =
+  document.getElementById("buscarTrabajo");
+
+buscadorTrabajo.addEventListener("keyup", function () {
+
+  const texto =
+    this.value.toLowerCase();
+
+  const filas =
+   document.querySelectorAll("tbody .fila-trabajo");
+
+  let encontrados = 0;
+
+  filas.forEach((fila) => {
+
+    const contenido =
+      fila.textContent.toLowerCase();
+
+    if (contenido.includes(texto)) {
+
+      fila.style.display = "";
+      encontrados++;
+
+    } else {
+
+      fila.style.display = "none";
+
+    }
+
+  });
+
+  const mensaje =
+    document.getElementById("sinTrabajos");
+
+  if (encontrados === 0) {
+
+    mensaje.style.display = "";
+
+  } else {
+
+    mensaje.style.display = "none";
+
+  }
+
+});
+
+</script>
+<script>
+
+function eliminarTrabajo(id, codigo) {
+
+  Swal.fire({
+
+    title: '¿Eliminar trabajo?',
+
+    text:
+      'Se eliminará la orden ' + codigo,
+
+    icon: 'warning',
+
+    showCancelButton: true,
+
+    confirmButtonColor: '#2563eb',
+
+    cancelButtonColor: '#d33',
+
+    confirmButtonText: 'Sí, eliminar',
+
+    cancelButtonText: 'Cancelar'
+
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      window.location.href =
+        '/trabajos/delete/' + id;
+
+    }
+
+  });
+
+}
+
+</script>
+<script>
+
+function abrirModalNuevaOrden() {
+
+  document.getElementById(
+    "modalNuevaOrden"
+  ).style.display = "flex";
+
+}
+
+function cerrarModalNuevaOrden() {
+
+  document.getElementById(
+    "modalNuevaOrden"
+  ).style.display = "none";
+
+}
+
+</script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- MODAL NUEVA ORDEN -->
+
+<div
+  id="modalNuevaOrden"
+  class="modal-overlay"
+  style="display:none;"
+>
+
+  <div class="modal-content modal-grande">
+
+    <div class="modal-header">
+
+      <h2>Nueva Orden</h2>
+
+      <button
+        class="close-modal"
+        onclick="cerrarModalNuevaOrden()"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <form id="formNuevaOrden">
+
+      <!-- DATOS CLIENTE -->
+
+      <h3>Datos del Cliente</h3>
+
+      <div class="form-grid">
+
+        <input
+          type="text"
+          placeholder="Nombre del paciente"
+        >
+
+        <input
+          type="text"
+          placeholder="Teléfono"
+        >
+
+<select
+  name="optica_id"
+  required
+>
+
+  <option value="">
+    Seleccione una óptica
+  </option>
+
+  <% opticas.forEach(optica => { %>
+
+    <option value="<%= optica.id %>">
+
+      <%= optica.nombre %>
+
+    </option>
+
+  <% }) %>
+
+</select>
+
+      </div>
+
+      <!-- FORMULA -->
+
+      <h3>Fórmula Oftálmica</h3>
+
+      <div class="form-grid">
+
+        <input
+          type="number"
+          step="0.25"
+          placeholder="Esfera OD"
+        >
+
+        <input
+          type="number"
+          step="0.25"
+          placeholder="Cilindro OD"
+        >
+
+        <input
+          type="number"
+          placeholder="Eje OD"
+        >
+
+        <input
+          type="number"
+          step="0.25"
+          placeholder="Esfera OI"
+        >
+
+        <input
+          type="number"
+          step="0.25"
+          placeholder="Cilindro OI"
+        >
+
+        <input
+          type="number"
+          placeholder="Eje OI"
+        >
+
+        <input
+          type="number"
+          step="0.25"
+          placeholder="Adición"
+        >
+
+        <input
+          type="text"
+          placeholder="DP"
+        >
+
+      </div>
+
+      <!-- FABRICACION -->
+
+      <h3>Fabricación</h3>
+
+      <div class="form-grid">
+
+        <input
+          type="text"
+          placeholder="Tipo lente"
+        >
+
+        <input
+          type="text"
+          placeholder="Material"
+        >
+
+        <input
+          type="text"
+          placeholder="Color"
+        >
+
+        <input
+          type="text"
+          placeholder="Tratamiento"
+        >
+
+      </div>
+
+      <!-- PRODUCCION -->
+
+      <h3>Producción</h3>
+      <div class="form-grid">
+
+        
+
+<select name="operario_actual_id">
+
+  <option value="">
+    Seleccione operario
+  </option>
+
+  <% operarios.forEach(operario => { %>
+
+    <option value="<%= operario.id %>">
+      <%= operario.user %> (<%= operario.rol %>)
+    </option>
+
+  <% }) %>
+
+</select>
+
+        <input
+          type="date"
+        >
+
+      </div>
+
+      <textarea
+        rows="4"
+        placeholder="Observaciones"
+      ></textarea>
+
+      <div class="modal-actions">
+
+        <button
+          type="button"
+          class="btn-secondary"
+          onclick="cerrarModalNuevaOrden()"
+        >
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="btn-primary"
+        >
+          Guardar Orden
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
   </body>
 </html>

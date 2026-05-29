@@ -217,3 +217,93 @@
   align-items: center;
   gap: 8px;
 }
+/* =========================
+   MODAL
+========================= */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.45);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 9999;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 18px;
+  padding: 30px;
+  width: 550px;
+  max-width: 90%;
+}
+
+.modal-grande {
+  max-width: 1100px;
+  max-height: 90vh;
+
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 25px;
+}
+
+.close-modal {
+  border: none;
+  background: none;
+
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.form-grid {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+  gap: 15px;
+
+  margin-bottom: 25px;
+}
+
+.form-grid input,
+.form-grid select,
+textarea {
+  width: 100%;
+
+  padding: 12px;
+
+  border: 1px solid #dcdfe4;
+
+  border-radius: 10px;
+}
+
+.modal-actions {
+  margin-top: 25px;
+
+  display: flex;
+  justify-content: flex-end;
+
+  gap: 15px;
+}
+
+.btn-secondary {
+  background: #e5e7eb;
+
+  border: none;
+
+  padding: 12px 20px;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+}

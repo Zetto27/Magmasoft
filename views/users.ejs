@@ -53,7 +53,7 @@
         <table class="trabajos-table">
           <thead>
             <tr>
-              <th>ID</th>
+             <!-- <th>ID</th> -->
               <th>Usuario</th>
               <th>Rol</th>
               <th>Documento</th>
@@ -72,7 +72,7 @@
             <% usuarios.forEach(usuario => { %>
 
            <tr class="fila-usuario">
-              <td><%= usuario.id %></td>
+              <!-- <td><%= usuario.id %></td> -->
 
               <td><%= usuario.user %></td>
 
@@ -87,7 +87,7 @@
                   <i
                     class="fas fa-pen"
                     onclick="editarUsuario(
-                      '<%= usuario.id %>',
+                    '<%= usuario.id %>',
                       '<%= usuario.user %>',
                       '<%= usuario.rol %>',
                       '<%= usuario.document %>',

@@ -86,6 +86,49 @@ CREATE TABLE trabajos (
     FOREIGN KEY (operario_actual_id) REFERENCES users(id)
 );
 
+CREATE TABLE opticas (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL,
+  direccion VARCHAR(200),
+  telefono VARCHAR(20),
+  email VARCHAR(100)
+);
+
+INSERT INTO opticas
+(nombre, direccion, telefono, email)
+VALUES
+('Óptica Visión Total',
+ 'Bogotá',
+ '3001111111',
+ 'vision@optica.com'),
+
+('Óptica Central',
+ 'Bogotá',
+ '3002222222',
+ 'central@optica.com'),
+
+('Óptica Moderna',
+ 'Bogotá',
+ '3003333333',
+ 'moderna@optica.com');
+ 
+SELECT * FROM opticas;
+
+SELECT
+    CONSTRAINT_NAME,
+    COLUMN_NAME,
+    REFERENCED_TABLE_NAME,
+    REFERENCED_COLUMN_NAME
+FROM information_schema.KEY_COLUMN_USAGE
+WHERE TABLE_SCHEMA = 'magmasoft'
+AND TABLE_NAME = 'trabajos'
+AND REFERENCED_TABLE_NAME IS NOT NULL;
+
+ALTER TABLE trabajos
+ADD CONSTRAINT fk_trabajos_optica
+FOREIGN KEY (optica_id)
+REFERENCES opticas(id);
+
 CREATE TABLE etapas_proceso (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
@@ -281,3 +324,41 @@ LEFT JOIN etapas_proceso e ON t.etapa_actual_id = e.id;
 
 -- vista
 SELECT * FROM vista_trabajos_completa;
+
+
+DROP VIEW vista_trabajos_completa;
+
+CREATE VIEW vista_trabajos_completa AS
+SELECT
+    t.id,
+    t.codigo,
+    t.cliente_nombre,
+    t.cliente_telefono,
+    t.tipo_lente,
+    t.estado,
+    t.fecha_creacion,
+
+    u.user AS operario_nombre,
+
+    e.nombre AS etapa_actual
+
+FROM trabajos t
+
+LEFT JOIN users u
+ON t.operario_actual_id = u.id
+
+LEFT JOIN etapas_proceso e
+ON t.etapa_actual_id = e.id;
+
+
+
+SHOW CREATE TABLE trabajos;
+
+DESCRIBE trabajos;
+
+
+DESC opticas;
+
+DESC users;
+
+SHOW TABLES;
