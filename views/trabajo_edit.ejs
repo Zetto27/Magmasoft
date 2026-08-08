@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+
+    <title>Editar Trabajo</title>
+
+    <link rel="stylesheet" href="/resources/css/index.css" />
+    <link rel="stylesheet" href="/resources/components/botones.css" />
+    <link rel="stylesheet" href="/resources/components/formularios.css" />
+    <link rel="stylesheet" href="/resources/css/trabajos.css" />
+  </head>
+
+  <body>
+    <div class="dashboard-layout">
+        <div class="dashboard-scroll">
+          <section class="dashboard-header">
+            <h2>Editar Trabajo</h2>
+
+            <p><%= trabajo.codigo %></p>
+          </section>
+
+          <section class="map-card">
+            <form action="/trabajos/update/<%= trabajo.id %>" method="POST">
+              <%- include('partials/formulario_trabajo') %>
+            </form>
+          </section>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

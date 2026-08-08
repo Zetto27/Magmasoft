@@ -3,25 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <title>Gestión de Trabajos</title>
-    
 
     <link rel="stylesheet" href="/resources/css/index.css" />
+    <link rel="stylesheet" href="/resources/components/botones.css" />
+    <link rel="stylesheet" href="/resources/components/formularios.css" />
+    <link rel="stylesheet" href="/resources/components/tablas.css" />
+    <link rel="stylesheet" href="/resources/components/badges.css" />
+    <link rel="stylesheet" href="/resources/trabajos/panel-maestro.css" />
+    <link rel="stylesheet" href="/resources/trabajos/timeline.css" />
+    <link rel="stylesheet" href="/resources/trabajos/modales.css" />
     <link rel="stylesheet" href="/resources/css/trabajos.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
 
     <script>
-      if (localStorage.getItem("sidebarCollapsed") === "true") {
-        document.documentElement.classList.add("sidebar-collapsed");
-      }
       function generarCodigoTrabajo(id) {
-
-  return (
-    "TR-" +
-    String(id).padStart(3, "0")
-  );
-
-}
+        return "TR-" + String(id).padStart(3, "0");
+      }
     </script>
   </head>
 
@@ -36,43 +40,106 @@
         <!-- ÁREA SCROLLEABLE -->
         <div class="dashboard-scroll">
           <!-- HEADER STICKY -->
-          <section class="dashboard-header">
-            <h2>Gestión de Trabajosss</h2>
-            <p>Administra los trabajos registrados en el sistema</p>
+          <!-- ================================================= -->
+          <!-- HEADER NUEVO -->
+          <!-- ================================================= -->
+
+          <section class="trabajos-header">
+            <div class="header-info">
+              <h1>Gestión de Trabajos</h1>
+
+              <p>Administra todas las órdenes de producción de MagmaSoft.</p>
+            </div>
+
+            <button
+              class="btn-primary btn-nueva"
+              onclick="abrirModalNuevaOrden()"
+            >
+              <i class="fas fa-plus-circle"></i>
+
+              Nueva Orden
+            </button>
+          </section>
+
+          <!-- ===================== -->
+          <!-- TARJETAS -->
+          <!-- ===================== -->
+
+          <section class="trabajos-resumen">
+            <div class="resume-card">
+              <div class="resume-icon blue">
+                <i class="fas fa-clipboard-list"></i>
+              </div>
+
+              <div>
+                <span>Total órdenes</span>
+
+                <h2><%= trabajos.length %></h2>
+              </div>
+            </div>
+
+            <div class="resume-card">
+              <div class="resume-icon yellow">
+                <i class="fas fa-clock"></i>
+              </div>
+
+              <div>
+                <span>Pendientes</span>
+                <h2>
+                  <%= trabajos.filter(t => t.estado === 'Pendiente').length %>
+                </h2>
+              </div>
+            </div>
+
+            <div class="resume-card">
+              <div class="resume-icon green">
+                <i class="fas fa-cogs"></i>
+              </div>
+
+              <div>
+                <span>En Proceso</span>
+                <h2>
+                  <%= trabajos.filter(t => t.estado === 'En proceso').length %>
+                </h2>
+              </div>
+            </div>
+
+            <div class="resume-card">
+              <div class="resume-icon gray">
+                <i class="fas fa-check-circle"></i>
+              </div>
+
+              <div>
+                <span>Finalizadas</span>
+                <h2>
+                  <%= trabajos.filter(t => t.estado === 'Entregado').length %>
+                </h2>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===================== -->
+          <!-- BUSCADOR -->
+          <!-- ===================== -->
+
+          <section class="trabajos-toolbar">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+
+              <input
+                type="text"
+                id="buscarTrabajo"
+                placeholder="Buscar por código, cliente u óptica..."
+              />
+            </div>
           </section>
 
           <section class="map-card trabajos-container">
-            <!-- TOOLBAR -->
-            <section class="trabajos-toolbar">
-<div class="search-box">
-  <i class="fas fa-search"></i>
-
-  <input
-    type="text"
-    id="buscarTrabajo"
-    placeholder="Buscar por código, cliente u óptica..."
-  />
-</div>
-
-              <button class="btn-filter">
-                <i class="fas fa-filter"></i>
-                Filtros
-              </button>
-
-<button
-  class="btn-primary"
-  onclick="abrirModalNuevaOrden()"
->
-  <i class="fas fa-plus"></i>
-  Nueva orden
-</button>
-            </section>
-
             <!-- TABLA -->
             <section class="trabajos-card">
               <table class="trabajos-table">
                 <thead>
-               <tr>
+                  <tr>
                     <th>Código / QR</th>
                     <th>Cliente / Óptica</th>
                     <th>Tipo de lente</th>
@@ -84,559 +151,710 @@
                   </tr>
                 </thead>
 
-<tbody>
+                <tbody>
+                  <% if (trabajos.length > 0) { %>
 
-  <% if (trabajos.length > 0) { %>
+                  <tr id="sinTrabajos" style="display: none">
+                    <td colspan="8" style="text-align: center; padding: 30px">
+                      No se encontraron trabajos
+                    </td>
+                  </tr>
+                  <% trabajos.forEach(trabajo => { %>
 
-    <tr id="sinTrabajos" style="display:none;">
-  <td colspan="8" style="text-align:center;padding:30px;">
-    No se encontraron trabajos
-  </td>
-</tr>
-    <% trabajos.forEach(trabajo => { %>
+                  <tr
+                    class="fila-trabajo"
+                    data-id="<%= trabajo.id %>"
+                    data-codigo="<%= trabajo.codigo %>"
+                    data-cliente="<%= trabajo.cliente_nombre %>"
+                    data-documento="<%= trabajo.cliente_documento %>"
+                    data-direccion="<%= trabajo.cliente_direccion %>"
+                    data-correo="<%= trabajo.cliente_correo %>"
+                    data-telefono="<%= trabajo.cliente_telefono %>"
+                    data-optica="<%= trabajo.optica_nombre || '' %>"
+                    data-tipo="<%= trabajo.tipo_lente %>"
+                    data-tratamiento="<%= trabajo.tratamiento %>"
+                    data-material="<%= trabajo.material %>"
+                    data-color="<%= trabajo.color %>"
+                    data-operario="<%= trabajo.operario_nombre || 'Sin asignar' %>"
+                    data-estado="<%= trabajo.estado %>"
+                    data-etapa-id="<%= trabajo.etapa_actual_id %>"
+                    data-etapa="<%= trabajo.etapa_actual || '' %>"
+                    data-entrega="<%= trabajo.fecha_estimada_entrega || '' %>"
+                    data-observaciones="<%= trabajo.observaciones || '' %>"
+                    data-esferaod="<%= trabajo.esfera_od || '' %>"
+                    data-cilindrood="<%= trabajo.cilindro_od || '' %>"
+                    data-ejeod="<%= trabajo.eje_od || '' %>"
+                    data-esferaoi="<%= trabajo.esfera_oi || '' %>"
+                    data-cilindrooi="<%= trabajo.cilindro_oi || '' %>"
+                    data-ejeoi="<%= trabajo.eje_oi || '' %>"
+                    data-dp="<%= trabajo.dp || '' %>"
+                  >
+                    <td><%= trabajo.codigo %></td>
 
-      <tr class="fila-trabajo">
+                    <td><%= trabajo.cliente_nombre %></td>
 
-        <td><%= trabajo.codigo %></td>
+                    <td><%= trabajo.tipo_lente %></td>
 
-        <td><%= trabajo.cliente_nombre %></td>
+                    <td>
+                      <% if (trabajo.estado === 'En proceso') { %>
 
-        <td><%= trabajo.tipo_lente %></td>
+                      <span class="badge blue"><%= trabajo.estado %></span>
 
-        <td>
+                      <% } else if (trabajo.estado === 'Pendiente') { %>
 
-          <% if (trabajo.estado === 'En proceso') { %>
+                      <span class="badge yellow"><%= trabajo.estado %></span>
 
-            <span class="badge blue">
-              <%= trabajo.estado %>
-            </span>
+                      <% } else { %>
 
-          <% } else if (trabajo.estado === 'Pendiente') { %>
+                      <span class="badge"><%= trabajo.estado %></span>
 
-            <span class="badge yellow">
-              <%= trabajo.estado %>
-            </span>
+                      <% } %>
+                    </td>
 
-          <% } else { %>
+                    <td><%= trabajo.etapa_actual || 'Sin etapa' %></td>
 
-            <span class="badge">
-              <%= trabajo.estado %>
-            </span>
+                    <td><%= trabajo.operario_nombre || 'Sin asignar' %></td>
 
-          <% } %>
+                    <td>
+                      <%= new Date(trabajo.fecha_creacion).toLocaleDateString('es-CO') %>
+                    </td>
 
-        </td>
+                    <td class="actions">
+                      <i
+                        class="fas fa-trash"
+                        onclick="
+                          event.stopPropagation();
+                          eliminarTrabajo(
+                            '<%= trabajo.id %>',
+                            '<%= trabajo.codigo %>',
+                          );
+                        "
+                      ></i>
+                    </td>
+                  </tr>
 
-        <td><%= trabajo.etapa_actual || 'Sin etapa' %></td>
+                  <% }) %>
 
-        <td><%= trabajo.operario_nombre || 'Sin asignar' %></td>
+                  <% } else { %>
 
-        <td>
+                  <tr>
+                    <td colspan="8" style="text-align: center; padding: 30px">
+                      No existen trabajos registrados
+                    </td>
+                  </tr>
 
-         <%= new Date(trabajo.fecha_creacion).toLocaleDateString('es-CO') %>
-
-        </td>
-
-      <td class="actions">
-
-      <a href="/trabajos/<%= trabajo.id %>">
-
-  <i class="fas fa-eye"></i>
-
-</a>
-
-        <i class="fas fa-pen"></i>
-
-        <i
-          class="fas fa-trash"
-          onclick="eliminarTrabajo(
-            '<%= trabajo.id %>',
-            '<%= trabajo.codigo %>'
-          )"
-        ></i>
-
-</td>
-
-      </tr>
-
-    <% }) %>
-
-  <% } else { %>
-
-    <tr>
-
-      <td colspan="8" style="text-align:center;padding:30px;">
-
-        No existen trabajos registrados
-
-      </td>
-
-    </tr>
-
-  <% } %>
-
-</tbody>
+                  <% } %>
+                </tbody>
               </table>
             </section>
 
-            <!-- DETALLE -->
-            <section class="trabajo-detalle-grid">
-              <div class="detalle-card">
-                <h3>Detalle del trabajo: MAG-000125</h3>
+            <!-- PANEL MAESTRO -->
 
-                <div class="timeline">
-                  <div class="timeline-step done">
-                    <div class="circle">
-                      <i class="fas fa-check"></i>
-                    </div>
-                    <span>Recepción</span>
+            <section class="panel-maestro">
+              <!-- CABECERA -->
+
+              <div class="panel-header">
+                <div class="panel-info">
+                  <div class="codigo-badge">
+                    <i class="fas fa-barcode"></i>
+
+                    <span id="pmCodigo">TR-000</span>
                   </div>
 
-                  <div class="timeline-step active">
-                    <div class="circle">2</div>
-                    <span>Tallado</span>
-                  </div>
+                  <h2 id="pmCliente">No hay ningún trabajo seleccionado</h2>
 
-                  <div class="timeline-step">
-                    <div class="circle">3</div>
-                    <span>Tratamiento</span>
-                  </div>
-
-                  <div class="timeline-step">
-                    <div class="circle">4</div>
-                    <span>Pulido</span>
-                  </div>
-
-                  <div class="timeline-step">
-                    <div class="circle">5</div>
-                    <span>Ensamble</span>
-                  </div>
-
-                  <div class="timeline-step">
-                    <div class="circle">6</div>
-                    <span>Validación</span>
-                  </div>
-
-                  <div class="timeline-step">
-                    <div class="circle">7</div>
-                    <span>Entregado</span>
+                  <div class="panel-meta">
+                    <span id="pmEstado">Pendiente</span>
                   </div>
                 </div>
 
-                <div class="detalle-info">
-                  <div>
-                    <p>
-                      <strong>Cliente / Óptica:</strong>
-                      Óptica Visión Total
-                    </p>
-                    <p>
-                      <strong>Tipo de lente:</strong>
-                      Monofocal
-                    </p>
-                    <p>
-                      <strong>Observaciones:</strong>
-                      Ninguna
-                    </p>
-                  </div>
+                <div class="panel-actions">
+                  <a id="btnEditarTrabajo" href="#" class="btn-primary">
+                    <i class="fas fa-pen"></i>
 
-                  <div>
-                    <p>
-                      <strong>Operario actual:</strong>
-                      Juan Pérez
-                    </p>
-                    <p>
-                      <strong>Fecha estimada entrega:</strong>
-                      27/05/2025
-                    </p>
-                    <p>
-                      <strong>Tiempo en etapa actual:</strong>
-                      1h 15m
-                    </p>
-                  </div>
+                    Editar
+                  </a>
+
+                  <button id="btnImprimirTrabajo" class="btn-secondary">
+                    <i class="fas fa-print"></i>
+
+                    Imprimir
+                  </button>
                 </div>
-
-                <button class="btn-primary update-btn">Actualizar etapa</button>
               </div>
 
-              <!-- PANEL DERECHO -->
-              <div class="side-panel">
-                <div class="comments-card">
-                  <h4>Historial de comentarios</h4>
+              <!-- TIMELINE -->
 
-                  <div class="comment-item">
-                    <strong>Juan Pérez</strong>
-                    <span>24/05 10:30</span>
-                    <p>Inicia tallado del lente.</p>
-                  </div>
+              <div class="timeline-produccion">
+                <div class="timeline-line"></div>
 
-                  <div class="comment-item">
-                    <strong>Claudia Mogollon</strong>
-                    <span>24/05 09:30</span>
-                    <p>Trabajo recibido correctamente.</p>
+                <div class="timeline-step" id="step1">
+                  <div class="timeline-icon">
+                    <i class="fas fa-inbox"></i>
                   </div>
+                  <span>Recepción</span>
                 </div>
 
-                <div class="info-card">
-                  <h4>Información adicional</h4>
-                  <p>
-                    <strong>Código / QR:</strong>
-                    MAG-000125
-                  </p>
-                  <p>
-                    <strong>Teléfono cliente:</strong>
-                    310 123 4567
-                  </p>
-                  <p>
-                    <strong>Fecha creación:</strong>
-                    24/05/2025
-                  </p>
-                  <p>
-                    <strong>Material:</strong>
-                    CR-39
-                  </p>
-                  <p>
-                    <strong>Color:</strong>
-                    Transparente
-                  </p>
+                <div class="timeline-step" id="step2">
+                  <div class="timeline-icon">
+                    <i class="fas fa-cut"></i>
+                  </div>
+                  <span>Tallado</span>
                 </div>
+
+                <div class="timeline-step" id="step3">
+                  <div class="timeline-icon">
+                    <i class="fas fa-flask"></i>
+                  </div>
+                  <span>Tratamiento</span>
+                </div>
+
+                <div class="timeline-step" id="step4">
+                  <div class="timeline-icon">
+                    <i class="fas fa-gem"></i>
+                  </div>
+                  <span>Pulido</span>
+                </div>
+
+                <div class="timeline-step" id="step5">
+                  <div class="timeline-icon">
+                    <i class="fas fa-check-circle"></i>
+                  </div>
+                  <span>Calidad</span>
+                </div>
+
+                <div class="timeline-step" id="step6">
+                  <div class="timeline-icon">
+                    <i class="fas fa-tools"></i>
+                  </div>
+                  <span>Ensamble</span>
+                </div>
+
+                <div class="timeline-step" id="step7">
+                  <div class="timeline-icon">
+                    <i class="fas fa-box-open"></i>
+                  </div>
+                  <span>Listo</span>
+                </div>
+
+                <div class="timeline-step" id="step8">
+                  <div class="timeline-icon">
+                    <i class="fas fa-handshake"></i>
+                  </div>
+                  <span>Entregado</span>
+                </div>
+              </div>
+
+              <div class="timeline-progress">
+                <div class="timeline-progress-bar" id="barraProduccion"></div>
+              </div>
+
+              <div class="timeline-progress-text" id="textoProgreso">
+                0 de 8 etapas completadas
+              </div>
+              <!-- TARJETAS -->
+
+              <div class="panel-grid">
+                <div class="panel-card">
+                  <div class="card-title">
+                    <i class="fas fa-user-circle"></i>
+                    <h3>Cliente</h3>
+                  </div>
+
+                  <div class="dato-card">
+                    <small>Nombre</small>
+                    <strong id="pmNombre">--</strong>
+                  </div>
+                  <div class="dato-card">
+                    <small>Número de identidad</small>
+                    <strong id="pmDocumento">--</strong>
+                  </div>
+                  <div class="dato-card">
+                    <small>Teléfono</small>
+                    <strong id="pmTelefono">--</strong>
+                  </div>
+                  <div class="dato-card">
+                    <small>Dirección</small>
+                    <strong id="pmDireccion">--</strong>
+                  </div>
+                  <div class="dato-card">
+                    <small>Correo</small>
+                    <strong id="pmCorreo">--</strong>
+                  </div>
+                </div>
+                <div class="panel-card">
+                  <div class="card-title">
+                    <i class="fas fa-glasses"></i>
+                    <h3>Fórmula</h3>
+                  </div>
+
+                  <div class="formula-resumen">
+                    <div class="ojo-card">
+                      <span>OD</span>
+
+                      <strong id="pmOD">--</strong>
+                    </div>
+
+                    <div class="ojo-card">
+                      <span>OI</span>
+
+                      <strong id="pmOI">--</strong>
+                    </div>
+
+                    <div class="ojo-card full">
+                      <span>DP</span>
+
+                      <strong id="pmDP">--</strong>
+                    </div>
+                    <div class="ojo-card">
+                      <span>Tipo de Lente</span>
+
+                      <strong id="pmLente">--</strong>
+                    </div>
+                    <div class="ojo-card">
+                      <span>Material</span>
+
+                      <strong id="pmMaterial">--</strong>
+                    </div>
+                    <div class="ojo-card">
+                      <span>Color</span>
+
+                      <strong id="pmColor">--</strong>
+                    </div>
+                    <div class="ojo-card">
+                      <span>Tratamiento</span>
+
+                      <strong id="pmTratamiento">--</strong>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel-card">
+                  <div class="card-title">
+                    <i class="fas fa-industry"></i>
+                    <h3>Producción</h3>
+                  </div>
+
+                  <div class="dato-card">
+                    <small>Operario</small>
+                    <strong id="pmOperario">Sin asignar</strong>
+                  </div>
+
+                  <div class="dato-card">
+                    <small>Estado Actual</small>
+                    <strong id="pmEstadoProduccion">--</strong>
+                  </div>
+
+                  <div class="dato-card">
+                    <small>Fecha Estimada de Entrega</small>
+                    <strong id="pmEntrega">--</strong>
+                  </div>
+
+                  <button
+                    id="btnAsignarOperario"
+                    class="btn-primary btn-block"
+                    onclick="abrirModalAsignarOperario()"
+                  >
+                    <i class="fas fa-user-plus"></i>
+
+                    Asignar Operario
+                  </button>
+
+                  <button
+                    id="btnCambioEtapa"
+                    class="btn-primary btn-block"
+                    onclick="cambiarEtapa()"
+                  >
+                    <i class="fas fa-play"></i>
+                    Cambiar etapa
+                  </button>
+
+                  <button
+                    id="btnDevolverEtapa"
+                    class="btn-primary btn-block"
+                    onclick="devolverEtapa()"
+                  >
+                    <i class="fas fa-undo"></i>
+                    Devolver etapa
+                  </button>
+                </div>
+              </div>
+
+              <!-- ========================================= -->
+              <!-- OBSERVACIONES · HISTORIAL · COMENTARIOS -->
+              <!-- ========================================= -->
+
+              <div class="detalle-grid">
+                <!-- OBSERVACIONES -->
+
+                <section class="detalle-card historial-card">
+                  <div class="detalle-header">
+                    <div class="detalle-title">
+                      <div class="detalle-icon verde">
+                        <i class="fas fa-pen-to-square"></i>
+                      </div>
+
+                      <h3>Observaciones</h3>
+                    </div>
+                  </div>
+
+                  <div class="observacion-box">
+                    <i class="fas fa-quote-left"></i>
+
+                    <p id="pmObservaciones">
+                      No hay observaciones registradas.
+                    </p>
+                  </div>
+                </section>
+
+                <!-- HISTORIAL -->
+
+                <section class="detalle-card historial-card">
+                  <div class="detalle-header">
+                    <div class="detalle-title">
+                      <div class="detalle-icon morado">
+                        <i class="fas fa-clock-rotate-left"></i>
+                      </div>
+
+                      <h3>Historial</h3>
+                    </div>
+                  </div>
+
+                  <div class="detalle-scroll" id="historialTrabajo">
+                    <p class="text-muted">
+                      Seleccione una orden para visualizar su historial.
+                    </p>
+                  </div>
+                </section>
+
+                <!-- COMENTARIOS -->
+
+                <section class="detalle-card comentarios-card">
+                  <div class="detalle-header">
+                    <div class="detalle-title">
+                      <div class="detalle-icon azul">
+                        <i class="fas fa-comments"></i>
+                      </div>
+
+                      <h3>Comentarios</h3>
+                    </div>
+                  </div>
+
+                  <div class="detalle-scroll" id="comentariosTrabajo">
+                    <p class="text-muted">
+                      No existen comentarios registrados.
+                    </p>
+                  </div>
+                </section>
               </div>
             </section>
           </section>
         </div>
       </main>
     </div>
+    <!-- MODAL ASIGNAR OPERARIO -->
 
+    <div id="modalAsignarOperario" class="modal-etapa" style="display: none">
+      <div class="modal-etapa-content">
+        <!-- Header -->
+        <div class="modal-header">
+          <h2>
+            <i class="fas fa-user-cog"></i>
+            Asignar Operario
+          </h2>
+
+          <button class="cerrar-modal" onclick="cerrarModalAsignarOperario()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <!-- Formulario -->
+        <form
+          id="formAsignarOperario"
+          method="POST"
+          action="/trabajos/asignar-operario"
+        >
+          <input type="hidden" name="trabajo_id" id="asignarTrabajoId" />
+
+          <div class="modal-body">
+            <!-- Resumen del trabajo -->
+            <div class="trabajo-resumen">
+              <h3 id="modalCodigoAsignar">TR-000001</h3>
+              <span id="modalClienteAsignar">Cliente</span>
+            </div>
+
+            <!-- Tarjeta -->
+            <div class="etapa-card etapa-siguiente" style="max-width: 100%">
+              <div class="icono-etapa">
+                <i class="fas fa-user"></i>
+              </div>
+
+              <small>Operario asignado</small>
+
+              <div class="form-group" style="margin-top: 15px">
+                <select name="operario_id" required>
+                  <option value="">Seleccione un operario</option>
+
+                  <% operarios.forEach(operario => { %>
+                  <option value="<%= operario.id %>">
+                    <%= operario.user %>
+                  </option>
+                  <% }) %>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn-cancelar"
+              onclick="cerrarModalAsignarOperario()"
+            >
+              Cancelar
+            </button>
+
+            <button type="submit" class="btn-continuar">
+              <i class="fas fa-user-check"></i>
+              Asignar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div id="modalNuevaOrden" class="modal-overlay" style="display: none">
+      <div class="modal-content modal-grande">
+        <div class="modal-header">
+          <h2>Nueva Orden</h2>
+
+          <button
+            class="close-modal"
+            onclick="cerrarModalNuevaOrden()"
+          ></button>
+        </div>
+
+        <form id="formNuevaOrden" action="/trabajos/create" method="POST">
+          <!-- DATOS CLIENTE -->
+          <%- include('partials/formulario_trabajo') %>
+        </form>
+      </div>
+    </div>
+    <%- include('partials/scripts') %>
+    <!-- ===========================
+ Modal Cambio de Etapa
+============================ -->
+
+    <div id="modalCambioEtapa" class="modal-etapa">
+      <div class="modal-etapa-content">
+        <div class="modal-header">
+          <h2>
+            <i class="fas fa-random"></i>
+            Cambiar Etapa
+          </h2>
+
+          <button class="cerrar-modal" onclick="cerrarModalEtapa()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div class="trabajo-resumen">
+            <h3 id="modalCodigo">TR-000001</h3>
+
+            <span id="modalCliente">Cliente</span>
+          </div>
+
+          <div class="flujo-etapa">
+            <div class="etapa-card etapa-actual">
+              <div class="icono-etapa">
+                <i class="fas fa-check-circle"></i>
+              </div>
+
+              <small>Etapa actual</small>
+
+              <h4 id="modalEtapaActual"></h4>
+            </div>
+
+            <div class="flecha">
+              <i class="fas fa-long-arrow-alt-right"></i>
+            </div>
+
+            <div class="etapa-card etapa-siguiente">
+              <div class="icono-etapa">
+                <i class="fas fa-forward"></i>
+              </div>
+
+              <small>Siguiente etapa</small>
+
+              <h4 id="modalEtapaSiguiente"></h4>
+            </div>
+          </div>
+
+          <div class="comentario-container">
+            <label>Observaciones del proceso</label>
+
+            <textarea
+              id="comentarioProceso"
+              placeholder="Escriba una observación (opcional)..."
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-cancelar" onclick="cerrarModalEtapa()">
+            Cancelar
+          </button>
+
+          <button
+            id="btnConfirmarEtapa"
+            class="btn-continuar"
+            onclick="confirmarCambioEtapa()"
+          >
+            Continuar →
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- ========================================= -->
+    <!-- Modal Devolver Etapa -->
+    <!-- ========================================= -->
+
+    <div id="modalDevolverEtapa" class="modal-etapa">
+      <div class="modal-etapa-content">
+        <div class="modal-header">
+          <h2>
+            <i class="fas fa-undo"></i>
+            Devolver etapa
+          </h2>
+
+          <button class="cerrar-modal" onclick="cerrarModalDevolver()">
+            &times;
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div class="trabajo-resumen">
+            <h3 id="devolverCodigo"></h3>
+
+            <span id="devolverCliente"></span>
+          </div>
+
+          <div class="flujo-etapa">
+            <div class="etapa-card etapa-actual">
+              <div class="icono-etapa">
+                <i class="fas fa-arrow-left"></i>
+              </div>
+
+              <small>Etapa actual</small>
+
+              <h4 id="devolverActual"></h4>
+            </div>
+
+            <div class="flecha">
+              <i class="fas fa-arrow-left"></i>
+            </div>
+
+            <div class="etapa-card etapa-siguiente">
+              <div class="icono-etapa">
+                <i class="fas fa-history"></i>
+              </div>
+
+              <small>Volver a</small>
+
+              <h4 id="devolverAnterior"></h4>
+            </div>
+          </div>
+
+          <div class="comentario-container">
+            <label>Motivo de la devolución</label>
+
+            <textarea
+              id="motivoDevolucion"
+              placeholder="Explique por qué se devuelve esta orden..."
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-cancelar" onclick="cerrarModalDevolver()">
+            Cancelar
+          </button>
+
+          <button class="btn-continuar" onclick="confirmarDevolucion()">
+            <i class="fas fa-undo"></i>
+
+            Devolver trabajo
+          </button>
+        </div>
+      </div>
+    </div>
     <script>
-      const layout = document.querySelector(".dashboard-layout");
-
-      if (document.documentElement.classList.contains("sidebar-collapsed")) {
-        layout.classList.add("collapsed");
+      function abrirModalNuevaOrden() {
+        document.getElementById("modalNuevaOrden").style.display = "flex";
       }
 
-      function toggleSidebar() {
-        layout.classList.toggle("collapsed");
-
-        const collapsed = layout.classList.contains("collapsed");
-
-        localStorage.setItem("sidebarCollapsed", collapsed);
-
-        document.documentElement.classList.toggle("sidebar-collapsed", collapsed);
+      function cerrarModalNuevaOrden() {
+        document.getElementById("modalNuevaOrden").style.display = "none";
       }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const formulario = document.getElementById("formNuevaOrden");
 
-      document.querySelectorAll(".nav-link").forEach((link) => {
-        if (link.href === window.location.href) {
-          link.classList.add("active");
-        }
+        if (!formulario) return;
+
+        // =====================================
+        // Validar formulario antes de guardar
+        // =====================================
+
+        formulario.addEventListener("submit", function (e) {
+          // Limpiar errores anteriores
+          formulario
+            .querySelectorAll(".campo-error")
+            .forEach((campo) => campo.classList.remove("campo-error"));
+
+          document.getElementById("mensajeFormulario").style.display = "none";
+
+          const campos = formulario.querySelectorAll(
+            "input:not([type='hidden']):not([type='button']):not([type='submit']), select, textarea",
+          );
+
+          for (const campo of campos) {
+            if (
+              campo.type !== "button" &&
+              campo.type !== "submit" &&
+              campo.value.trim() === ""
+            ) {
+              e.preventDefault();
+              const mensaje = document.getElementById("mensajeFormulario");
+
+              mensaje.style.display = "flex";
+
+              campo.classList.add("campo-error");
+
+              campo.focus();
+
+              return;
+            }
+          }
+        });
+        // =====================================
+        // Cerrar formulario con ESC
+        // =====================================
+
+        document.addEventListener("keydown", function (e) {
+          if (e.key !== "Escape") return;
+
+          const modal = document.getElementById("modalNuevaOrden");
+
+          if (modal.style.display === "flex") {
+            cerrarModalNuevaOrden();
+          }
+        });
       });
     </script>
-    <script>
-
-const buscadorTrabajo =
-  document.getElementById("buscarTrabajo");
-
-buscadorTrabajo.addEventListener("keyup", function () {
-
-  const texto =
-    this.value.toLowerCase();
-
-  const filas =
-   document.querySelectorAll("tbody .fila-trabajo");
-
-  let encontrados = 0;
-
-  filas.forEach((fila) => {
-
-    const contenido =
-      fila.textContent.toLowerCase();
-
-    if (contenido.includes(texto)) {
-
-      fila.style.display = "";
-      encontrados++;
-
-    } else {
-
-      fila.style.display = "none";
-
-    }
-
-  });
-
-  const mensaje =
-    document.getElementById("sinTrabajos");
-
-  if (encontrados === 0) {
-
-    mensaje.style.display = "";
-
-  } else {
-
-    mensaje.style.display = "none";
-
-  }
-
-});
-
-</script>
-<script>
-
-function eliminarTrabajo(id, codigo) {
-
-  Swal.fire({
-
-    title: '¿Eliminar trabajo?',
-
-    text:
-      'Se eliminará la orden ' + codigo,
-
-    icon: 'warning',
-
-    showCancelButton: true,
-
-    confirmButtonColor: '#2563eb',
-
-    cancelButtonColor: '#d33',
-
-    confirmButtonText: 'Sí, eliminar',
-
-    cancelButtonText: 'Cancelar'
-
-  }).then((result) => {
-
-    if (result.isConfirmed) {
-
-      window.location.href =
-        '/trabajos/delete/' + id;
-
-    }
-
-  });
-
-}
-
-</script>
-<script>
-
-function abrirModalNuevaOrden() {
-
-  document.getElementById(
-    "modalNuevaOrden"
-  ).style.display = "flex";
-
-}
-
-function cerrarModalNuevaOrden() {
-
-  document.getElementById(
-    "modalNuevaOrden"
-  ).style.display = "none";
-
-}
-
-</script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- MODAL NUEVA ORDEN -->
-
-<div
-  id="modalNuevaOrden"
-  class="modal-overlay"
-  style="display:none;"
->
-
-  <div class="modal-content modal-grande">
-
-    <div class="modal-header">
-
-      <h2>Nueva Orden</h2>
-
-      <button
-        class="close-modal"
-        onclick="cerrarModalNuevaOrden()"
-      >
-        ×
-      </button>
-
-    </div>
-
-    <form id="formNuevaOrden">
-
-      <!-- DATOS CLIENTE -->
-
-      <h3>Datos del Cliente</h3>
-
-      <div class="form-grid">
-
-        <input
-          type="text"
-          placeholder="Nombre del paciente"
-        >
-
-        <input
-          type="text"
-          placeholder="Teléfono"
-        >
-
-<select
-  name="optica_id"
-  required
->
-
-  <option value="">
-    Seleccione una óptica
-  </option>
-
-  <% opticas.forEach(optica => { %>
-
-    <option value="<%= optica.id %>">
-
-      <%= optica.nombre %>
-
-    </option>
-
-  <% }) %>
-
-</select>
-
-      </div>
-
-      <!-- FORMULA -->
-
-      <h3>Fórmula Oftálmica</h3>
-
-      <div class="form-grid">
-
-        <input
-          type="number"
-          step="0.25"
-          placeholder="Esfera OD"
-        >
-
-        <input
-          type="number"
-          step="0.25"
-          placeholder="Cilindro OD"
-        >
-
-        <input
-          type="number"
-          placeholder="Eje OD"
-        >
-
-        <input
-          type="number"
-          step="0.25"
-          placeholder="Esfera OI"
-        >
-
-        <input
-          type="number"
-          step="0.25"
-          placeholder="Cilindro OI"
-        >
-
-        <input
-          type="number"
-          placeholder="Eje OI"
-        >
-
-        <input
-          type="number"
-          step="0.25"
-          placeholder="Adición"
-        >
-
-        <input
-          type="text"
-          placeholder="DP"
-        >
-
-      </div>
-
-      <!-- FABRICACION -->
-
-      <h3>Fabricación</h3>
-
-      <div class="form-grid">
-
-        <input
-          type="text"
-          placeholder="Tipo lente"
-        >
-
-        <input
-          type="text"
-          placeholder="Material"
-        >
-
-        <input
-          type="text"
-          placeholder="Color"
-        >
-
-        <input
-          type="text"
-          placeholder="Tratamiento"
-        >
-
-      </div>
-
-      <!-- PRODUCCION -->
-
-      <h3>Producción</h3>
-      <div class="form-grid">
-
-        
-
-<select name="operario_actual_id">
-
-  <option value="">
-    Seleccione operario
-  </option>
-
-  <% operarios.forEach(operario => { %>
-
-    <option value="<%= operario.id %>">
-      <%= operario.user %> (<%= operario.rol %>)
-    </option>
-
-  <% }) %>
-
-</select>
-
-        <input
-          type="date"
-        >
-
-      </div>
-
-      <textarea
-        rows="4"
-        placeholder="Observaciones"
-      ></textarea>
-
-      <div class="modal-actions">
-
-        <button
-          type="button"
-          class="btn-secondary"
-          onclick="cerrarModalNuevaOrden()"
-        >
-          Cancelar
-        </button>
-
-        <button
-          type="submit"
-          class="btn-primary"
-        >
-          Guardar Orden
-        </button>
-
-      </div>
-
-    </form>
-
-  </div>
-
-</div>
+    <script src="/resources/js/trabajos.js"></script>
   </body>
 </html>

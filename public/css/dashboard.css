@@ -1,0 +1,532 @@
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+.dashboard-scroll {
+  padding: 0 34px 40px;
+}
+
+.dashboard-header {
+  margin-bottom: 28px;
+}
+
+.dashboard-header h2 {
+  margin: 0;
+  font-size: 38px;
+  font-weight: 700;
+  color: #173f7a;
+}
+
+/* =====================================================
+   TARJETAS SUPERIORES
+===================================================== */
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.stat-card {
+  min-height: 125px;
+  padding: 20px;
+
+  background: #ffffff;
+  border-radius: 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  box-shadow: 0 5px 20px rgba(31, 56, 88, 0.06);
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #344b70;
+}
+
+.stat-value {
+  margin-top: 5px;
+
+  font-size: 28px;
+  font-weight: 700;
+
+  color: #173f7a;
+}
+
+.stat-subtitle {
+  margin-top: 2px;
+
+  font-size: 11px;
+  color: #7b8799;
+}
+
+/* =====================================================
+   ICONOS
+===================================================== */
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 21px;
+}
+
+.stat-icon.azul {
+  background: #e8f1ff;
+  color: #2563eb;
+}
+
+.stat-icon.naranja {
+  background: #fff3dc;
+  color: #f59e0b;
+}
+
+.stat-icon.morado {
+  background: #f1eaff;
+  color: #7c3aed;
+}
+
+.stat-icon.verde {
+  background: #e8f8ed;
+  color: #16a34a;
+}
+
+/* =====================================================
+   GRID PRINCIPAL
+===================================================== */
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+/* =====================================================
+   TARJETAS
+===================================================== */
+
+.dashboard-card {
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 5px 20px rgba(31, 56, 88, 0.06);
+}
+
+.dashboard-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 16px;
+}
+
+.dashboard-card-header h3 {
+  margin: 0;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  color: #173f7a;
+}
+
+.dashboard-card-header a {
+  font-size: 12px;
+  font-weight: 600;
+
+  color: #2563eb;
+  text-decoration: none;
+}
+
+/* =====================================================
+   ÓRDENES POR ETAPA
+===================================================== */
+
+.etapas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.etapa-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 10px 12px;
+
+  background: #f8fafc;
+  border-radius: 9px;
+}
+
+.etapa-nombre {
+  font-size: 12px;
+  color: #475569;
+}
+
+.etapa-cantidad {
+  font-size: 13px;
+  color: #173f7a;
+}
+
+/* =====================================================
+   ACTIVIDAD RECIENTE
+===================================================== */
+
+.actividad-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.actividad-item {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 12px;
+
+  padding: 11px 0;
+
+  border-bottom: 1px solid #eef1f5;
+}
+
+.actividad-item:last-child {
+  border-bottom: none;
+}
+
+.actividad-icono {
+  width: 34px;
+  min-width: 34px;
+  height: 34px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #eaf2ff;
+  color: #2563eb;
+
+  font-size: 12px;
+}
+
+.actividad-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.actividad-principal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+.actividad-principal strong {
+  font-size: 12px;
+  color: #1f3f72;
+}
+
+.actividad-tiempo {
+  font-size: 10px;
+  color: #9aa4b2;
+  white-space: nowrap;
+}
+
+.actividad-detalle {
+  margin-top: 3px;
+
+  font-size: 11px;
+  color: #53627a;
+}
+
+.actividad-usuario {
+  margin-top: 3px;
+
+  font-size: 10px;
+  color: #9aa4b2;
+}
+
+.actividad-observacion {
+  margin-top: 4px;
+
+  font-size: 10px;
+  color: #6b7280;
+}
+
+.actividad-ver-mas {
+  display: inline-block;
+
+  margin-top: 8px;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  color: #2563eb;
+  text-decoration: none;
+}
+
+/* =====================================================
+   TABLA
+===================================================== */
+
+.dashboard-table-card {
+  margin-bottom: 18px;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.dashboard-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dashboard-table th {
+  padding: 10px 8px;
+
+  text-align: left;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  color: #718096;
+
+  border-bottom: 1px solid #e8edf3;
+}
+
+.dashboard-table td {
+  padding: 11px 8px;
+
+  font-size: 11px;
+
+  color: #53627a;
+
+  border-bottom: 1px solid #f0f2f5;
+}
+
+.dashboard-table td strong {
+  color: #173f7a;
+}
+
+.estado-badge {
+  display: inline-block;
+
+  padding: 4px 9px;
+
+  border-radius: 7px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.tabla-vacia {
+  text-align: center;
+  padding: 30px !important;
+  color: #9aa4b2 !important;
+}
+/* =====================================================
+   GRÁFICAS DASHBOARD
+===================================================== */
+
+.grafica-card {
+  min-height: 390px;
+}
+
+.grafica-card .dashboard-card-header {
+  margin-bottom: 20px;
+}
+
+.grafica-card .dashboard-card-header p {
+  margin: 5px 0 0;
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.grafica-container {
+  position: relative;
+  width: 100%;
+  height: 290px;
+}
+
+.grafica-torta-container {
+  position: relative;
+  width: 100%;
+  height: 350px;
+  max-width: 650px;
+  margin: 0 auto;
+}
+/* =====================================================
+   PRÓXIMAS ENTREGAS
+===================================================== */
+
+.proximas-entregas-card {
+  margin: 20px 0 20px 0;
+}
+
+.proximas-entregas-card .dashboard-card-header p {
+  margin: 5px 0 0;
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.entregas-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.entrega-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 15px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.entrega-item:last-child {
+  border-bottom: none;
+}
+
+.entrega-icono {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  font-size: 15px;
+}
+
+.entrega-icono.normal {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.entrega-icono.proxima {
+  background: #fff7ed;
+  color: #f97316;
+}
+
+.entrega-icono.hoy {
+  background: #fef2f2;
+  color: #ef4444;
+}
+
+.entrega-icono.atrasada {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.entrega-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.entrega-principal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.entrega-principal strong {
+  font-size: 14px;
+  color: #1f2937;
+}
+
+.entrega-estado {
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.entrega-estado.normal {
+  color: #2563eb;
+}
+
+.entrega-estado.proxima {
+  color: #ea580c;
+}
+
+.entrega-estado.hoy {
+  color: #dc2626;
+}
+
+.entrega-estado.atrasada {
+  color: #dc2626;
+}
+
+.entrega-cliente {
+  margin-top: 3px;
+  font-size: 13px;
+  color: #4b5563;
+}
+
+.entrega-detalle {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 5px;
+
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.entrega-detalle span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.entrega-detalle i {
+  font-size: 10px;
+}
+
+.entregas-vacia {
+  min-height: 180px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+  color: #9ca3af;
+}
+
+.entregas-vacia i {
+  font-size: 28px;
+  margin-bottom: 10px;
+  color: #d1d5db;
+}
+
+.entregas-vacia p {
+  margin: 0;
+  font-size: 13px;
+}

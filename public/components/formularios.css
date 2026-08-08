@@ -1,0 +1,90 @@
+/* ==========================================
+   FORMULARIOS - MAGMASOFT
+========================================== */
+
+/* Contenedor de cada sección */
+
+.form-section {
+  background: #fff;
+  border-radius: 20px;
+  padding: 28px;
+  margin-bottom: 24px;
+  border: 1px solid #edf2f7;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+}
+
+/* Grid */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+/* Inputs */
+
+.form-grid input,
+.form-grid select,
+textarea {
+  width: 100%;
+  height: 52px;
+  padding: 0 18px;
+  border-radius: 14px;
+  border: 1px solid #d8dee8;
+  background: #fcfdff;
+  transition: 0.25s;
+  font-size: 14px;
+}
+
+/* Focus */
+
+.form-grid input:focus,
+.form-grid select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+/* Textarea */
+
+textarea {
+  min-height: 140px;
+  padding: 18px;
+  resize: vertical;
+}
+
+/* Campo con error */
+
+.campo-error {
+  border: 2px solid #dc2626 !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+}
+
+/* Mensaje del formulario */
+
+.mensaje-formulario {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  margin-bottom: 15px;
+  padding: 12px 15px;
+  border-radius: 10px;
+  background: #fff4f4;
+  border: 1px solid #f5bcbc;
+  color: #c62828;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.mensaje-formulario i {
+  color: #d32f2f;
+}
+
+.form-grid label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #344054;
+}

@@ -106,7 +106,7 @@ h1 span {
   flex-direction: column;
 
   overflow: hidden;
-  transition: 0.45s ease;
+  transition: width 0.35s ease;
 }
 
 /* COLAPSADO */
@@ -160,7 +160,10 @@ h1 span {
   align-items: center;
   gap: 14px;
   font-weight: 500;
-  transition: 0.3s;
+
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
 }
 
 .sidebar-nav a:hover,
@@ -175,11 +178,43 @@ h1 span {
 }
 
 /* TEXTO COLAPSADO */
-.dashboard-layout.collapsed .sidebar span,
-.sidebar-collapsed .dashboard-layout .sidebar span {
-  opacity: 0;
-  width: 0;
+.sidebar span {
+  white-space: nowrap;
   overflow: hidden;
+  opacity: 1;
+  transition: opacity 0.15s ease 0.2s;
+}
+
+.dashboard-layout.collapsed .sidebar span {
+  width: 0;
+  opacity: 0;
+  transition: opacity 0.05s;
+}
+
+/* =========================
+   SIDEBAR COLAPSADO
+========================= */
+
+.dashboard-layout.collapsed .sidebar-nav a,
+.dashboard-layout.collapsed .logout-btn {
+  justify-content: center;
+  padding: 14px 0;
+}
+
+.dashboard-layout.collapsed .sidebar-top {
+  justify-content: center;
+}
+
+.dashboard-layout.collapsed .toggle-btn {
+  margin: 0 auto;
+}
+
+.dashboard-layout.collapsed .sidebar-nav i,
+.dashboard-layout.collapsed .logout-btn i {
+  min-width: 0;
+  width: 24px;
+  text-align: center;
+  margin: 0;
 }
 
 .logout-btn {
@@ -330,4 +365,25 @@ h1 span {
   display: flex;
   gap: 10px;
   margin-top: 10px;
+}
+
+/* Evitar animación al hacer clic */
+.sidebar-nav a:focus,
+.sidebar-nav a:active,
+.logout-btn:focus,
+.logout-btn:active {
+  outline: none;
+  transform: none;
+}
+
+.sidebar-nav a {
+  transform: none;
+}
+
+.form-section {
+  background: #fbfcfe;
+  border: 1px solid #edf2f7;
+  border-radius: 18px;
+  padding: 25px;
+  margin-bottom: 24px;
 }

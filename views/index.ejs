@@ -1,72 +1,36 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>MagmaSoft</title>
-  <script>
-  if (localStorage.getItem("sidebarCollapsed") === "true") {
-    document.documentElement.classList.add("sidebar-collapsed");
-  }
-</script>
-  <link rel="stylesheet" href="resources/css/index.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>MagmaSoft</title>
 
-<% if (login) { %>
-<div class="dashboard-layout">
+    <link rel="stylesheet" href="/resources/css/index.css" />
 
-  <!-- SIDEBAR REUTILIZABLE -->
-  <%- include('partials/sidebar') %>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
 
-        <main class="dashboard-content">
-        <%- include('partials/topbar') %>
+  <body>
+    <div class="logout-container">
+      <div class="content">
+        <img src="/resources/css/img/Logo.png" class="logo" />
 
-        <div class="dashboard-scroll">
-          <section class="dashboard-header">
-            <h2>Dashboard</h2>
-          </section>
+        <h1>
+          Bienvenido a
 
-          <section class="map-card">
-            <h3>Contenido</h3>
-          </section>
-        </div>
-      </main>
+          <span>MagmaSoft</span>
+        </h1>
 
-</div>
-<% } else { %>
-<div class="logout-container">
+        <div class="line"></div>
 
-  <div class="content">
-    <img src="resources/css/img/Logo.png" alt="MagmaSoft" class="logo">
-    <h1>
-      Bienvenido a <span>MagmaSoft</span>
-    </h1>
-    <div class="line"></div>
-    <p>Debe iniciar sesión para acceder</p>
-    <a href="/login" class="login-link">Iniciar sesión</a>
-  </div>
-  <img src="resources/css/img/mountains.png" alt="Montañas" class="mountains">
-</div>
-<% } %>
-<script>
-      const layout = document.querySelector(".dashboard-layout");
+        <p>Debe iniciar sesión para acceder</p>
 
-      if (document.documentElement.classList.contains("sidebar-collapsed")) {
-        layout.classList.add("collapsed");
-      }
-      function toggleSidebar() {
-        layout.classList.toggle("collapsed");
-        const collapsed = layout.classList.contains("collapsed");
-        localStorage.setItem("sidebarCollapsed", collapsed);
-        document.documentElement.classList.toggle("sidebar-collapsed", collapsed);
-      }
-      document.querySelectorAll(".nav-link").forEach((link) => {
-        if (link.href === window.location.href) {
-          link.classList.add("active");
-        }
-      });
-</script>
-</body>
+        <a href="/login" class="login-link">Iniciar sesión</a>
+      </div>
+
+      <img src="/resources/css/img/mountains.png" class="mountains" />
+    </div>
+  </body>
 </html>

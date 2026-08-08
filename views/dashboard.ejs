@@ -2,45 +2,579 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <title>Dashboard</title>
+
+    <title>Dashboard | MagmaSoft</title>
 
     <link rel="stylesheet" href="/resources/css/index.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="/resources/css/dashboard.css" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
   </head>
+
   <body>
     <div class="dashboard-layout">
       <%- include('partials/sidebar') %>
-
       <main class="dashboard-content">
         <%- include('partials/topbar') %>
 
-        <section class="dashboard-header">
-          <h2>Dashboard perros</h2>
-          <p>
-            Bienvenido,
-            <strong><%= user %></strong>
-          </p>
-        </section>
+        <div class="dashboard-scroll">
+          <!-- ==========================================
+         ENCABEZADO
+    =========================================== -->
 
-        <section class="map-card">
-          <img src="/resources/css/img/dashboard-map.png" alt="Mapa" />
-        </section>
+          <section class="dashboard-header">
+            <h2>Dashboard</h2>
+          </section>
+
+          <!-- ==========================================
+         TARJETAS PRINCIPALES
+    =========================================== -->
+
+          <section class="dashboard-stats">
+            <!-- ÓRDENES TOTALES -->
+
+            <div class="stat-card">
+              <div class="stat-info">
+                <span class="stat-title">Órdenes Totales</span>
+
+                <strong class="stat-value">
+                  <%= dashboard.totalOrdenes %>
+                </strong>
+
+                <span class="stat-subtitle">Registradas</span>
+              </div>
+
+              <div class="stat-icon azul">
+                <i class="fas fa-clipboard-list"></i>
+              </div>
+            </div>
+
+            <!-- EN PRODUCCIÓN -->
+
+            <div class="stat-card">
+              <div class="stat-info">
+                <span class="stat-title">En Producción</span>
+
+                <strong class="stat-value">
+                  <%= dashboard.ordenesProduccion %>
+                </strong>
+
+                <span class="stat-subtitle">Actualmente</span>
+              </div>
+
+              <div class="stat-icon naranja">
+                <i class="fas fa-cog"></i>
+              </div>
+            </div>
+
+            <!-- PENDIENTES -->
+
+            <div class="stat-card">
+              <div class="stat-info">
+                <span class="stat-title">Pendientes</span>
+
+                <strong class="stat-value">
+                  <%= dashboard.ordenesPendientes %>
+                </strong>
+
+                <span class="stat-subtitle">Por iniciar</span>
+              </div>
+
+              <div class="stat-icon morado">
+                <i class="fas fa-clock"></i>
+              </div>
+            </div>
+
+            <!-- ENTREGADAS -->
+
+            <div class="stat-card">
+              <div class="stat-info">
+                <span class="stat-title">Entregadas</span>
+
+                <strong class="stat-value">
+                  <%= dashboard.ordenesEntregadas %>
+                </strong>
+
+                <span class="stat-subtitle">Finalizadas</span>
+              </div>
+
+              <div class="stat-icon verde">
+                <i class="fas fa-check"></i>
+              </div>
+            </div>
+          </section>
+
+          <!-- ==========================================
+         ACTIVIDAD + ETAPAS
+    =========================================== -->
+
+          <section class="dashboard-grid">
+            <section class="dashboard-card grafica-card grafica-lentes">
+              <div class="dashboard-card-header">
+                <div>
+                  <h3>Distribución por Tipo de Lente</h3>
+                  <p>Distribución de las órdenes según el tipo de lente.</p>
+                </div>
+              </div>
+
+              <div class="grafica-torta-container">
+                <canvas id="graficaLentes"></canvas>
+              </div>
+            </section>
+
+            <!-- ========================================
+           ÓRDENES POR ETAPA
+      ========================================= -->
+
+            <div class="dashboard-card grafica-card">
+              <div class="dashboard-card-header">
+                <div>
+                  <h3>Órdenes por Etapa</h3>
+                  <p>Distribución de trabajos según su etapa actual.</p>
+                </div>
+              </div>
+
+              <div class="grafica-container">
+                <canvas id="graficaEtapas"></canvas>
+              </div>
+            </div>
+
+            <!-- ========================================
+          TRABAJO POR OPERARIO
+      ========================================= -->
+
+            <div class="dashboard-card grafica-card">
+              <div class="dashboard-card-header">
+                <div>
+                  <h3>Trabajos por Operario</h3>
+                  <p>Órdenes actualmente asignadas a cada operario.</p>
+                </div>
+              </div>
+
+              <div class="grafica-container">
+                <canvas id="graficaOperarios"></canvas>
+              </div>
+            </div>
+
+            <!-- ========================================
+           ACTIVIDAD RECIENTE
+      ========================================= -->
+
+            <div class="dashboard-card actividad-card">
+              <div class="dashboard-card-header">
+                <h3>Actividad Reciente</h3>
+              </div>
+
+              <div class="actividad-list">
+                <% if ( dashboard.actividadReciente &&
+                dashboard.actividadReciente.length > 0 ) { %> <%
+                dashboard.actividadReciente.forEach(item => { %>
+
+                <%
+                const fecha = new Date(item.fecha_inicio);
+                const ahora = new Date();
+                const diferencia = Math.floor(
+                  (ahora - fecha) / 1000
+                );
+                let tiempo = "";
+                if (diferencia < 60) {
+                tiempo = "Hace unos segundos";
+                } else if (diferencia < 3600) {tiempo =`Hace ${Math.floor(diferencia / 60)} min`;
+                } else if (diferencia < 86400) {
+                  tiempo = `Hace ${Math.floor(diferencia / 3600)} h`;
+                } else {
+                  tiempo =`Hace ${Math.floor(diferencia / 86400)} días`;
+                }
+                const accion = item.fecha_fin
+                  ? "Etapa completada"
+                  : "Etapa iniciada"; %>
+
+                <div class="actividad-item">
+                  <!-- ICONO -->
+
+                  <div class="actividad-icono">
+                    <% if (item.fecha_fin) { %>
+
+                    <i class="fas fa-check"></i>
+
+                    <% } else { %>
+
+                    <i class="fas fa-play"></i>
+
+                    <% } %>
+                  </div>
+
+                  <!-- INFORMACIÓN -->
+
+                  <div class="actividad-info">
+                    <div class="actividad-principal">
+                      <strong>
+                        <%= accion %>
+                      </strong>
+
+                      <span class="actividad-tiempo"><%= tiempo %></span>
+                    </div>
+
+                    <div class="actividad-detalle">
+                      <%= item.codigo %> · <%= item.etapa %>
+                    </div>
+
+                    <div class="actividad-usuario">
+                      <%= item.usuario || "Usuario desconocido" %>
+                    </div>
+
+                    <% if (item.observacion) { %>
+
+                    <div class="actividad-observacion">
+                      <%= item.observacion %>
+                    </div>
+
+                    <% } %>
+                  </div>
+                </div>
+
+                <% }) %>
+
+                <% } else { %>
+
+                <div class="actividad-vacia">
+                  <i class="fas fa-history"></i>
+
+                  <p>No hay actividad reciente.</p>
+                </div>
+
+                <% } %>
+              </div>
+
+              <a href="/reportes" class="actividad-ver-mas">
+                Ver todas las actividades
+              </a>
+            </div>
+          </section>
+
+          <!-- ==========================================
+              PRÓXIMAS ENTREGAS
+          =========================================== -->
+
+          <section class="dashboard-card proximas-entregas-card">
+            <div class="dashboard-card-header">
+              <div>
+                <h3>Próximas entregas</h3>
+
+                <p>Órdenes pendientes de entrega.</p>
+              </div>
+
+              <a href="/trabajos">Ver todas</a>
+            </div>
+
+            <div class="entregas-list">
+              <% if ( dashboard.proximasEntregas &&
+              dashboard.proximasEntregas.length > 0 ) { %> <%
+              dashboard.proximasEntregas.forEach(item => { const fechaEntrega =
+              new Date(item.fecha_estimada_entrega); const hoy = new Date();
+              hoy.setHours(0, 0, 0, 0); fechaEntrega.setHours(0, 0, 0, 0); const
+              diferencia = Math.ceil( (fechaEntrega - hoy) / (1000 * 60 * 60 *
+              24) ); let estadoEntrega = ""; let claseEntrega = ""; if
+              (diferencia < 0) { estadoEntrega = "Atrasada"; claseEntrega =
+              "atrasada"; } else if (diferencia === 0) { estadoEntrega =
+              "Entrega hoy"; claseEntrega = "hoy"; } else if (diferencia <= 2) {
+              estadoEntrega = `En ${diferencia} día${diferencia > 1 ? "s" :
+              ""}`; claseEntrega = "proxima"; } else { estadoEntrega = `En
+              ${diferencia} días`; claseEntrega = "normal"; } %>
+
+              <div class="entrega-item">
+                <div class="entrega-icono <%= claseEntrega %>">
+                  <i class="fas fa-calendar-check"></i>
+                </div>
+
+                <div class="entrega-info">
+                  <div class="entrega-principal">
+                    <strong>
+                      <%= item.codigo %>
+                    </strong>
+
+                    <span class="entrega-estado <%= claseEntrega %>">
+                      <%= estadoEntrega %>
+                    </span>
+                  </div>
+
+                  <div class="entrega-cliente"><%= item.cliente_nombre %></div>
+
+                  <div class="entrega-detalle">
+                    <span>
+                      <i class="fas fa-glasses"></i>
+                      <%= item.tipo_lente %>
+                    </span>
+
+                    <span>
+                      <i class="fas fa-calendar"></i>
+
+                      <%= fechaEntrega.toLocaleDateString(
+                "es-CO",
+                {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric"
+                }
+              ) %>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <% }) %>
+
+              <% } else { %>
+
+              <div class="entregas-vacia">
+                <i class="fas fa-calendar-check"></i>
+
+                <p>No hay próximas entregas.</p>
+              </div>
+
+              <% } %>
+            </div>
+          </section>
+
+          <!-- ==========================================
+         ÓRDENES EN PRODUCCIÓN
+    =========================================== -->
+
+          <section class="dashboard-card dashboard-table-card">
+            <div class="dashboard-card-header">
+              <h3>Órdenes en Producción</h3>
+
+              <a href="/trabajos">Ver todas</a>
+            </div>
+
+            <div class="table-container">
+              <table class="dashboard-table">
+                <thead>
+                  <tr>
+                    <th>Código</th>
+                    <th>Cliente</th>
+                    <th>Tipo de Lente</th>
+                    <th>Etapa Actual</th>
+                    <th>Operario</th>
+                    <th>Fecha Entrega</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <% if ( dashboard.trabajosProduccion &&
+                  dashboard.trabajosProduccion.length > 0 ) { %> <%
+                  dashboard.trabajosProduccion.forEach(item => { %>
+
+                  <tr>
+                    <td>
+                      <strong>
+                        <%= item.codigo %>
+                      </strong>
+                    </td>
+
+                    <td>
+                      <%= item.cliente_nombre %>
+                    </td>
+
+                    <td>
+                      <%= item.tipo_lente %>
+                    </td>
+
+                    <td>
+                      <span class="estado-badge"><%= item.etapa_actual %></span>
+                    </td>
+
+                    <td>
+                      <%= item.operario_nombre || "Sin asignar" %>
+                    </td>
+
+                    <td>
+                      <%= item.fecha_estimada_entrega
+                      ? new Date(
+                          item.fecha_estimada_entrega
+                        ).toLocaleDateString("es-CO")
+                      : "Sin fecha"
+                    %>
+                    </td>
+                  </tr>
+
+                  <% }) %>
+
+                  <% } else { %>
+
+                  <tr>
+                    <td colspan="6" class="tabla-vacia">
+                      No hay órdenes en producción.
+                    </td>
+                  </tr>
+
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
       </main>
     </div>
-
+    <%- include('partials/scripts') %>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-      const layout = document.querySelector(".dashboard-layout");
+      document.addEventListener("DOMContentLoaded", () => {
 
-      function toggleSidebar() {
-        layout.classList.toggle("collapsed");
+        // ==========================================
+        // DATOS DESDE EJS
+        // ==========================================
 
-        localStorage.setItem("sidebarCollapsed", layout.classList.contains("collapsed"));
-      }
+        const ordenesPorEtapa = <%- JSON.stringify(dashboard.ordenesPorEtapa || []) %>;
+        const trabajosPorOperario = <%- JSON.stringify(dashboard.trabajosPorOperario || []) %>;
+        const ordenesPorLente = <%- JSON.stringify(dashboard.ordenesPorLente || []) %>;
 
-      window.addEventListener("DOMContentLoaded", () => {
-        if (localStorage.getItem("sidebarCollapsed") === "true") {
-          layout.classList.add("collapsed");
+        // ==========================================
+        // 1. GRÁFICA ÓRDENES POR ETAPA
+        // ==========================================
+
+        const canvasEtapas = document.getElementById("graficaEtapas");
+
+        if (canvasEtapas) {
+
+          new Chart(canvasEtapas, {
+            type: "bar",
+
+            data: {
+              labels: ordenesPorEtapa.map(item => item.etapa),
+
+              datasets: [{
+                label: "Órdenes",
+                data: ordenesPorEtapa.map(item => Number(item.cantidad)),
+                borderWidth: 0,
+                borderRadius: 6
+              }]
+            },
+
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+
+              plugins: {
+                legend: {
+                  display: false
+                }
+              },
+
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    precision: 0
+                  }
+                },
+
+                x: {
+                  grid: {
+                    display: false
+                  }
+                }
+              }
+            }
+          });
+
         }
+
+
+        // ==========================================
+        // 2. GRÁFICA TRABAJOS POR OPERARIO
+        // ==========================================
+
+        const canvasOperarios = document.getElementById("graficaOperarios");
+
+        if (canvasOperarios) {
+
+          new Chart(canvasOperarios, {
+            type: "bar",
+
+            data: {
+              labels: trabajosPorOperario.map(item => item.operario),
+
+              datasets: [{
+                label: "Trabajos asignados",
+                data: trabajosPorOperario.map(item => Number(item.cantidad)),
+                borderWidth: 0,
+                borderRadius: 6
+              }]
+            },
+
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+
+              plugins: {
+                legend: {
+                  display: false
+                }
+              },
+
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    precision: 0
+                  }
+                },
+
+                x: {
+                  grid: {
+                    display: false
+                  }
+                }
+              }
+            }
+          });
+
+        }
+
+
+        // ==========================================
+        // 3. GRÁFICA TIPO DE LENTE
+        // ==========================================
+
+        const canvasLentes = document.getElementById("graficaLentes");
+
+        if (canvasLentes) {
+
+          new Chart(canvasLentes, {
+            type: "doughnut",
+
+            data: {
+              labels: ordenesPorLente.map(item => item.tipo_lente),
+
+              datasets: [{
+                data: ordenesPorLente.map(item => Number(item.cantidad)),
+                borderWidth: 2
+              }]
+            },
+
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+
+              plugins: {
+                legend: {
+                  position: "right"
+                }
+              }
+            }
+          });
+
+        }
+
       });
     </script>
   </body>

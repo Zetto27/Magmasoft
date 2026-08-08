@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <link rel="stylesheet" href="/resources/estado/estado.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <meta charset="UTF-8" />
+    <title>Estado de la Orden</title>
+  </head>
+  <body>
+    <div class="estado-container">
+      <div class="estado-card">
+        <div class="estado-logo">
+          <h1>MAGMASOFT</h1>
+        </div>
+        <p class="estado-subtitulo">Estado de su orden</p>
+        <div class="codigo"><%= trabajo.codigo %></div>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Paciente</label>
+            <span><%= trabajo.cliente_nombre %></span>
+          </div>
+
+          <div class="info-item">
+            <label>Óptica</label>
+            <span><%= trabajo.optica %></span>
+          </div>
+          <div class="info-item">
+            <label>Estado</label>
+            <span><%= trabajo.estado %></span>
+          </div>
+          <div class="info-item">
+            <label>Fecha estimada</label>
+            <span>
+              <%= trabajo.fecha_estimada_entrega
+            ? new Date(trabajo.fecha_estimada_entrega).toLocaleDateString("es-CO"): "Sin fecha" %>
+            </span>
+          </div>
+        </div>
+        <div class="timeline">
+          <h2>Estado de Producción</h2>
+
+          <div class="timeline-container">
+            <div class="timeline-line"></div>
+
+            <% etapas.forEach(etapa=>{ %>
+
+            <div
+              class="timeline-step <%= etapa.orden_etapa <= trabajo.orden_etapa ? 'done' : '' %> <%= trabajo.estado !== 'Entregado' && etapa.orden_etapa === trabajo.orden_etapa ? 'active' : '' %>"
+            >
+              <div
+                class="timeline-circle"
+                style="
+<% if(etapa.orden_etapa <= trabajo.orden_etapa){ %>
+background:<%= etapa.color %>;
+border-color:<%= etapa.color %>;
+<% } %>
+"
+              >
+                <% if(etapa.orden_etapa <= trabajo.orden_etapa){ %>
+
+                <i class="fa-solid fa-check"></i>
+
+                <% }else{ %>
+
+                <%= etapa.orden_etapa %>
+
+                <% } %>
+              </div>
+
+              <span>
+                <%= etapa.nombre %>
+              </span>
+            </div>
+
+            <% }) %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -3,16 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <title>Usuarios</title>
-    <script>
-      if (localStorage.getItem("sidebarCollapsed") === "true") {
-        document.documentElement.classList.add("sidebar-collapsed");
-      }
-    </script>
+    <script></script>
     <link rel="stylesheet" href="/resources/css/index.css" />
-    <link rel="stylesheet" href="/resources/css/trabajos.css"
-/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/resources/components/botones.css" />
+    <link rel="stylesheet" href="/resources/components/formularios.css" />
+    <link rel="stylesheet" href="/resources/components/tablas.css" />
+    <link rel="stylesheet" href="/resources/components/badges.css" />
+    <link rel="stylesheet" href="/resources/css/trabajos.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div class="dashboard-layout">
@@ -29,382 +34,277 @@
 
           <section class="map-card">
             <!-- Tcodigo para esta seccion -->
-                    
-                    <div class="trabajos-toolbar">
-          <div class="search-box">
-            <i class="fas fa-search"></i>
-            <input
-              type="text"
-              id="buscarUsuario"
-              placeholder="Buscar usuario..."
-            />
-          </div>
-  <button
-  class="btn-primary"
-  onclick="abrirModalRegistro()"
->
-  <i class="fas fa-plus"></i>
-  Nuevo Usuario
-</button>
-        </div>
 
-        <br />
+            <div class="trabajos-toolbar">
+              <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input
+                  type="text"
+                  id="buscarUsuario"
+                  placeholder="Buscar usuario..."
+                />
+              </div>
+              <button class="btn-primary" onclick="abrirModalRegistro()">
+                <i class="fas fa-plus"></i>
+                Nuevo Usuario
+              </button>
+            </div>
 
-        <table class="trabajos-table">
-          <thead>
-            <tr>
-             <!-- <th>ID</th> -->
-              <th>Usuario</th>
-              <th>Rol</th>
-              <th>Documento</th>
-              <th>Email</th>
-              <th>Celular</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
+            <br />
 
-          <tbody>
-                    <tr id="sinResultados" style="display: none;">
-          <td colspan="7" style="text-align:center; padding: 30px;">
-            No se encontraron usuarios
-          </td>
-        </tr>
-            <% usuarios.forEach(usuario => { %>
+            <table class="trabajos-table">
+              <thead>
+                <tr>
+                  <!-- <th>ID</th> -->
+                  <th>Usuario</th>
+                  <th>Rol</th>
+                  <th>Documento</th>
+                  <th>Email</th>
+                  <th>Celular</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
 
-           <tr class="fila-usuario">
-              <!-- <td><%= usuario.id %></td> -->
+              <tbody>
+                <tr id="sinResultados" style="display: none">
+                  <td colspan="7" style="text-align: center; padding: 30px">
+                    No se encontraron usuarios
+                  </td>
+                </tr>
+                <% usuarios.forEach(usuario => { %>
 
-              <td><%= usuario.user %></td>
+                <tr class="fila-usuario">
+                  <!-- <td><%= usuario.id %></td> -->
 
-              <td><%= usuario.rol %></td>
+                  <td><%= usuario.user %></td>
 
-              <td><%= usuario.document %></td>
+                  <td><%= usuario.rol%></td>
 
-              <td><%= usuario.email %></td>
+                  <td><%= usuario.document %></td>
 
-              <td><%= usuario.celular %></td>
-              <td class="actions">
-                  <i
-                    class="fas fa-pen"
-                    onclick="editarUsuario(
-                    '<%= usuario.id %>',
-                      '<%= usuario.user %>',
-                      '<%= usuario.rol %>',
-                      '<%= usuario.document %>',
-                      '<%= usuario.email %>',
-                      '<%= usuario.celular %>'
-                    )"
-                  ></i>
-                <i
-                  class="fas fa-trash"
-                  onclick="eliminarUsuario('<%= usuario.id %>')"
-                ></i>
-              </td>
-            </tr>
+                  <td><%= usuario.email %></td>
 
-            <% }) %>
-          </tbody>
-        </table>
-        <!-- MODAL NUEVO USUARIO -->
+                  <td><%= usuario.celular %></td>
+                  <td class="actions">
+                    <i
+                      class="fas fa-pen"
+                      onclick="
+                        editarUsuario(
+                          '<%= usuario.id %>',
+                          '<%= usuario.user %>',
+                          '<%= usuario.rol_id %>',
+                          '<%= usuario.document %>',
+                          '<%= usuario.email %>',
+                          '<%= usuario.celular %>',
+                        )
+                      "
+                    ></i>
+                    <i
+                      class="fas fa-trash"
+                      onclick="eliminarUsuario('<%= usuario.id %>')"
+                    ></i>
+                  </td>
+                </tr>
 
-<div id="registerModal" class="modal">
-  <div class="modal-content">
+                <% }) %>
+              </tbody>
+            </table>
+            <!-- MODAL NUEVO USUARIO -->
 
-    <h3>Nuevo Usuario</h3>
+            <div id="registerModal" class="modal">
+              <div class="modal-content">
+                <h3>Nuevo Usuario</h3>
 
-    <form action="/users/create" method="POST">
+                <form action="/users/create" method="POST">
+                  <input
+                    type="text"
+                    name="user"
+                    placeholder="Nombre completo"
+                    required
+                  />
 
-      <input
-        type="text"
-        name="user"
-        placeholder="Nombre completo"
-        required
-      >
+                  <select name="rol_id" required>
+                    <option value="">Seleccione un rol</option>
+                    <option value="1">Administrador</option>
+                    <option value="2">Supervisor</option>
+                    <option value="3">Operario</option>
+                  </select>
 
-      <select name="rol" required>
-        <option value="">Seleccione un rol</option>
-        <option value="Administrador">Administrador</option>
-        <option value="Supervisor">Supervisor</option>
-        <option value="Operario">Operario</option>
-      </select>
+                  <input
+                    type="text"
+                    name="document"
+                    placeholder="Documento"
+                    required
+                  />
 
-      <input
-        type="text"
-        name="document"
-        placeholder="Documento"
-        required
-      >
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Correo electrónico"
+                    required
+                  />
 
-      <input
-        type="email"
-        name="email"
-        placeholder="Correo electrónico"
-        required
-      >
+                  <input
+                    type="text"
+                    name="celular"
+                    placeholder="Celular"
+                    required
+                  />
 
-      <input
-        type="text"
-        name="celular"
-        placeholder="Celular"
-        required
-      >
+                  <input
+                    type="password"
+                    name="pass"
+                    placeholder="Contraseña"
+                    required
+                  />
 
-      <input
-        type="password"
-        name="pass"
-        placeholder="Contraseña"
-        required
-      >
+                  <div class="modal-buttons">
+                    <button type="submit" class="btn-primary">Guardar</button>
 
-      <div class="modal-buttons">
+                    <button
+                      type="button"
+                      class="btn-primary"
+                      onclick="cerrarModalRegistro()"
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div id="editModal" class="modal">
+              <div class="modal-content">
+                <h3>Editar Usuario</h3>
 
-        <button
-          type="submit"
-          class="btn-primary"
-        >
-          Guardar
-        </button>
+                <form id="editForm" method="POST">
+                  <input id="editUser" type="text" name="user" required />
 
-        <button
-          type="button"
-          class="btn-primary"
-          onclick="cerrarModalRegistro()"
-        >
-          Cancelar
-        </button>
+                  <select id="editRol" name="rol_id" required>
+                    <option value="1">Administrador</option>
+                    <option value="2">Supervisor</option>
+                    <option value="3">Operario</option>
+                  </select>
 
-      </div>
+                  <input
+                    id="editDocument"
+                    type="text"
+                    name="document"
+                    required
+                  />
 
-    </form>
+                  <input id="editEmail" type="email" name="email" required />
 
-  </div>
-</div>
-<div id="editModal" class="modal">
+                  <input id="editCelular" type="text" name="celular" required />
+                  <small>
+                    Deja este campo vacío si no deseas cambiar la contraseña
+                  </small>
 
-  <div class="modal-content">
+                  <input
+                    id="editPass"
+                    type="password"
+                    name="pass"
+                    placeholder="Nueva contraseña"
+                  />
 
-    <h3>Editar Usuario</h3>
+                  <div class="modal-buttons">
+                    <button type="submit" class="btn-primary">
+                      Actualizar
+                    </button>
 
-    <form id="editForm" method="POST">
-
-      <input
-        id="editUser"
-        type="text"
-        name="user"
-        required
-      >
-
-      <select
-        id="editRol"
-        name="rol"
-        required
-      >
-        <option value="Administrador">Administrador</option>
-        <option value="Supervisor">Supervisor</option>
-        <option value="Operario">Operario</option>
-      </select>
-
-      <input
-        id="editDocument"
-        type="text"
-        name="document"
-        required
-      >
-
-      <input
-        id="editEmail"
-        type="email"
-        name="email"
-        required
-      >
-
-      <input
-        id="editCelular"
-        type="text"
-        name="celular"
-        required
-      >
-      <small>
-        Deja este campo vacío si no deseas cambiar la contraseña
-      </small>
-
-      <input
-        id="editPass"
-        type="password"
-        name="pass"
-        placeholder="Nueva contraseña"
-      >
-
-      <div class="modal-buttons">
-
-        <button
-          type="submit"
-          class="btn-primary"
-        >
-          Actualizar
-        </button>
-
-        <button
-          type="button"
-          class="btn-primary"
-          onclick="cerrarModalEditar()"
-        >
-          Cancelar
-        </button>
-
-      </div>
-
-    </form>
-
-  </div>
-
-</div>
+                    <button
+                      type="button"
+                      class="btn-primary"
+                      onclick="cerrarModalEditar()"
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
           </section>
         </div>
       </main>
     </div>
+    <%- include('partials/scripts') %>
     <script>
-      const layout = document.querySelector(".dashboard-layout");
-
-      if (document.documentElement.classList.contains("sidebar-collapsed")) {
-        layout.classList.add("collapsed");
+      function abrirModalRegistro() {
+        document.getElementById("registerModal").style.display = "flex";
       }
 
-      function toggleSidebar() {
-        layout.classList.toggle("collapsed");
+      function cerrarModalRegistro() {
+        document.getElementById("registerModal").style.display = "none";
+      }
+    </script>
+    <script>
+      function editarUsuario(id, user, rol_id, documento, email, celular) {
+        document.getElementById("editUser").value = user;
 
-        const collapsed = layout.classList.contains("collapsed");
+        document.getElementById("editRol").value = rol_id;
 
-        localStorage.setItem("sidebarCollapsed", collapsed);
+        document.getElementById("editDocument").value = documento;
 
-        document.documentElement.classList.toggle("sidebar-collapsed", collapsed);
+        document.getElementById("editEmail").value = email;
+
+        document.getElementById("editCelular").value = celular;
+
+        document.getElementById("editForm").action = "/users/update/" + id;
+
+        document.getElementById("editModal").style.display = "flex";
       }
 
-      document.querySelectorAll(".nav-link").forEach((link) => {
-        if (link.href === window.location.href) {
-          link.classList.add("active");
+      function cerrarModalEditar() {
+        document.getElementById("editModal").style.display = "none";
+      }
+    </script>
+    <script>
+      function eliminarUsuario(id) {
+        Swal.fire({
+          title: "¿Eliminar usuario?",
+          text: "Esta acción no se puede deshacer",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#dc2626",
+          cancelButtonColor: "#6b7280",
+          confirmButtonText: "Eliminar",
+          cancelButtonText: "Cancelar",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = "/users/delete/" + id;
+          }
+        });
+      }
+    </script>
+    <script>
+      const buscador = document.getElementById("buscarUsuario");
+
+      buscador.addEventListener("keyup", function () {
+        const texto = this.value.toLowerCase();
+
+        const filas = document.querySelectorAll(".fila-usuario");
+
+        let encontrados = 0;
+
+        filas.forEach((fila) => {
+          const contenido = fila.textContent.toLowerCase();
+
+          if (contenido.includes(texto)) {
+            fila.style.display = "";
+            encontrados++;
+          } else {
+            fila.style.display = "none";
+          }
+        });
+
+        const mensaje = document.getElementById("sinResultados");
+
+        if (encontrados === 0) {
+          mensaje.style.display = "";
+        } else {
+          mensaje.style.display = "none";
         }
       });
     </script>
-    <script>
-
-function abrirModalRegistro() {
-  document.getElementById("registerModal").style.display = "flex";
-}
-
-function cerrarModalRegistro() {
-  document.getElementById("registerModal").style.display = "none";
-}
-
-</script>
-<script>
-
-function editarUsuario(
-  id,
-  user,
-  rol,
-  documento,
-  email,
-  celular
-) {
-
-  document.getElementById("editUser").value = user;
-
-  document.getElementById("editRol").value = rol;
-
-  document.getElementById("editDocument").value = documento;
-
-  document.getElementById("editEmail").value = email;
-
-  document.getElementById("editCelular").value = celular;
-
-  document.getElementById("editForm").action =
-    "/users/update/" + id;
-
-  document.getElementById("editModal").style.display =
-    "flex";
-}
-
-function cerrarModalEditar() {
-
-  document.getElementById("editModal").style.display =
-    "none";
-
-}
-
-</script>
-<script>
-
-function eliminarUsuario(id) {
-
-  Swal.fire({
-    title: "¿Eliminar usuario?",
-    text: "Esta acción no se puede deshacer",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#dc2626",
-    cancelButtonColor: "#6b7280",
-    confirmButtonText: "Eliminar",
-    cancelButtonText: "Cancelar"
-  }).then((result) => {
-
-    if (result.isConfirmed) {
-
-      window.location.href =
-        "/users/delete/" + id;
-
-    }
-
-  });
-
-}
-
-</script><script>
-
-const buscador = document.getElementById("buscarUsuario");
-
-buscador.addEventListener("keyup", function () {
-
-  const texto = this.value.toLowerCase();
-
-  const filas =
-    document.querySelectorAll(".fila-usuario");
-
-  let encontrados = 0;
-
-  filas.forEach((fila) => {
-
-    const contenido =
-      fila.textContent.toLowerCase();
-
-    if (contenido.includes(texto)) {
-
-      fila.style.display = "";
-      encontrados++;
-
-    } else {
-
-      fila.style.display = "none";
-
-    }
-
-  });
-
-  const mensaje =
-    document.getElementById("sinResultados");
-
-  if (encontrados === 0) {
-
-    mensaje.style.display = "";
-
-  } else {
-
-    mensaje.style.display = "none";
-
-  }
-
-});
-</script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </body>
 </html>

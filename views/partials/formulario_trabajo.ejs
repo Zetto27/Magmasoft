@@ -1,0 +1,219 @@
+<div class="form-section">
+  <div class="section-title">
+    <i class="fa-solid fa-user"></i>
+    <!-- DATOS CLIENTE -->
+    <h3>Datos del Cliente</h3>
+  </div>
+
+  <div class="form-grid">
+    <input
+      type="text"
+      name="cliente_nombre"
+      placeholder="Nombre del paciente"
+      value="<%= trabajo ? trabajo.cliente_nombre : '' %>"
+    />
+
+    <input
+      type="text"
+      name="cliente_documento"
+      placeholder="Documento del paciente"
+      value="<%= trabajo ? trabajo.cliente_documento : '' %>"
+    />
+
+    <input
+      type="text"
+      name="cliente_telefono"
+      placeholder="Teléfono del paciente"
+      value="<%= trabajo ? trabajo.cliente_telefono : '' %>"
+    />
+    <input
+      type="text"
+      name="cliente_direccion"
+      placeholder="Dirección del paciente"
+      value="<%= trabajo ? trabajo.cliente_direccion : '' %>"
+    />
+            <input
+      type="email"
+      name="cliente_correo"
+      placeholder="Correo electrónico del paciente"
+      value="<%= trabajo ? trabajo.cliente_correo : '' %>"
+    />
+
+<select name="optica_id">
+
+    <option value="">Seleccione una óptica</option>
+
+    <% opticas.forEach(optica => { %>
+
+        <option
+            value="<%= optica.id %>"
+            <%= trabajo && trabajo.optica_id == optica.id ? 'selected' : '' %>>
+            <%= optica.nombre %>
+        </option>
+
+    <% }) %>
+
+</select>
+  </div>
+</div>
+
+<div class="form-section">
+  <div class="section-title">
+    <i class="fa-solid fa-eye"></i>
+    <!-- FORMULA -->
+    <h3>Fórmula Oftálmica</h3>
+  </div>
+  <div class="form-grid">
+    <input
+      type="number"
+      step="0.25"
+      name="esfera_od"
+      placeholder="Esfera OD"
+      value="<%= trabajo ? trabajo.esfera_od : '' %>"
+    />
+
+    <input
+      type="number"
+      step="0.25"
+      name="esfera_oi"
+      placeholder="Esfera OI"
+      value="<%= trabajo ? trabajo.esfera_oi : '' %>"
+    />
+
+    <input
+      type="number"
+      step="0.25"
+      name="cilindro_od"
+      placeholder="Cilindro OD"
+      value="<%= trabajo ? trabajo.cilindro_od : '' %>"
+    />
+
+    <input
+      type="number"
+      step="0.25"
+      name="cilindro_oi"
+      placeholder="Cilindro OI"
+      value="<%= trabajo ? trabajo.cilindro_oi : '' %>"
+    />
+
+    <input
+      type="number"
+      name="eje_od"
+      placeholder="Eje OD"
+      value="<%= trabajo ? trabajo.eje_od : '' %>"
+    />
+
+    <input
+      type="number"
+      name="eje_oi"
+      placeholder="Eje OI"
+      value="<%= trabajo ? trabajo.eje_oi : '' %>"
+    />
+
+    <input
+      type="number"
+      step="0.25"
+      name="adicion_val"
+      placeholder="Adición"
+      value="<%= trabajo ? trabajo.adicion_val : '' %>"
+    />
+
+    <input
+      type="text"
+      name="dp"
+      placeholder="DP"
+      value="<%= trabajo ? trabajo.dp : '' %>"
+    />
+  </div>
+</div>
+
+<div class="form-section">
+  <div class="section-title">
+    <i class="fa-solid fa-glasses"></i>
+    <!-- FABRICACION -->
+
+    <h3>Características del Lente</h3>
+  </div>
+
+  <div class="form-grid">
+    <input
+      type="text"
+      name="tipo_lente"
+      placeholder="Tipo de lente"
+      value="<%= trabajo ? trabajo.tipo_lente : '' %>"
+    />
+
+    <input
+      type="text"
+      name="material"
+      placeholder="Material"
+      value="<%= trabajo ? trabajo.material : '' %>"
+    />
+
+    <input
+      type="text"
+      name="color"
+      placeholder="Color"
+      value="<%= trabajo ? trabajo.color : '' %>"
+    />
+
+    <input
+      type="text"
+      name="tratamiento"
+      placeholder="Tratamiento"
+      value="<%= trabajo ? trabajo.tratamiento : '' %>"
+    />
+  </div>
+</div>
+
+<div class="form-section">
+  <div class="section-title">
+    <i class="fa-solid fa-calendar-days"></i>
+    <h3>Entrega</h3>
+  </div>
+
+  <div class="form-grid">
+    <div>
+      <label>Fecha estimada de entrega</label>
+
+      <input
+        type="date"
+        name="fecha_estimada_entrega"
+        value="<%= trabajo && trabajo.fecha_estimada_entrega ? trabajo.fecha_estimada_entrega.toISOString().split('T')[0] : '' %>"
+      />
+    </div>
+  </div>
+
+  <textarea
+    name="observaciones"
+    rows="4"
+    placeholder="Ingrese observaciones del trabajo..."
+  >
+<%= trabajo ? trabajo.observaciones : '' %></textarea
+  >
+  <div id="mensajeFormulario" class="mensaje-formulario" style="display: none">
+    <i class="fas fa-circle-exclamation"></i>
+    Debe completar todos los campos obligatorios.
+  </div>
+  <div class="modal-actions">
+    <% if (modo === "crear") { %>
+
+    <button
+      type="button"
+      class="btn-secondary"
+      onclick="cerrarModalNuevaOrden()"
+    >
+      Cancelar
+    </button>
+
+    <% } else { %>
+
+    <a href="/trabajos" class="btn-secondary">Cancelar</a>
+
+    <% } %>
+
+    <button type="submit" class="btn-primary">
+      <%= modo === "crear" ? "Guardar Orden" : "Actualizar Trabajo" %>
+    </button>
+  </div>
+</div>

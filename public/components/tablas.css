@@ -1,0 +1,125 @@
+/* =========================
+   CONTENEDOR TABLA
+========================= */
+
+.trabajos-card {
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+}
+
+/* =========================
+   TABLA
+========================= */
+
+.trabajos-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+}
+
+/* =========================
+   CABECERA
+========================= */
+
+.trabajos-table th {
+  position: sticky;
+  top: 0;
+  padding: 14px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  border: none;
+  z-index: 20;
+}
+
+/* =========================
+   CELDAS
+========================= */
+
+.trabajos-table td {
+  padding: 14px;
+  border: none;
+}
+
+/* =========================
+   FILAS
+========================= */
+
+.trabajos-table tbody tr {
+  transition: 0.25s;
+}
+
+.trabajos-table tbody tr:hover {
+  transform: scale(1.003);
+}
+
+/* =========================
+   FILA ACTIVA
+========================= */
+
+.active-row {
+  background: #f8fafc;
+}
+
+/* =========================
+   FILA TRABAJO
+========================= */
+
+.fila-trabajo {
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.fila-trabajo:hover td {
+  background: #f8fbff;
+}
+
+.fila-trabajo.fila-seleccionada td {
+  background: #eef5ff;
+}
+
+.fila-trabajo.fila-seleccionada td:first-child {
+  border-left: 5px solid #2563eb;
+  font-weight: 700;
+}
+
+/* =========================
+   ACCIONES
+========================= */
+
+.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+}
+
+.actions a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.actions i {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #667085;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.actions i:hover {
+  background: #2563eb;
+  color: #fff;
+}

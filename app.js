@@ -31,6 +31,8 @@ app.use(
 );
 // 8 Invocamos a la conexion de la BD
 const connection = require("./Database/db");
+const trabajosRoutes = require("./routes/trabajos");
+const estadoRoutes = require("./routes/estado");
 const e = require("express");
 
 // 9 Rutas
@@ -47,7 +49,7 @@ app.get("/registro", (req, res) => {
 app.post("/register", async (req, res) => {
   console.log(req.body);
   const user = req.body.user;
-  const rol = req.body.rol;
+  const rol_id = req.body.rol_id;
   const document = req.body.document;
   const email = req.body.email;
   const celular = req.body.celular;
@@ -59,7 +61,7 @@ app.post("/register", async (req, res) => {
     "INSERT INTO users SET ?",
     {
       user,
-      rol,
+      rol_id,
       document,
       email,
       celular,
@@ -71,7 +73,8 @@ app.post("/register", async (req, res) => {
           return res.render("register", {
             alert: true,
             alertTitle: "Dato duplicado",
-            alertMessage: "Ya existe un registro con ese correo, documento o celular.",
+            alertMessage:
+              "Ya existe un registro con ese correo, documento o celular.",
             alertIcon: "warning",
             showConfirmButton: true,
             timer: false,
@@ -104,7 +107,7 @@ app.post("/register", async (req, res) => {
 });
 app.post("/users/create", async (req, res) => {
   const user = req.body.user;
-  const rol = req.body.rol;
+  const rol_id = req.body.rol_id;
   const document = req.body.document;
   const email = req.body.email;
   const celular = req.body.celular;
@@ -116,7 +119,7 @@ app.post("/users/create", async (req, res) => {
     "INSERT INTO users SET ?",
     {
       user,
-      rol,
+      rol_id,
       document,
       email,
       celular,
@@ -136,7 +139,7 @@ app.post("/users/create", async (req, res) => {
 app.post("/users/update/:id", async (req, res) => {
   const id = req.params.id;
 
-  const { user, rol, document, email, celular, pass } = req.body;
+  const { user, rol_id, document, email, celular, pass } = req.body;
 
   try {
     // Si no escribieron contraseña
@@ -146,13 +149,13 @@ app.post("/users/update/:id", async (req, res) => {
         UPDATE users
         SET
           user = ?,
-          rol = ?,
+          rol_id = ?,
           document = ?,
           email = ?,
           celular = ?
         WHERE id = ?
         `,
-        [user, rol, document, email, celular, id],
+        [user, rol_id, document, email, celular, id],
         (error) => {
           if (error) {
             console.log(error);
@@ -171,14 +174,14 @@ app.post("/users/update/:id", async (req, res) => {
         UPDATE users
         SET
           user = ?,
-          rol = ?,
+          rol_id = ?,
           document = ?,
           email = ?,
           celular = ?,
           pass = ?
         WHERE id = ?
         `,
-        [user, rol, document, email, celular, passwordHash, id],
+        [user, rol_id, document, email, celular, passwordHash, id],
         (error) => {
           if (error) {
             console.log(error);
@@ -216,55 +219,240 @@ app.post("/auth", async (req, res) => {
   const pass = req.body.pass;
 
   if (document && pass) {
-    connection.query("SELECT * FROM users WHERE document = ?", [document], async (error, results) => {
-      if (error) {
-        console.log(error);
-        return res.send("Error del servidor");
-      }
+    connection.query(
+      "SELECT * FROM users WHERE document = ?",
+      [document],
+      async (error, results) => {
+        if (error) {
+          console.log(error);
+          return res.send("Error del servidor");
+        }
 
-      if (results.length == 0 || !(await bcryptjs.compare(pass, results[0].pass))) {
+        if (
+          results.length == 0 ||
+          !(await bcryptjs.compare(pass, results[0].pass))
+        ) {
+          return res.render("login", {
+            alert: true,
+            alertTitle: "Error",
+            alertMessage: "Usuario o contraseña incorrecta",
+            alertIcon: "error",
+            showConfirmButton: true,
+            timer: false,
+            ruta: "/",
+          });
+        }
+        req.session.loggedin = true;
+        req.session.user_id = results[0].id;
+        req.session.rol_id = results[0].rol_id;
+        req.session.user = results[0].user;
+
         return res.render("login", {
           alert: true,
-          alertTitle: "Error",
-          alertMessage: "Usuario o contraseña incorrecta",
-          alertIcon: "error",
-          showConfirmButton: true,
-          timer: false,
-          ruta: "/",
+          alertTitle: "Conexión exitosa",
+          alertMessage: "¡Bienvenido " + results[0].user,
+          alertIcon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+          ruta: "",
         });
-      }
-      req.session.loggedin = true;
-      req.session.rol = results[0].rol;
-      req.session.user = results[0].user;
-
-      return res.render("login", {
-        alert: true,
-        alertTitle: "Conexión exitosa",
-        alertMessage: "¡Bienvenido " + results[0].user,
-        alertIcon: "success",
-        showConfirmButton: false,
-        timer: 1500,
-        ruta: "",
-      });
-    });
+      },
+    );
   } else {
     return res.send("Faltan datos");
   }
 });
 
 // 12 Ruta para cerrar sesión
-app.get("/", (req, res) => {
-  if (req.session.loggedin) {
-    res.render("index", {
-      login: true,
-      rol: req.session.rol,
+function queryDB(sql, params = []) {
+  return new Promise((resolve, reject) => {
+    connection.query(sql, params, (error, results) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+app.get("/", async (req, res) => {
+  if (!req.session.loggedin) {
+    return res.render("index");
+  }
+
+  try {
+    // ==========================================
+    // 1. ÓRDENES TOTALES
+    // ==========================================
+
+    const [totalOrdenes] = await queryDB(`
+      SELECT COUNT(*) AS total
+      FROM trabajos
+    `);
+
+    // ==========================================
+    // 2. ÓRDENES PENDIENTES
+    // ==========================================
+
+    const [ordenesPendientes] = await queryDB(`
+      SELECT COUNT(*) AS total
+      FROM trabajos
+      WHERE estado = 'Pendiente'
+    `);
+
+    // ==========================================
+    // 3. ÓRDENES EN PRODUCCIÓN
+    // ==========================================
+
+    const [ordenesProduccion] = await queryDB(`
+      SELECT COUNT(*) AS total
+      FROM trabajos
+      WHERE estado = 'En proceso'
+    `);
+
+    // ==========================================
+    // 4. ÓRDENES ENTREGADAS
+    // ==========================================
+
+    const [ordenesEntregadas] = await queryDB(`
+      SELECT COUNT(*) AS total
+      FROM trabajos
+      WHERE estado = 'Entregado'
+    `);
+
+    // ==========================================
+    // 5. ÓRDENES POR ETAPA
+    // ==========================================
+
+    const ordenesPorEtapa = await queryDB(`
+      SELECT
+        ep.nombre AS etapa,
+        COUNT(t.id) AS cantidad
+      FROM etapas_proceso ep
+      LEFT JOIN trabajos t
+        ON t.etapa_actual_id = ep.id
+      GROUP BY
+        ep.id,
+        ep.nombre,
+        ep.orden_etapa
+      ORDER BY ep.orden_etapa
+    `);
+
+    // ==========================================
+    // 6. ÓRDENES POR TIPO DE LENTE
+    // ==========================================
+
+    const ordenesPorLente = await queryDB(`
+      SELECT
+        tipo_lente,
+        COUNT(*) AS cantidad
+      FROM trabajos
+      GROUP BY tipo_lente
+      ORDER BY cantidad DESC
+    `);
+    // ==========================================
+    // 7. TRABAJOS ASIGNADOS POR OPERARIO
+    // ==========================================
+
+    const trabajosPorOperario = await queryDB(`
+        SELECT
+          COALESCE(u.user, 'Sin asignar') AS operario,
+          COUNT(t.id) AS cantidad
+        FROM trabajos t
+        LEFT JOIN users u
+          ON t.operario_actual_id = u.id
+        GROUP BY
+          t.operario_actual_id,
+          u.user
+        ORDER BY cantidad DESC
+      `);
+
+    // ==========================================
+    // 7. ÓRDENES EN PRODUCCIÓN
+    // ==========================================
+
+    const trabajosProduccion = await queryDB(`
+      SELECT
+        id,
+        codigo,
+        cliente_nombre,
+        tipo_lente,
+        etapa_actual,
+        operario_nombre,
+        fecha_estimada_entrega
+      FROM vista_trabajos_completa
+      WHERE estado = 'En proceso'
+      ORDER BY fecha_creacion DESC
+      LIMIT 5
+    `);
+
+    // ==========================================
+    // 8. PRÓXIMAS ENTREGAS
+    // ==========================================
+
+    const proximasEntregas = await queryDB(`
+      SELECT
+        id,
+        codigo,
+        cliente_nombre,
+        tipo_lente,
+        fecha_estimada_entrega
+      FROM vista_trabajos_completa
+      WHERE fecha_estimada_entrega IS NOT NULL
+        AND estado <> 'Entregado'
+      ORDER BY fecha_estimada_entrega ASC
+      LIMIT 5
+    `);
+    // ==========================================
+    // 9. ACTIVIDAD RECIENTE
+    // ==========================================
+
+    const actividadReciente = await queryDB(`
+      SELECT
+        he.id,
+        he.fecha_inicio,
+        he.fecha_fin,
+        ep.nombre AS etapa,
+        u.user AS usuario,
+        t.codigo,
+        he.observacion
+      FROM historial_etapas he
+      LEFT JOIN etapas_proceso ep
+        ON he.etapa_id = ep.id
+      LEFT JOIN users u
+        ON he.usuario_id = u.id
+      LEFT JOIN trabajos t
+        ON he.trabajo_id = t.id
+      ORDER BY he.fecha_inicio DESC
+      LIMIT 8
+    `);
+    // ==========================================
+    // ENVIAR TODO AL DASHBOARD
+    // ==========================================
+
+    res.render("dashboard", {
       user: req.session.user,
+      rol_id: req.session.rol_id,
+      page: "dashboard",
+
+      dashboard: {
+        totalOrdenes: totalOrdenes.total,
+        ordenesPendientes: ordenesPendientes.total,
+        ordenesProduccion: ordenesProduccion.total,
+        ordenesEntregadas: ordenesEntregadas.total,
+
+        ordenesPorEtapa,
+        ordenesPorLente,
+        trabajosPorOperario,
+        trabajosProduccion,
+        proximasEntregas,
+        actividadReciente,
+      },
     });
-  } else {
-    res.render("index", {
-      login: false,
-      message: "Debe iniciar sesión para acceder",
-    });
+  } catch (error) {
+    console.error("Error cargando Dashboard:", error);
+
+    res.status(500).send("Error al cargar el Dashboard");
   }
 });
 // 13 Iniciamos el servidor
@@ -281,116 +469,31 @@ app.get("/users", (req, res) => {
     return res.redirect("/login");
   }
 
-  connection.query("SELECT id,user,rol,document,email,celular FROM users ORDER BY id DESC", (error, results) => {
-    if (error) {
-      console.log(error);
-      return res.send("Error al consultar usuarios");
-    }
-
-    res.render("users", {
-      user: req.session.user,
-      page: "users",
-      usuarios: results,
-    });
-  });
-});
-
-app.get("/trabajos", (req, res) => {
-  if (!req.session.loggedin) {
-    return res.redirect("/login");
-  }
-
   connection.query(
     `
-    SELECT *
-    FROM vista_trabajos_completa
-    ORDER BY id DESC
+    SELECT
+        u.id,
+        u.user,
+        u.rol_id,
+        r.nombre AS rol,
+        u.document,
+        u.email,
+        u.celular
+    FROM users u
+    INNER JOIN roles r
+        ON u.rol_id = r.id
+    ORDER BY u.id DESC
     `,
-    (error, trabajos) => {
+    (error, results) => {
       if (error) {
         console.log(error);
-        return res.send("Error al cargar trabajos");
+        return res.send("Error al consultar usuarios");
       }
 
-      connection.query(
-        `
-        SELECT id, user, rol
-        FROM users
-        WHERE rol IN ('Operario','Supervisor')
-        ORDER BY user
-        `,
-        (error, operarios) => {
-          if (error) {
-            console.log(error);
-            return res.send("Error al cargar operarios");
-          }
-
-          connection.query(
-            `
-            SELECT *
-            FROM opticas
-            ORDER BY nombre
-            `,
-            (error, opticas) => {
-              if (error) {
-                console.log(error);
-                return res.send("Error al cargar ópticas");
-              }
-
-              res.render("trabajos", {
-                user: req.session.user,
-                page: "trabajos",
-                trabajos,
-                operarios,
-                opticas,
-              });
-            },
-          );
-        },
-      );
-    },
-  );
-});
-// elimiar orden de trabajo
-app.get("/trabajos/delete/:id", (req, res) => {
-  const id = req.params.id;
-
-  connection.query("DELETE FROM trabajos WHERE id = ?", [id], (error) => {
-    if (error) {
-      console.log(error);
-
-      return res.send("Error al eliminar trabajo");
-    }
-
-    res.redirect("/trabajos");
-  });
-});
-
-// vista detalle de trabajo
-app.get("/trabajos/:id", (req, res) => {
-  const id = req.params.id;
-
-  connection.query(
-    `
-    SELECT *
-    FROM vista_trabajos_completa
-    WHERE id = ?
-    `,
-    [id],
-    (error, resultado) => {
-      if (error) {
-        console.log(error);
-
-        return res.send("Error al cargar trabajo");
-      }
-
-      if (resultado.length === 0) {
-        return res.send("Trabajo no encontrado");
-      }
-
-      res.render("detalle-trabajo", {
+      res.render("users", {
         user: req.session.user,
-        trabajo: resultado[0],
+        usuarios: results,
+        page: "users",
       });
     },
   );
@@ -422,6 +525,9 @@ app.get("/configuracion", (req, res) => {
     page: "configuracion",
   });
 });
+
+app.use("/", trabajosRoutes);
+app.use("/", estadoRoutes);
 
 app.listen(3000, () => {
   console.log("Server is running in http://localhost:3000");

@@ -1,0 +1,26 @@
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const layout = document.querySelector(".dashboard-layout");
+
+    if (!layout) return;
+
+    // Restaurar estado del menú
+    if (localStorage.getItem("sidebarCollapsed") === "true") {
+      layout.classList.add("collapsed");
+    }
+  });
+
+  // Función global para el botón del menú
+  window.toggleSidebar = function () {
+    const layout = document.querySelector(".dashboard-layout");
+
+    if (!layout) return;
+
+    layout.classList.toggle("collapsed");
+
+    localStorage.setItem(
+      "sidebarCollapsed",
+      layout.classList.contains("collapsed"),
+    );
+  };
+</script>

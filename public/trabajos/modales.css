@@ -1,0 +1,156 @@
+/* ==========================================
+   MODALES - MAGMASOFT
+========================================== */
+
+/* =========================
+   OVERLAY
+========================= */
+
+.modal-overlay,
+.modal-etapa {
+  position: fixed;
+  inset: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* Overlay clásico */
+
+.modal-overlay {
+  background: rgba(0, 0, 0, 0.45);
+}
+
+/* Overlay moderno */
+
+.modal-etapa {
+  background: rgba(15, 23, 42, 0.55);
+
+  backdrop-filter: blur(6px);
+
+  padding: 25px;
+}
+
+.modal-etapa.active {
+  display: flex;
+
+  animation: fadeModal 0.25s ease;
+}
+
+/* =========================
+   CONTENEDOR
+========================= */
+
+.modal-content {
+  width: 550px;
+  max-width: 90%;
+  background: #fff;
+  border-radius: 18px;
+  padding: 30px;
+}
+
+.modal-grande {
+  max-width: 1100px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-etapa-content {
+  width: 700px;
+  max-width: 100%;
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  animation: subirModal 0.3s ease;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: 12px 28px;
+
+  background: #2563eb;
+
+  color: #fff;
+}
+
+.modal-header h2 {
+  margin: 0;
+
+  font-size: 22px;
+}
+
+/* =========================
+   BODY
+========================= */
+
+.modal-body {
+  padding: 30px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 15px;
+  padding: 20px 30px;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* =========================
+   BOTONES
+========================= */
+
+.modal-actions {
+  display: flex;
+
+  gap: 16px;
+
+  margin-top: 25px;
+}
+
+.modal-actions .btn-primary,
+.modal-actions .btn-secondary {
+  flex: 1;
+
+  height: 50px;
+}
+.modal-etapa .form-group {
+  margin-top: 20px;
+}
+
+.modal-etapa .form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #34495e;
+}
+
+.modal-etapa .form-group select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 15px;
+  background: #fff;
+  transition: 0.25s;
+}
+
+.modal-etapa .form-group select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
