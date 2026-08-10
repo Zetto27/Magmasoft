@@ -27,6 +27,11 @@
         return "TR-" + String(id).padStart(3, "0");
       }
     </script>
+    <script>
+      if (localStorage.getItem("sidebarCollapsed") === "true") {
+        document.documentElement.classList.add("sidebar-precollapsed");
+      }
+    </script>
   </head>
 
   <body>

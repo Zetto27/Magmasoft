@@ -411,10 +411,10 @@ HEADER
 }
 
 .header-info h1 {
-  font-size: 34px;
-  font-weight: 700;
-  color: #0f172a;
   margin: 0;
+  font-size: 38px;
+  font-weight: 700;
+  color: #173f7a;
 }
 
 .header-info p {
@@ -559,9 +559,9 @@ TABLA MODERNA
 
 .panel-info h2 {
   margin: 0;
-  font-size: 30px;
-  color: #111827;
+  font-size: 38px;
   font-weight: 700;
+  color: #173f7a;
 }
 
 .panel-meta {

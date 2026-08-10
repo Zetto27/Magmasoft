@@ -16,6 +16,11 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
+    <script>
+      if (localStorage.getItem("sidebarCollapsed") === "true") {
+        document.documentElement.classList.add("sidebar-precollapsed");
+      }
+    </script>
   </head>
 
   <body>
@@ -26,17 +31,349 @@
         <%- include('partials/topbar') %>
 
         <div class="dashboard-scroll">
-          <section class="dashboard-header">
-            <h2>Reportes</h2>
-            <p>Consulta reportes y estadísticas del sistema</p>
+          <section class="reportes-header">
+            <div>
+              <h2>Reportes</h2>
+
+              <p>
+                Consulta y analiza las órdenes de trabajo <%= rol ===
+                "Administrador" ? "de toda la empresa" : "asignadas a ti" %>.
+              </p>
+            </div>
           </section>
 
-          <section class="map-card">
-            <h3>Contenido de Reportes</h3>
+          <!-- ==========================================
+                REPORTE DE ÓRDENES
+            =========================================== -->
+
+          <section class="reporte-card">
+            <div class="reporte-card-header">
+              <div>
+                <h3>
+                  <i class="fas fa-clipboard-list"></i>
+                  Órdenes de Trabajo
+                </h3>
+
+                <p>Listado de órdenes disponibles.</p>
+              </div>
+
+              <div class="reporte-total">
+                <span>Total</span>
+
+                <strong>
+                  <%= reporteOrdenes.length %>
+                </strong>
+              </div>
+            </div>
+
+            <!-- ==========================================
+                FILTROS
+            =========================================== -->
+
+            <div class="reporte-filtros">
+              <div class="filtro-grupo">
+                <label for="buscarReporte">Buscar</label>
+
+                <div class="filtro-input">
+                  <i class="fas fa-search"></i>
+
+                  <input
+                    type="text"
+                    id="buscarReporte"
+                    placeholder="Código, cliente..."
+                  />
+                </div>
+              </div>
+
+              <div class="filtro-grupo">
+                <label for="filtroEstado">Estado</label>
+
+                <select id="filtroEstado">
+                  <option value="">Todos los estados</option>
+
+                  <option value="Pendiente">Pendiente</option>
+
+                  <option value="En proceso">En proceso</option>
+
+                  <option value="Entregado">Entregado</option>
+                </select>
+              </div>
+
+              <% if (rol === "Administrador") { %>
+
+              <div class="filtro-grupo">
+                <label for="filtroOperario">Operario</label>
+
+                <select id="filtroOperario">
+                  <option value="">Todos los operarios</option>
+
+                  <% const operariosReporte = [ ...new Map( reporteOrdenes
+                  .filter(item => item.operario) .map(item => [ item.operario,
+                  item.operario ]) ).values() ]; %> <%
+                  operariosReporte.forEach(operario => { %>
+
+                  <option value="<%= operario %>"><%= operario %></option>
+
+                  <% }) %>
+                </select>
+              </div>
+
+              <% } %>
+            </div>
+
+            <!-- ==========================================
+                TABLA
+            =========================================== -->
+
+            <div class="reporte-tabla-container">
+              <table class="reporte-tabla">
+                <thead>
+                  <tr>
+                    <th>Código</th>
+
+                    <th>Cliente</th>
+
+                    <th>Tipo de lente</th>
+
+                    <th>Estado</th>
+
+                    <th>Etapa</th>
+
+                    <th>Operario</th>
+
+                    <th>Creación</th>
+
+                    <th>Entrega</th>
+                  </tr>
+                </thead>
+
+                <tbody id="tablaReportes">
+                  <% if (reporteOrdenes.length > 0) { %> <%
+                  reporteOrdenes.forEach(item => { %>
+
+                  <tr
+                    data-estado="<%= item.estado %>"
+                    data-operario="<%= item.operario || '' %>"
+                  >
+                    <td>
+                      <strong class="reporte-codigo"><%= item.codigo %></strong>
+                    </td>
+
+                    <td>
+                      <span class="reporte-cliente">
+                        <%= item.cliente_nombre %>
+                      </span>
+                    </td>
+
+                    <td>
+                      <%= item.tipo_lente %>
+                    </td>
+
+                    <td>
+                      <% if (item.estado === "Pendiente") { %>
+
+                      <span class="reporte-badge pendiente">Pendiente</span>
+
+                      <% } else if (item.estado === "En proceso") { %>
+
+                      <span class="reporte-badge proceso">En proceso</span>
+
+                      <% } else if (item.estado === "Entregado") { %>
+
+                      <span class="reporte-badge entregado">Entregado</span>
+
+                      <% } else { %>
+
+                      <span class="reporte-badge"><%= item.estado %></span>
+
+                      <% } %>
+                    </td>
+
+                    <td>
+                      <%= item.etapa_actual || "Sin etapa" %>
+                    </td>
+
+                    <td>
+                      <%= item.operario || "Sin asignar" %>
+                    </td>
+
+                    <td>
+                      <%= item.fecha_creacion
+                  ? new Date(item.fecha_creacion)
+                    .toLocaleDateString("es-CO")
+                  : "-"
+                %>
+                    </td>
+
+                    <td>
+                      <%= item.fecha_estimada_entrega
+                  ? new Date(item.fecha_estimada_entrega)
+                    .toLocaleDateString("es-CO")
+                  : "Sin fecha"
+                %>
+                    </td>
+                  </tr>
+
+                  <% }) %>
+
+                  <% } else { %>
+
+                  <tr>
+                    <td colspan="8" class="reporte-tabla-vacia">
+                      <i class="fas fa-folder-open"></i>
+
+                      <span>No hay órdenes para mostrar.</span>
+                    </td>
+                  </tr>
+
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          </section>
+          <!-- ==========================================
+                  GRÁFICAS DE PRODUCCIÓN
+             =========================================== -->
+
+          <section class="reportes-graficas-grid">
+            <!-- ========================================
+                PRODUCCIÓN POR ETAPA
+            ========================================= -->
+
+            <div class="reporte-card reporte-grafica-card">
+              <div class="reporte-card-header">
+                <div>
+                  <h3>
+                    <i class="fas fa-chart-bar"></i>
+                    Producción por etapa
+                  </h3>
+
+                  <p>Distribución de órdenes según su etapa actual.</p>
+                </div>
+              </div>
+
+              <div class="grafica-container">
+                <canvas id="graficaProduccionEtapa"></canvas>
+              </div>
+            </div>
+
+            <!-- ========================================
+                TRABAJOS POR OPERARIO
+            ========================================= -->
+
+            <div class="reporte-card reporte-grafica-card">
+              <div class="reporte-card-header">
+                <div>
+                  <h3>
+                    <i class="fas fa-user-cog"></i>
+                    Trabajos por operario
+                  </h3>
+
+                  <p>Cantidad de órdenes asignadas por operario.</p>
+                </div>
+              </div>
+
+              <div class="grafica-container">
+                <canvas id="graficaTrabajosOperario"></canvas>
+              </div>
+            </div>
+          </section>
+          <!-- ==========================================
+     INDICADORES DE RENDIMIENTO
+=========================================== -->
+
+          <section class="reporte-card indicadores-card">
+            <div class="reporte-card-header">
+              <div>
+                <h3>
+                  <i class="fas fa-chart-line"></i>
+                  Indicadores de rendimiento
+                </h3>
+
+                <p>Resumen del estado actual de las órdenes.</p>
+              </div>
+            </div>
+
+            <div class="indicadores-grid">
+              <!-- TOTAL -->
+
+              <div class="indicador-item">
+                <div class="indicador-icono azul">
+                  <i class="fas fa-clipboard-list"></i>
+                </div>
+
+                <div class="indicador-info">
+                  <span>Total de órdenes</span>
+
+                  <strong>
+                    <%= indicadoresRendimiento.total %>
+                  </strong>
+                </div>
+              </div>
+
+              <!-- ENTREGADAS -->
+
+              <div class="indicador-item">
+                <div class="indicador-icono verde">
+                  <i class="fas fa-check-circle"></i>
+                </div>
+
+                <div class="indicador-info">
+                  <span>Entregadas</span>
+
+                  <strong>
+                    <%= indicadoresRendimiento.entregadas %>
+                  </strong>
+                </div>
+              </div>
+
+              <!-- PRODUCCIÓN -->
+
+              <div class="indicador-item">
+                <div class="indicador-icono naranja">
+                  <i class="fas fa-cog"></i>
+                </div>
+
+                <div class="indicador-info">
+                  <span>En producción</span>
+
+                  <strong>
+                    <%= indicadoresRendimiento.produccion %>
+                  </strong>
+                </div>
+              </div>
+
+              <!-- PENDIENTES -->
+
+              <div class="indicador-item">
+                <div class="indicador-icono morado">
+                  <i class="fas fa-clock"></i>
+                </div>
+
+                <div class="indicador-info">
+                  <span>Pendientes</span>
+
+                  <strong>
+                    <%= indicadoresRendimiento.pendientes %>
+                  </strong>
+                </div>
+              </div>
+            </div>
           </section>
         </div>
       </main>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+      window.produccionPorEtapa =
+        <%- JSON.stringify(produccionPorEtapa) %>;
+
+      window.trabajosPorOperario =
+        <%- JSON.stringify(trabajosPorOperario) %>;
+    </script>
+
+    <script src="/resources/js/reportes.js"></script>
 
     <%- include('partials/scripts') %>
   </body>

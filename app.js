@@ -499,13 +499,267 @@ app.get("/users", (req, res) => {
   );
 });
 
-app.get("/reportes", (req, res) => {
-  if (!req.session.loggedin) return res.redirect("/login");
+app.get("/reportes", async (req, res) => {
+  if (!req.session.loggedin) {
+    return res.redirect("/login");
+  }
 
-  res.render("reportes", {
-    user: req.session.user,
-    page: "reportes",
-  });
+  try {
+    const [usuario] = await queryDB(
+      `
+      SELECT
+        u.id,
+        u.user,
+        u.rol_id,
+        r.nombre AS rol
+      FROM users u
+      INNER JOIN roles r
+        ON u.rol_id = r.id
+      WHERE u.id = ?
+    `,
+      [req.session.user_id],
+    );
+
+    let reporteOrdenes;
+
+    if (usuario.rol === "Administrador") {
+      reporteOrdenes = await queryDB(`
+    SELECT
+      t.id,
+      t.codigo,
+      t.cliente_nombre,
+      t.tipo_lente,
+      t.estado,
+      ep.nombre AS etapa_actual,
+      u.user AS operario,
+      t.fecha_creacion,
+      t.fecha_estimada_entrega
+    FROM trabajos t
+
+    LEFT JOIN etapas_proceso ep
+      ON t.etapa_actual_id = ep.id
+
+    LEFT JOIN users u
+      ON t.operario_actual_id = u.id
+
+    ORDER BY t.fecha_creacion DESC
+  `);
+    } else {
+      reporteOrdenes = await queryDB(
+        `
+    SELECT
+      t.id,
+      t.codigo,
+      t.cliente_nombre,
+      t.tipo_lente,
+      t.estado,
+      ep.nombre AS etapa_actual,
+      u.user AS operario,
+      t.fecha_creacion,
+      t.fecha_estimada_entrega
+    FROM trabajos t
+
+    LEFT JOIN etapas_proceso ep
+      ON t.etapa_actual_id = ep.id
+
+    LEFT JOIN users u
+      ON t.operario_actual_id = u.id
+
+    WHERE t.operario_actual_id = ?
+
+    ORDER BY t.fecha_creacion DESC
+  `,
+        [req.session.user_id],
+      );
+    }
+
+    // ==========================================
+    // PRODUCCIÓN POR ETAPA
+    // ==========================================
+
+    let produccionPorEtapa;
+
+    if (req.session.rol_id == 1) {
+      // Administrador: todas las órdenes
+      produccionPorEtapa = await queryDB(`
+    SELECT
+      ep.nombre AS etapa,
+      COUNT(t.id) AS cantidad
+    FROM etapas_proceso ep
+    LEFT JOIN trabajos t
+      ON t.etapa_actual_id = ep.id
+    GROUP BY
+      ep.id,
+      ep.nombre,
+      ep.orden_etapa
+    ORDER BY ep.orden_etapa
+  `);
+    } else {
+      // Operario: solamente sus órdenes
+      produccionPorEtapa = await queryDB(
+        `
+    SELECT
+      ep.nombre AS etapa,
+      COUNT(t.id) AS cantidad
+    FROM etapas_proceso ep
+    LEFT JOIN trabajos t
+      ON t.etapa_actual_id = ep.id
+      AND t.operario_actual_id = ?
+    GROUP BY
+      ep.id,
+      ep.nombre,
+      ep.orden_etapa
+    ORDER BY ep.orden_etapa
+  `,
+        [req.session.user_id],
+      );
+    }
+
+    // ==========================================
+    // ÓRDENES POR OPERARIO
+    // ==========================================
+
+    let trabajosPorOperario;
+
+    if (req.session.rol_id == 1) {
+      // Administrador: puede ver todos los operarios
+      trabajosPorOperario = await queryDB(`
+    SELECT
+      COALESCE(u.user, 'Sin asignar') AS operario,
+      COUNT(t.id) AS cantidad
+    FROM trabajos t
+    LEFT JOIN users u
+      ON t.operario_actual_id = u.id
+    GROUP BY
+      t.operario_actual_id,
+      u.user
+    ORDER BY cantidad DESC
+  `);
+    } else {
+      // Operario: solamente sus propias órdenes
+      trabajosPorOperario = await queryDB(
+        `
+    SELECT
+      COALESCE(u.user, 'Sin asignar') AS operario,
+      COUNT(t.id) AS cantidad
+    FROM trabajos t
+    LEFT JOIN users u
+      ON t.operario_actual_id = u.id
+    WHERE t.operario_actual_id = ?
+    GROUP BY
+      t.operario_actual_id,
+      u.user
+    ORDER BY cantidad DESC
+  `,
+        [req.session.user_id],
+      );
+    }
+    // ==========================================
+    // INDICADORES DE RENDIMIENTO
+    // ==========================================
+
+    let indicadoresRendimiento;
+
+    if (usuario.rol === "Administrador") {
+      // ========================================
+      // ADMINISTRADOR
+      // ========================================
+
+      const [totalOrdenes] = await queryDB(`
+    SELECT COUNT(*) AS total
+    FROM trabajos
+  `);
+
+      const [ordenesEntregadas] = await queryDB(`
+    SELECT COUNT(*) AS total
+    FROM trabajos
+    WHERE estado = 'Entregado'
+  `);
+
+      const [ordenesProduccion] = await queryDB(`
+    SELECT COUNT(*) AS total
+    FROM trabajos
+    WHERE estado = 'En proceso'
+  `);
+
+      const [ordenesPendientes] = await queryDB(`
+    SELECT COUNT(*) AS total
+    FROM trabajos
+    WHERE estado = 'Pendiente'
+  `);
+
+      indicadoresRendimiento = {
+        total: totalOrdenes.total,
+        entregadas: ordenesEntregadas.total,
+        produccion: ordenesProduccion.total,
+        pendientes: ordenesPendientes.total,
+      };
+    } else {
+      // ========================================
+      // OPERARIO
+      // ========================================
+
+      const [totalOrdenes] = await queryDB(
+        `
+    SELECT COUNT(*) AS total
+    FROM trabajos
+    WHERE operario_actual_id = ?
+    `,
+        [usuario.id],
+      );
+
+      const [ordenesEntregadas] = await queryDB(
+        `
+    SELECT COUNT(*) AS total
+    FROM trabajos
+    WHERE operario_actual_id = ?
+      AND estado = 'Entregado'
+    `,
+        [usuario.id],
+      );
+
+      const [ordenesProduccion] = await queryDB(
+        `
+    SELECT COUNT(*) AS total
+    FROM trabajos
+    WHERE operario_actual_id = ?
+      AND estado = 'En proceso'
+    `,
+        [usuario.id],
+      );
+
+      const [ordenesPendientes] = await queryDB(
+        `
+    SELECT COUNT(*) AS total
+    FROM trabajos
+    WHERE operario_actual_id = ?
+      AND estado = 'Pendiente'
+    `,
+        [usuario.id],
+      );
+
+      indicadoresRendimiento = {
+        total: totalOrdenes.total,
+        entregadas: ordenesEntregadas.total,
+        produccion: ordenesProduccion.total,
+        pendientes: ordenesPendientes.total,
+      };
+    }
+
+    res.render("reportes", {
+      user: req.session.user,
+      rol_id: usuario.rol_id,
+      rol: usuario.rol,
+      page: "reportes",
+      reporteOrdenes,
+      produccionPorEtapa,
+      trabajosPorOperario,
+      indicadoresRendimiento,
+    });
+  } catch (error) {
+    console.error("Error cargando Reportes:", error);
+    res.status(500).send("Error al cargar Reportes");
+  }
 });
 
 app.get("/mensajes", (req, res) => {

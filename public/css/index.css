@@ -89,137 +89,299 @@ h1 span {
   background: #f7f9fc;
 }
 
-/* =========================
+/* ==================================================
    SIDEBAR
-========================= */
+================================================== */
+
 .sidebar {
-  width: 280px;
-  min-width: 280px;
-  max-width: 280px;
+  width: 260px;
+  min-width: 260px;
+  max-width: 260px;
+
   height: 100vh;
 
-  background: #fff;
+  background: #ffffff;
+
   border-right: 1px solid #edf0f6;
-  padding: 20px;
+
+  padding: 18px 14px;
 
   display: flex;
   flex-direction: column;
 
   overflow: hidden;
-  transition: width 0.35s ease;
-}
-
-/* COLAPSADO */
-.dashboard-layout.collapsed .sidebar,
-.sidebar-collapsed .dashboard-layout .sidebar {
-  width: 95px;
-  min-width: 95px;
-  max-width: 95px;
-}
-
-/* TOP SIDEBAR */
-.sidebar-top {
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 25px;
-}
-
-/* TOGGLE */
-.toggle-btn {
-  width: 48px;
-  height: 48px;
-  border: none;
-  border-radius: 14px;
-  background: #f3f6fb;
-  cursor: pointer;
-  color: #153d7a;
-  font-size: 18px;
-}
-
-/* LOGO */
-.dashboard-layout.collapsed .sidebar-logo img {
-  width: 45px;
-}
-
-/* NAV */
-.sidebar-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  flex: 1;
-}
-
-.sidebar-nav a,
-.logout-btn {
-  width: 100%;
-  text-decoration: none;
-  color: #53627c;
-  padding: 14px 18px;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  font-weight: 500;
 
   transition:
-    background-color 0.25s ease,
-    color 0.25s ease;
+    width 0.3s ease,
+    min-width 0.3s ease,
+    max-width 0.3s ease,
+    padding 0.3s ease;
 }
 
-.sidebar-nav a:hover,
-.sidebar-nav a.active {
-  background: #edf4ff;
-  color: #2563eb;
-}
-
-.sidebar-nav i,
-.logout-btn i {
-  min-width: 20px;
-}
-
-/* TEXTO COLAPSADO */
-.sidebar span {
-  white-space: nowrap;
-  overflow: hidden;
-  opacity: 1;
-  transition: opacity 0.15s ease 0.2s;
-}
-
-.dashboard-layout.collapsed .sidebar span {
-  width: 0;
-  opacity: 0;
-  transition: opacity 0.05s;
-}
-
-/* =========================
+/* ==================================================
    SIDEBAR COLAPSADO
-========================= */
+================================================== */
 
-.dashboard-layout.collapsed .sidebar-nav a,
-.dashboard-layout.collapsed .logout-btn {
-  justify-content: center;
-  padding: 14px 0;
+.dashboard-layout.collapsed .sidebar {
+  width: 82px;
+  min-width: 82px;
+  max-width: 82px;
+
+  padding: 18px 10px;
+}
+
+/* ==================================================
+   PARTE SUPERIOR
+================================================== */
+
+.sidebar-top {
+  display: flex;
+  align-items: center;
+
+  justify-content: flex-start;
+
+  margin-bottom: 22px;
+
+  min-height: 46px;
 }
 
 .dashboard-layout.collapsed .sidebar-top {
   justify-content: center;
 }
 
-.dashboard-layout.collapsed .toggle-btn {
-  margin: 0 auto;
+/* ==================================================
+   BOTÓN TOGGLE
+================================================== */
+
+.toggle-btn {
+  width: 42px;
+  height: 42px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #f5f7fb;
+
+  color: #153d7a;
+
+  font-size: 16px;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.toggle-btn:hover {
+  background: #edf4ff;
+  color: #2563eb;
+}
+
+.toggle-btn:active {
+  transform: scale(0.95);
+}
+
+/* ==================================================
+   LOGO
+================================================== */
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 22px;
+
+  overflow: hidden;
+}
+
+.sidebar-logo img {
+  width: 150px;
+  height: auto;
+
+  object-fit: contain;
+
+  transition:
+    width 0.3s ease,
+    opacity 0.2s ease;
+}
+
+.dashboard-layout.collapsed .sidebar-logo {
+  justify-content: center;
+}
+
+.dashboard-layout.collapsed .sidebar-logo img {
+  width: 42px;
+}
+
+/* ==================================================
+   NAVEGACIÓN
+================================================== */
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+
+  flex: 1;
+
+  overflow: hidden;
+}
+
+/* ==================================================
+   LINKS
+================================================== */
+
+.sidebar-nav a,
+.logout-btn {
+  width: 100%;
+  min-height: 46px;
+
+  text-decoration: none;
+
+  color: #53627c;
+
+  padding: 10px 12px;
+
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  white-space: nowrap;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    padding 0.3s ease;
+}
+
+/* ==================================================
+   HOVER / ACTIVO
+================================================== */
+
+.sidebar-nav a:hover {
+  background: #f5f8fd;
+  color: #2563eb;
+}
+
+.sidebar-nav a.active {
+  background: #edf4ff;
+  color: #2563eb;
+
+  font-weight: 600;
+}
+
+/* ==================================================
+   ICONOS
+================================================== */
+
+.sidebar-nav i,
+.logout-btn i {
+  width: 22px;
+  min-width: 22px;
+
+  text-align: center;
+
+  font-size: 16px;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+/* ==================================================
+   TEXTO
+================================================== */
+
+.sidebar span {
+  display: inline-block;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  opacity: 1;
+
+  width: auto;
+
+  transition:
+    opacity 0.15s ease,
+    width 0.3s ease;
+}
+
+/* ==================================================
+   TEXTO CUANDO ESTÁ COLAPSADO
+================================================== */
+
+.dashboard-layout.collapsed .sidebar span {
+  width: 0;
+
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+/* ==================================================
+   SIDEBAR COLAPSADO
+================================================== */
+
+.dashboard-layout.collapsed .sidebar-nav a,
+.dashboard-layout.collapsed .logout-btn {
+  justify-content: center;
+
+  padding-left: 0;
+  padding-right: 0;
+
+  gap: 0;
 }
 
 .dashboard-layout.collapsed .sidebar-nav i,
 .dashboard-layout.collapsed .logout-btn i {
-  min-width: 0;
-  width: 24px;
-  text-align: center;
+  width: 22px;
+  min-width: 22px;
+
   margin: 0;
 }
 
+/* ==================================================
+   LOGOUT
+================================================== */
+
 .logout-btn {
-  color: #ef4444;
   margin-top: auto;
+
+  color: #ef4444;
+
+  border: none;
+
+  background: transparent;
+
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background: #fff1f2;
+  color: #dc2626;
+}
+
+/* ==================================================
+   EVITAR DESBORDAMIENTO
+================================================== */
+
+.sidebar * {
+  box-sizing: border-box;
 }
 
 /* =========================
@@ -243,36 +405,72 @@ h1 span {
 .topbar {
   display: flex;
   justify-content: flex-end;
-  padding: 20px 40px;
+  padding: 10px 40px;
   background: #f7f9fc;
   z-index: 20;
 }
 
-/* =========================
+//* =========================
    USER BADGE
 ========================= */
+
 .user-badge {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+
   background: #fff;
-  padding: 10px 18px;
-  border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+
+  padding: 7px 13px;
+
+  border-radius: 12px;
+
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.04);
 }
 
+/* FOTO */
+
 .user-badge img {
-  width: 42px;
-  height: 42px;
+  width: 34px;
+  height: 34px;
+
   border-radius: 50%;
+
   object-fit: cover;
 }
 
-.user-badge span {
-  font-weight: 600;
-  color: #153d7a;
+/* INFORMACIÓN */
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
 }
 
+/* NOMBRE */
+
+.user-name {
+  font-size: 13px;
+  font-weight: 600;
+
+  color: #153d7a;
+
+  line-height: 1.2;
+}
+
+/* ROL */
+
+.user-role {
+  margin-top: 2px;
+
+  font-size: 10px;
+  font-weight: 500;
+
+  color: #9ca3af;
+
+  line-height: 1.2;
+}
 /* =========================
    SCROLL INTERNO MODULOS
 ========================= */
@@ -294,8 +492,10 @@ h1 span {
 }
 
 .dashboard-header h2 {
-  font-size: 42px;
-  color: #153d7a;
+  margin: 0;
+  font-size: 38px;
+  font-weight: 700;
+  color: #173f7a;
 }
 
 .dashboard-header p {
@@ -386,4 +586,35 @@ h1 span {
   border-radius: 18px;
   padding: 25px;
   margin-bottom: 24px;
+}
+/* ==================================================
+   PREVENIR PARPADEO DEL SIDEBAR
+================================================== */
+
+html.sidebar-precollapsed .sidebar {
+  width: 82px;
+  min-width: 82px;
+  max-width: 82px;
+
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+html.sidebar-precollapsed .sidebar span {
+  width: 0;
+  opacity: 0;
+}
+
+html.sidebar-precollapsed .sidebar-nav a,
+html.sidebar-precollapsed .logout-btn {
+  justify-content: center;
+
+  padding-left: 0;
+  padding-right: 0;
+
+  gap: 0;
+}
+
+html.sidebar-precollapsed .sidebar-top {
+  justify-content: center;
 }

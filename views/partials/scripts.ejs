@@ -4,13 +4,15 @@
 
     if (!layout) return;
 
-    // Restaurar estado del menú
-    if (localStorage.getItem("sidebarCollapsed") === "true") {
+    const collapsed = localStorage.getItem("sidebarCollapsed") === "true";
+
+    if (collapsed) {
       layout.classList.add("collapsed");
     }
+
+    document.documentElement.classList.remove("sidebar-precollapsed");
   });
 
-  // Función global para el botón del menú
   window.toggleSidebar = function () {
     const layout = document.querySelector(".dashboard-layout");
 
@@ -24,3 +26,4 @@
     );
   };
 </script>
+|
