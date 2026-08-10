@@ -19,27 +19,22 @@ const flujoProduccion = {
     siguiente: 4,
     textoBoton: "Iniciar Pulido",
   },
-
   4: {
     siguiente: 5,
     textoBoton: "Iniciar Control de Calidad",
   },
-
   5: {
     siguiente: 6,
     textoBoton: "Iniciar Ensamble",
   },
-
   6: {
     siguiente: 7,
     textoBoton: "Marcar como listo para entrega",
   },
-
   7: {
     siguiente: 8,
     textoBoton: "Confirmar entrega al cliente",
   },
-
   8: {
     siguiente: null,
     textoBoton: "Orden finalizada",
@@ -48,17 +43,12 @@ const flujoProduccion = {
 
 // Función para filtrar los trabajos en la tabla
 const buscadorTrabajo = document.getElementById("buscarTrabajo");
-
 buscadorTrabajo.addEventListener("keyup", function () {
   const texto = this.value.toLowerCase();
-
   const filas = document.querySelectorAll("tbody .fila-trabajo");
-
   let encontrados = 0;
-
   filas.forEach((fila) => {
     const contenido = fila.textContent.toLowerCase();
-
     if (contenido.includes(texto)) {
       fila.style.display = "";
       encontrados++;
@@ -68,27 +58,22 @@ buscadorTrabajo.addEventListener("keyup", function () {
   });
 
   const mensaje = document.getElementById("sinTrabajos");
-
   if (encontrados === 0) {
     mensaje.style.display = "";
   } else {
     mensaje.style.display = "none";
   }
 });
-
 // Función para seleccionar un trabajo y mostrar sus detalles
 let trabajoSeleccionado = null;
 function seleccionarTrabajo(fila) {
   document
     .querySelectorAll(".fila-trabajo")
     .forEach((f) => f.classList.remove("fila-seleccionada"));
-
   fila.classList.add("fila-seleccionada");
-
   trabajoSeleccionado = fila.dataset;
   // Guardar la última orden seleccionada
   localStorage.setItem("trabajoSeleccionado", fila.dataset.id);
-
   actualizarPanelMaestro(fila);
   cargarHistorial(fila.dataset.id);
   cargarComentarios(fila.dataset.id);
@@ -98,7 +83,6 @@ function seleccionarTrabajo(fila) {
 
 function actualizarPanelMaestro(fila) {
   document.getElementById("pmCodigo").textContent = fila.dataset.codigo;
-
   document.getElementById("btnEditarTrabajo").href =
     "/trabajos/edit/" + fila.dataset.id;
   document.getElementById("pmCliente").textContent = fila.dataset.cliente;
