@@ -125,6 +125,7 @@
                     type="text"
                     name="user"
                     placeholder="Nombre completo"
+                    autocomplete="new-password"
                     required
                   />
 
@@ -234,6 +235,7 @@
     <%- include('partials/scripts') %>
     <script>
       function abrirModalRegistro() {
+        document.querySelector("#registerModal form").reset();
         document.getElementById("registerModal").style.display = "flex";
       }
 
