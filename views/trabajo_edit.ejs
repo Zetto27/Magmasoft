@@ -1,3 +1,40 @@
+<!--
+==================================================================
+MÓDULO: EDICIÓN DE TRABAJOS
+
+PROYECTO:
+MagmaSoft
+
+DESCRIPCIÓN:
+Vista encargada de la actualización de la información
+de una orden de producción previamente registrada.
+
+CASO DE USO RELACIONADO:
+CU-04 Editar Trabajo
+
+HISTORIA DE USUARIO:
+Como administrador,
+quiero editar la información de una orden de producción,
+para mantener actualizados los datos del cliente,
+la fórmula óptica y las características del trabajo.
+
+ARTEFACTOS RELACIONADOS:
+- Diagrama de Casos de Uso
+- Diagrama de Clases
+- Historias de Usuario
+- Prototipos de Interfaz
+- Modelo de Datos
+- Plan de Trabajo del Proyecto
+
+TECNOLOGÍAS UTILIZADAS:
+- HTML5
+- CSS3
+- EJS
+- Node.js
+- Express
+==================================================================
+-->
+
 <!DOCTYPE html>
 <html lang="es">
   <head>
@@ -5,28 +42,54 @@
 
     <title>Editar Trabajo</title>
 
-    <link rel="stylesheet" href="/resources/css/index.css" />
-    <link rel="stylesheet" href="/resources/components/botones.css" />
-    <link rel="stylesheet" href="/resources/components/formularios.css" />
-    <link rel="stylesheet" href="/resources/css/trabajos.css" />
+    <!-- =========================================
+         HOJAS DE ESTILO DEL MÓDULO
+    ========================================== -->
+
+    /resources/css/index.css
+    /resources/components/botones.css
+    /resources/components/formularios.css
+    /resources/css/trabajos.css
   </head>
 
   <body>
     <div class="dashboard-layout">
-        <div class="dashboard-scroll">
-          <section class="dashboard-header">
-            <h2>Editar Trabajo</h2>
+      <div class="dashboard-scroll">
 
-            <p><%= trabajo.codigo %></p>
-          </section>
+        <!-- =========================================
+             ENCABEZADO DEL MÓDULO
 
-          <section class="map-card">
-            <form action="/trabajos/update/<%= trabajo.id %>" method="POST">
-              <%- include('partials/formulario_trabajo') %>
-            </form>
-          </section>
-        </div>
-      </main>
+             Muestra la información principal
+             de la orden que será editada.
+        ========================================== -->
+
+        <section class="dashboard-header">
+          <h2>Editar Trabajo</h2>
+
+          <p><%= trabajo.codigo %></p>
+        </section>
+
+        <!-- =========================================
+             FORMULARIO DE ACTUALIZACIÓN
+
+             Permite modificar la información
+             registrada previamente para una orden.
+
+             Caso de Uso:
+             Actualizar información de trabajo.
+        ========================================== -->
+
+        <section class="map-card">
+          /trabajos/update/<%= trabajo.id %> method="POST">
+
+            <!-- Formulario reutilizable de captura
+                 de información del trabajo -->
+            <%- include('partials/formulario_trabajo') %>
+
+          </form>
+        </section>
+
+      </div>
     </div>
   </body>
 </html>
