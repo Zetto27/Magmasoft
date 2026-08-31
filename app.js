@@ -33,7 +33,6 @@ app.use(
 const connection = require("./Database/db");
 const trabajosRoutes = require("./routes/trabajos");
 const estadoRoutes = require("./routes/estado");
-const e = require("express");
 
 // 9 Rutas
 
@@ -55,7 +54,7 @@ app.post("/register", async (req, res) => {
   const celular = req.body.celular;
   const pass = req.body.pass;
 
-  let passwordHash = await bcryptjs.hash(pass, 8);
+  const passwordHash = await bcryptjs.hash(pass, 8);
 
   connection.query(
     "INSERT INTO users SET ?",
@@ -229,7 +228,7 @@ app.post("/auth", async (req, res) => {
         }
 
         if (
-          results.length == 0 ||
+          results.length === 0 ||
           !(await bcryptjs.compare(pass, results[0].pass))
         ) {
           return res.render("login", {
@@ -250,7 +249,7 @@ app.post("/auth", async (req, res) => {
         return res.render("login", {
           alert: true,
           alertTitle: "Conexión exitosa",
-          alertMessage: "¡Bienvenido " + results[0].user,
+          alertMessage: `¡Bienvenido ${results[0].user}!`,
           alertIcon: "success",
           showConfirmButton: false,
           timer: 1500,
