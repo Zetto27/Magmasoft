@@ -1,7 +1,50 @@
+<!--
+==================================================================
+COMPONENTE: BARRA SUPERIOR (TOPBAR)
+
+PROYECTO:
+MagmaSoft
+
+DESCRIPCIÓN:
+Componente reutilizable encargado de mostrar
+la información del usuario autenticado dentro
+de la aplicación.
+
+FUNCIONALIDADES:
+- Mostrar el usuario activo.
+- Mantener identidad visual del sistema.
+- Complementar la navegación principal.
+
+CASOS DE USO RELACIONADOS:
+- CU-01 Iniciar Sesión.
+- CU-02 Gestionar Usuarios.
+- CU-03 Gestionar Trabajos.
+- CU-04 Consultar Reportes.
+
+ARTEFACTOS RELACIONADOS:
+- Historias de Usuario.
+- Casos de Uso.
+- Prototipos de Interfaz.
+- Diseño de Navegación.
+
+==================================================================
+-->
+
+<!-- ==========================================
+     BARRA SUPERIOR DEL SISTEMA
+     Contiene la información del usuario actualmente autenticado.
+========================================== -->
+
 <header class="topbar">
+  <!-- ==========================================
+       INFORMACIÓN DEL USUARIO
+       Muestra el avatar y nombre de la sesión activa.
+  ========================================== -->
   <div class="user-badge">
+    <!-- Imagen de perfil por defecto -->
     <img src="/resources/css/img/user.png" alt="Usuario" />
     <div class="user-info">
+      <!-- Nombre recuperado desde la sesión -->
       <span class="user-name"><%= user %></span>
     </div>
   </div>
