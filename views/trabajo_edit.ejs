@@ -46,16 +46,15 @@ TECNOLOGÍAS UTILIZADAS:
          HOJAS DE ESTILO DEL MÓDULO
     ========================================== -->
 
-    /resources/css/index.css
-    /resources/components/botones.css
-    /resources/components/formularios.css
-    /resources/css/trabajos.css
+    <link rel="stylesheet" href="/resources/css/index.css" />
+    <link rel="stylesheet" href="/resources/components/botones.css" />
+    <link rel="stylesheet" href="/resources/components/formularios.css" />
+    <link rel="stylesheet" href="/resources/css/trabajos.css" />
   </head>
 
   <body>
     <div class="dashboard-layout">
       <div class="dashboard-scroll">
-
         <!-- =========================================
              ENCABEZADO DEL MÓDULO
 
@@ -80,15 +79,12 @@ TECNOLOGÍAS UTILIZADAS:
         ========================================== -->
 
         <section class="map-card">
-          /trabajos/update/<%= trabajo.id %> method="POST">
-
+          <form action="/trabajos/update/<%= trabajo.id %>" method="POST">
             <!-- Formulario reutilizable de captura
                  de información del trabajo -->
             <%- include('partials/formulario_trabajo') %>
-
           </form>
         </section>
-
       </div>
     </div>
   </body>
