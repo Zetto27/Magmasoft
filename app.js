@@ -35,7 +35,6 @@ const estadoRoutes = require("./routes/estado");
 
 // Rutas de autenticación
 app.use("/", authRoutes);
-
 // Rutas para la gestión de usuarios
 app.use("/", usuariosRoutes);
 
