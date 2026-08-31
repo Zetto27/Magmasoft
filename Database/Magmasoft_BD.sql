@@ -1,13 +1,5 @@
 USE Magmasoft;
 
-CREATE TABLE `roles` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(30) NOT NULL,
-  `descripcion` varchar(150) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `nombre` (`nombre`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
 CREATE TABLE `users` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user` varchar(45) NOT NULL,
@@ -22,32 +14,16 @@ CREATE TABLE `users` (
   UNIQUE KEY `user_UNIQUE` (`user`),
   KEY `fk_users_roles` (`rol_id`),
   CONSTRAINT `fk_users_roles` FOREIGN KEY (`rol_id`) REFERENCES `roles` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE `opticas` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(100) NOT NULL,
-  `direccion` varchar(200) DEFAULT NULL,
-  `telefono` varchar(20) DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE `etapas_proceso` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(50) NOT NULL,
-  `orden_etapa` int NOT NULL,
-  `tiempo_estandar_minutos` int DEFAULT NULL,
-  `color` varchar(20) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `chk_tiempo_estandar` CHECK ((`tiempo_estandar_minutos` > 0))
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `trabajos` (
   `id` int NOT NULL AUTO_INCREMENT,
   `codigo` varchar(20) NOT NULL,
   `cliente_nombre` varchar(100) NOT NULL,
+  `cliente_documento` varchar(20) DEFAULT NULL,
   `cliente_telefono` varchar(20) DEFAULT NULL,
+  `cliente_direccion` varchar(200) DEFAULT NULL,
+  `cliente_correo` varchar(200) DEFAULT NULL,
   `optica_id` int NOT NULL,
   `tipo_lente` varchar(50) NOT NULL,
   `tratamiento` varchar(50) DEFAULT NULL,
@@ -65,9 +41,12 @@ CREATE TABLE `trabajos` (
   `etapa_actual_id` int DEFAULT '1',
   `estado` enum('Pendiente','En proceso','Retrasado','Finalizado','Entregado') DEFAULT 'Pendiente',
   `operario_actual_id` int DEFAULT NULL,
+  `fecha_inicio_produccion` datetime DEFAULT NULL,
+  `fecha_fin_produccion` datetime DEFAULT NULL,
   `fecha_creacion` datetime DEFAULT CURRENT_TIMESTAMP,
   `fecha_estimada_entrega` datetime DEFAULT NULL,
   `fecha_entrega` datetime DEFAULT NULL,
+  `fecha_entrega_real` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `codigo` (`codigo`),
   KEY `fk_etapa_actual` (`etapa_actual_id`),
@@ -78,8 +57,40 @@ CREATE TABLE `trabajos` (
   CONSTRAINT `fk_trabajos_optica` FOREIGN KEY (`optica_id`) REFERENCES `opticas` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `chk_eje_od` CHECK (((`eje_od` is null) or (`eje_od` between 0 and 180))),
   CONSTRAINT `chk_eje_oi` CHECK (((`eje_oi` is null) or (`eje_oi` between 0 and 180)))
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+CREATE TABLE `roles` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(30) NOT NULL,
+  `descripcion` varchar(150) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `nombre` (`nombre`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+CREATE TABLE `opticas` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) NOT NULL,
+  `direccion` varchar(200) DEFAULT NULL,
+  `telefono` varchar(20) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+CREATE TABLE `historial_trabajos` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `trabajo_id` int NOT NULL,
+  `usuario_id` int NOT NULL,
+  `accion` varchar(100) NOT NULL,
+  `detalle` text,
+  `fecha` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_historial_trabajos_trabajo` (`trabajo_id`),
+  KEY `fk_historial_trabajos_usuario` (`usuario_id`),
+  CONSTRAINT `fk_historial_trabajos_trabajo` FOREIGN KEY (`trabajo_id`) REFERENCES `trabajos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_historial_trabajos_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=177 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `historial_etapas` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -96,7 +107,17 @@ CREATE TABLE `historial_etapas` (
   CONSTRAINT `historial_etapas_ibfk_1` FOREIGN KEY (`trabajo_id`) REFERENCES `trabajos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `historial_etapas_ibfk_2` FOREIGN KEY (`etapa_id`) REFERENCES `etapas_proceso` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `historial_etapas_ibfk_3` FOREIGN KEY (`usuario_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=132 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `etapas_proceso` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(50) NOT NULL,
+  `orden_etapa` int NOT NULL,
+  `tiempo_estandar_minutos` int DEFAULT NULL,
+  `color` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `chk_tiempo_estandar` CHECK ((`tiempo_estandar_minutos` > 0))
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `comentarios_trabajo` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -112,6 +133,22 @@ CREATE TABLE `comentarios_trabajo` (
   CONSTRAINT `comentarios_trabajo_ibfk_1` FOREIGN KEY (`trabajo_id`) REFERENCES `trabajos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `comentarios_trabajo_ibfk_2` FOREIGN KEY (`usuario_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `comentarios_trabajo_ibfk_3` FOREIGN KEY (`etapa_id`) REFERENCES `etapas_proceso` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `asignaciones_trabajo` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `trabajo_id` int NOT NULL,
+  `etapa_id` int NOT NULL,
+  `usuario_id` int NOT NULL,
+  `fecha_asignacion` datetime DEFAULT CURRENT_TIMESTAMP,
+  `fecha_finalizacion` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `trabajo_id` (`trabajo_id`),
+  KEY `etapa_id` (`etapa_id`),
+  KEY `usuario_id` (`usuario_id`),
+  CONSTRAINT `asignaciones_trabajo_ibfk_1` FOREIGN KEY (`trabajo_id`) REFERENCES `trabajos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `asignaciones_trabajo_ibfk_2` FOREIGN KEY (`etapa_id`) REFERENCES `etapas_proceso` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `asignaciones_trabajo_ibfk_3` FOREIGN KEY (`usuario_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `archivos_trabajo` (
@@ -132,80 +169,44 @@ CREATE TABLE `archivos_trabajo` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
-CREATE TABLE asignaciones_trabajo (
-
-    id INT AUTO_INCREMENT PRIMARY KEY,
-
-    trabajo_id INT NOT NULL,
-
-    etapa_id INT NOT NULL,
-
-    usuario_id INT NOT NULL,
-
-    fecha_asignacion DATETIME DEFAULT CURRENT_TIMESTAMP,
-
-    fecha_finalizacion DATETIME NULL,
-
-    FOREIGN KEY (trabajo_id)
-        REFERENCES trabajos(id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-
-    FOREIGN KEY (etapa_id)
-        REFERENCES etapas_proceso(id)
-        ON DELETE RESTRICT
-        ON UPDATE CASCADE,
-
-    FOREIGN KEY (usuario_id)
-        REFERENCES users(id)
-        ON DELETE RESTRICT
-        ON UPDATE CASCADE
-
-);
-
-ALTER TABLE trabajos
-ADD COLUMN fecha_inicio_produccion DATETIME NULL AFTER operario_actual_id,
-ADD COLUMN fecha_fin_produccion DATETIME NULL AFTER fecha_inicio_produccion;
-
-CREATE TABLE historial_trabajos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-
-    trabajo_id INT NOT NULL,
-
-    usuario_id INT NOT NULL,
-
-    accion VARCHAR(100) NOT NULL,
-
-    detalle TEXT,
-
-    fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT fk_historial_trabajos_trabajo
-        FOREIGN KEY (trabajo_id)
-        REFERENCES trabajos(id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-
-    CONSTRAINT fk_historial_trabajos_usuario
-        FOREIGN KEY (usuario_id)
-        REFERENCES users(id)
-        ON DELETE RESTRICT
-        ON UPDATE CASCADE
-);
-
-INSERT INTO roles (nombre, descripcion) VALUES
-('Administrador', 'Control total del sistema'),
-('Supervisor', 'Supervisa el proceso de producción'),
-('Operario', 'Realiza las etapas del laboratorio');
-
-
-
 -- Vistas 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `magmasoft`.`vista_trabajos_completa` AS select `t`.`id` AS `id`,`t`.`codigo` AS `codigo`,`t`.`cliente_nombre` AS `cliente_nombre`,`t`.`cliente_telefono` AS `cliente_telefono`,`o`.`nombre` AS `optica_nombre`,`t`.`tipo_lente` AS `tipo_lente`,`t`.`tratamiento` AS `tratamiento`,`t`.`color` AS `color`,`t`.`material` AS `material`,`t`.`esfera_od` AS `esfera_od`,`t`.`cilindro_od` AS `cilindro_od`,`t`.`eje_od` AS `eje_od`,`t`.`esfera_oi` AS `esfera_oi`,`t`.`cilindro_oi` AS `cilindro_oi`,`t`.`eje_oi` AS `eje_oi`,`t`.`adicion_val` AS `adicion_val`,`t`.`dp` AS `dp`,`t`.`estado` AS `estado`,`t`.`etapa_actual_id` AS `etapa_actual_id`,`ep`.`nombre` AS `etapa_actual`,`u`.`user` AS `operario_nombre`,`t`.`fecha_creacion` AS `fecha_creacion`,`t`.`fecha_estimada_entrega` AS `fecha_estimada_entrega`,`t`.`fecha_entrega` AS `fecha_entrega`,`t`.`observaciones` AS `observaciones` from (((`magmasoft`.`trabajos` `t` left join `magmasoft`.`opticas` `o` on((`t`.`optica_id` = `o`.`id`))) left join `magmasoft`.`etapas_proceso` `ep` on((`t`.`etapa_actual_id` = `ep`.`id`))) left join `magmasoft`.`users` `u` on((`t`.`operario_actual_id` = `u`.`id`)));
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` 
+SQL SECURITY DEFINER VIEW `magmasoft`.`vista_trabajos_completa` 
+AS select 
+`t`.`id` AS `id`,
+`t`.`codigo` AS `codigo`,
+`t`.`cliente_nombre` AS `cliente_nombre`,
+`t`.`cliente_documento` AS `cliente_documento`,
+`t`.`cliente_telefono` AS `cliente_telefono`,
+`t`.`cliente_direccion` AS `cliente_direccion`,
+`t`.`cliente_correo` AS `cliente_correo`,
+`t`.`optica_id` AS `optica_id`,
+`o`.`nombre` AS `optica_nombre`,
+`t`.`tipo_lente` AS `tipo_lente`,
+`t`.`tratamiento` AS `tratamiento`,
+`t`.`color` AS `color`,
+`t`.`material` AS `material`,
+`t`.`esfera_od` AS `esfera_od`,
+`t`.`cilindro_od` AS `cilindro_od`,
+`t`.`eje_od` AS `eje_od`,
+`t`.`esfera_oi` AS `esfera_oi`,
+`t`.`cilindro_oi` AS `cilindro_oi`,
+`t`.`eje_oi` AS `eje_oi`,
+`t`.`adicion_val` AS `adicion_val`,
+`t`.`dp` AS `dp`,
+`t`.`estado` AS `estado`,
+`t`.`etapa_actual_id` AS `etapa_actual_id`,
+`ep`.`nombre` AS `etapa_actual`,
+`u`.`user` AS `operario_nombre`,
+`t`.`fecha_creacion` AS `fecha_creacion`,
+`t`.`fecha_estimada_entrega` AS `fecha_estimada_entrega`,
+`t`.`fecha_entrega` AS `fecha_entrega`,
+`t`.`observaciones` AS `observaciones` 
+from (((`magmasoft`.`trabajos` `t` left join `magmasoft`.
+`opticas` `o` on((`t`.
+`optica_id` = `o`.
+`id`))) left join `magmasoft`.`etapas_proceso` `ep` on((`t`.`etapa_actual_id` = `ep`.`id`))) left join `magmasoft`.`users` `u` on((`t`.`operario_actual_id` = `u`.`id`)));
 
 
-SELECT
-id,
-etapa_actual_id
-FROM trabajos
-WHERE id = 13;
+

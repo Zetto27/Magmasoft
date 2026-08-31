@@ -1,8 +1,42 @@
+<!--
+==================================================================
+MÓDULO: AUTENTICACIÓN DE USUARIOS
+
+PROYECTO:
+MagmaSoft
+
+DESCRIPCIÓN:
+Vista encargada de permitir el acceso de los usuarios
+al sistema mediante la validación de credenciales.
+
+CASO DE USO RELACIONADO:
+CU-01 Iniciar Sesión
+
+HISTORIA DE USUARIO:
+Como usuario del sistema,
+quiero autenticarme mediante mis credenciales
+para acceder a las funcionalidades de MagmaSoft
+según los permisos asignados.
+
+ARTEFACTOS RELACIONADOS:
+- Diagrama de Casos de Uso
+- Diagrama de Clases
+- Historias de Usuario
+- Prototipos de Interfaz
+- Modelo de Datos
+- Plan de Trabajo del Proyecto
+
+==================================================================
+-->
 <!doctype html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
     <title>MagmaSoft Login</title>
+
+    <!-- =========================================
+        HOJAS DE ESTILO DEL MÓDULO
+    ========================================== -->
 
     <link rel="stylesheet" href="resources/css/login.css" />
     <link
@@ -13,7 +47,11 @@
 
   <body>
     <div class="container">
-      <!-- PANEL IZQUIERDO -->
+      <!-- =========================================
+          PANEL INFORMATIVO
+          Presenta información descriptiva
+          del sistema MagmaSoft.
+      ========================================== -->
       <div class="left-panel">
         <img
           src="resources/css/img/Logo.png"
@@ -37,13 +75,18 @@
         </p>
       </div>
 
-      <!-- TARJETA LOGIN -->
+      <!-- =========================================
+        FORMULARIO DE AUTENTICACIÓN 
+        Permite validar las credenciales
+        de acceso del usuario.
+      ========================================== -->
       <div class="login-card">
         <div class="logo"></div>
 
         <h2>Inicio de sesión</h2>
 
         <form action="/auth" method="POST">
+          <!-- Campo de identificación -->
           <div class="input-group">
             <input
               type="text"
@@ -54,7 +97,7 @@
               required
             />
           </div>
-
+          <!-- Campo de contraseña -->
           <div class="input-group">
             <input
               type="password"
@@ -65,21 +108,22 @@
               required
             />
           </div>
-
-          <div class="options">
-            <label>
-              <input type="checkbox" />
-              Recordar sesión
-            </label>
-          </div>
-
+          <!-- Botón de autenticación -->
           <button type="submit" class="login-btn">Iniciar sesión</button>
         </form>
       </div>
     </div>
-
+    <!-- =========================================
+            LIBRERÍA SWEETALERT
+            Permite mostrar mensajes visuales
+            de éxito, error o advertencia.
+    ========================================== -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <!-- =========================================
+            MENSAJES DINÁMICOS DEL SISTEMA
+            Muestra alertas enviadas desde el
+            servidor luego de procesos de login.
+      ========================================== -->
     <% if (typeof alert !== "undefined") { %>
     <script>
       Swal.fire({

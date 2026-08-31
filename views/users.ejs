@@ -1,54 +1,130 @@
+<!--
+==================================================================
+MÓDULO: GESTIÓN DE USUARIOS
+
+PROYECTO:
+MagmaSoft
+
+DESCRIPCIÓN:
+Vista encargada de la administración de usuarios
+registrados en la plataforma.
+
+FUNCIONALIDADES:
+- Consultar usuarios registrados.
+- Crear nuevos usuarios.
+- Modificar información de usuarios.
+- Eliminar usuarios.
+- Buscar usuarios dinámicamente.
+
+CASO DE USO RELACIONADO:
+CU-02 Gestionar Usuarios
+
+HISTORIA DE USUARIO:
+Como administrador del sistema,
+quiero administrar los usuarios registrados
+para controlar el acceso y los permisos dentro
+de la plataforma.
+
+ARTEFACTOS DEL CICLO DE SOFTWARE RELACIONADOS:
+- Diagrama de Casos de Uso
+- Diagrama de Clases
+- Historias de Usuario
+- Prototipos de Interfaz
+- Modelo de Datos
+- Informe Técnico del Proyecto
+- Plan de Trabajo para Construcción del Software
+
+==================================================================
+-->
 <!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
+
+    <!-- Título de la página de gestión de usuarios -->
     <title>Usuarios</title>
-    <script></script>
+
+    <!--
+      Hoja de estilos principal y componentes reutilizables.
+      Estos recursos permiten mantener una interfaz consistente
+      en los diferentes módulos de MagmaSoft.
+    -->
     <link rel="stylesheet" href="/resources/css/index.css" />
     <link rel="stylesheet" href="/resources/components/botones.css" />
     <link rel="stylesheet" href="/resources/components/formularios.css" />
     <link rel="stylesheet" href="/resources/components/tablas.css" />
     <link rel="stylesheet" href="/resources/components/badges.css" />
     <link rel="stylesheet" href="/resources/css/trabajos.css" />
+
+    <!-- Biblioteca de iconos utilizada en la interfaz -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
+
+    <!-- Fuente utilizada por la interfaz del sistema -->
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+
+    <!--
+      Recupera el estado del menú lateral almacenado en localStorage.
+      Esto permite conservar la preferencia visual del usuario
+      cuando navega entre las diferentes vistas.
+    -->
     <script>
       if (localStorage.getItem("sidebarCollapsed") === "true") {
         document.documentElement.classList.add("sidebar-precollapsed");
       }
     </script>
   </head>
+
   <body>
     <div class="dashboard-layout">
-      <%- include('partials/sidebar') %>
+      <!-- Menú lateral principal del sistema -->
+      <%- include("partials/sidebar") %>
 
       <main class="dashboard-content">
-        <%- include('partials/topbar') %>
+        <!-- Barra superior del sistema -->
+        <%- include("partials/topbar") %>
 
         <div class="dashboard-scroll">
+          <!--
+            Encabezado del módulo.
+            Este módulo permite administrar los usuarios registrados
+            en el sistema MagmaSoft.
+          -->
           <section class="dashboard-header">
             <h2>Usuarios</h2>
             <p>Gestión de usuarios del sistema</p>
           </section>
 
           <section class="map-card">
-            <!-- Tcodigo para esta seccion -->
+            <!-- ==========================================
+                BARRA DE HERRAMIENTAS
+            ========================================== -->
 
             <div class="trabajos-toolbar">
+              <!--
+                Campo de búsqueda.
+                La búsqueda se realiza en el navegador mediante JavaScript
+                sin necesidad de realizar nuevas consultas a la base de datos.
+              -->
               <div class="search-box">
                 <i class="fas fa-search"></i>
+
                 <input
                   type="text"
                   id="buscarUsuario"
                   placeholder="Buscar usuario..."
                 />
               </div>
+
+              <!--
+                Botón para abrir el formulario de creación
+                de un nuevo usuario.
+              -->
               <button class="btn-primary" onclick="abrirModalRegistro()">
                 <i class="fas fa-plus"></i>
                 Nuevo Usuario
@@ -57,10 +133,13 @@
 
             <br />
 
+            <!-- ==========================================
+                 TABLA DE USUARIOS
+                 ========================================== -->
+
             <table class="trabajos-table">
               <thead>
                 <tr>
-                  <!-- <th>ID</th> -->
                   <th>Usuario</th>
                   <th>Rol</th>
                   <th>Documento</th>
@@ -71,28 +150,63 @@
               </thead>
 
               <tbody>
+                <!--
+                  Mensaje mostrado cuando el buscador
+                  no encuentra coincidencias.
+                -->
                 <tr id="sinResultados" style="display: none">
-                  <td colspan="7" style="text-align: center; padding: 30px">
+                  <td colspan="6" style="text-align: center; padding: 30px">
                     No se encontraron usuarios
                   </td>
                 </tr>
+
+                <!--
+                  EJS recorre la colección "usuarios" enviada
+                  desde el servidor y genera una fila por cada registro.
+
+                  Los datos utilizados en esta vista provienen
+                  de la consulta realizada en la ruta /users.
+                -->
                 <% usuarios.forEach(usuario => { %>
 
                 <tr class="fila-usuario">
-                  <!-- <td><%= usuario.id %></td> -->
+                  <!-- Nombre del usuario -->
+                  <td>
+                    <%= usuario.user %>
+                  </td>
 
-                  <td><%= usuario.user %></td>
+                  <!-- Rol asignado al usuario -->
+                  <td>
+                    <%= usuario.rol %>
+                  </td>
 
-                  <td><%= usuario.rol%></td>
+                  <!-- Documento de identificación -->
+                  <td>
+                    <%= usuario.document %>
+                  </td>
 
-                  <td><%= usuario.document %></td>
+                  <!-- Correo electrónico -->
+                  <td>
+                    <%= usuario.email %>
+                  </td>
 
-                  <td><%= usuario.email %></td>
+                  <!-- Número de celular -->
+                  <td>
+                    <%= usuario.celular %>
+                  </td>
 
-                  <td><%= usuario.celular %></td>
+                  <!-- ==========================================
+                         ACCIONES DEL USUARIO
+                         ========================================== -->
+
                   <td class="actions">
+                    <!--
+                        Abre el formulario de edición y envía
+                        los datos actuales del usuario.
+                      -->
                     <i
                       class="fas fa-pen"
+                      title="Editar usuario"
                       onclick="
                         editarUsuario(
                           '<%= usuario.id %>',
@@ -104,8 +218,14 @@
                         )
                       "
                     ></i>
+
+                    <!--
+                        Solicita confirmación antes de eliminar
+                        el usuario seleccionado.
+                      -->
                     <i
                       class="fas fa-trash"
+                      title="Eliminar usuario"
                       onclick="eliminarUsuario('<%= usuario.id %>')"
                     ></i>
                   </td>
@@ -114,13 +234,23 @@
                 <% }) %>
               </tbody>
             </table>
-            <!-- MODAL NUEVO USUARIO -->
+
+            <!-- ==========================================
+                 MODAL PARA CREAR USUARIO
+                 ========================================== -->
 
             <div id="registerModal" class="modal">
               <div class="modal-content">
                 <h3>Nuevo Usuario</h3>
 
+                <!--
+                  Formulario utilizado para registrar un nuevo usuario.
+
+                  La información es enviada mediante POST a:
+                  /users/create
+                -->
                 <form action="/users/create" method="POST">
+                  <!-- Nombre completo -->
                   <input
                     type="text"
                     name="user"
@@ -129,6 +259,7 @@
                     required
                   />
 
+                  <!-- Rol del usuario -->
                   <select name="rol_id" required>
                     <option value="">Seleccione un rol</option>
                     <option value="1">Administrador</option>
@@ -136,6 +267,7 @@
                     <option value="3">Operario</option>
                   </select>
 
+                  <!-- Documento -->
                   <input
                     type="text"
                     name="document"
@@ -143,6 +275,7 @@
                     required
                   />
 
+                  <!-- Correo -->
                   <input
                     type="email"
                     name="email"
@@ -150,6 +283,7 @@
                     required
                   />
 
+                  <!-- Celular -->
                   <input
                     type="text"
                     name="celular"
@@ -157,6 +291,7 @@
                     required
                   />
 
+                  <!-- Contraseña -->
                   <input
                     type="password"
                     name="pass"
@@ -164,6 +299,7 @@
                     required
                   />
 
+                  <!-- Botones del formulario -->
                   <div class="modal-buttons">
                     <button type="submit" class="btn-primary">Guardar</button>
 
@@ -178,19 +314,31 @@
                 </form>
               </div>
             </div>
+
+            <!-- ==========================================
+                 MODAL PARA EDITAR USUARIO
+                 ========================================== -->
+
             <div id="editModal" class="modal">
               <div class="modal-content">
                 <h3>Editar Usuario</h3>
 
+                <!--
+                  El atributo action se establece dinámicamente
+                  mediante JavaScript según el usuario seleccionado.
+                -->
                 <form id="editForm" method="POST">
+                  <!-- Nombre -->
                   <input id="editUser" type="text" name="user" required />
 
+                  <!-- Rol -->
                   <select id="editRol" name="rol_id" required>
                     <option value="1">Administrador</option>
                     <option value="2">Supervisor</option>
                     <option value="3">Operario</option>
                   </select>
 
+                  <!-- Documento -->
                   <input
                     id="editDocument"
                     type="text"
@@ -198,9 +346,17 @@
                     required
                   />
 
+                  <!-- Correo -->
                   <input id="editEmail" type="email" name="email" required />
 
+                  <!-- Celular -->
                   <input id="editCelular" type="text" name="celular" required />
+
+                  <!--
+                    Contraseña opcional.
+                    Si el campo queda vacío, el controlador
+                    puede conservar la contraseña existente.
+                  -->
                   <small>
                     Deja este campo vacío si no deseas cambiar la contraseña
                   </small>
@@ -212,6 +368,7 @@
                     placeholder="Nueva contraseña"
                   />
 
+                  <!-- Botones -->
                   <div class="modal-buttons">
                     <button type="submit" class="btn-primary">
                       Actualizar
@@ -232,18 +389,52 @@
         </div>
       </main>
     </div>
-    <%- include('partials/scripts') %>
+
+    <!-- Scripts comunes utilizados por el sistema -->
+    <%- include("partials/scripts") %>
+
+    <!-- ==========================================
+         GESTIÓN DEL MODAL DE REGISTRO
+         ========================================== -->
+
     <script>
+      /**
+       * Abre el modal utilizado para registrar
+       * un nuevo usuario.
+       *
+       * Antes de mostrar el formulario se limpian
+       * todos sus campos.
+       */
       function abrirModalRegistro() {
         document.querySelector("#registerModal form").reset();
+
         document.getElementById("registerModal").style.display = "flex";
       }
 
+      /**
+       * Cierra el modal de registro de usuarios.
+       */
       function cerrarModalRegistro() {
         document.getElementById("registerModal").style.display = "none";
       }
     </script>
+
+    <!-- ==========================================
+         GESTIÓN DEL MODAL DE EDICIÓN
+         ========================================== -->
+
     <script>
+      /**
+       * Abre el formulario de edición y carga
+       * la información del usuario seleccionado.
+       *
+       * @param {number|string} id - Identificador del usuario.
+       * @param {string} user - Nombre del usuario.
+       * @param {number|string} rol_id - Identificador del rol.
+       * @param {string} documento - Documento del usuario.
+       * @param {string} email - Correo electrónico.
+       * @param {string} celular - Número de celular.
+       */
       function editarUsuario(id, user, rol_id, documento, email, celular) {
         document.getElementById("editUser").value = user;
 
@@ -255,16 +446,34 @@
 
         document.getElementById("editCelular").value = celular;
 
+        /*
+          Construye dinámicamente la ruta utilizada
+          para actualizar el usuario seleccionado.
+        */
         document.getElementById("editForm").action = "/users/update/" + id;
 
         document.getElementById("editModal").style.display = "flex";
       }
 
+      /**
+       * Cierra el modal utilizado para editar usuarios.
+       */
       function cerrarModalEditar() {
         document.getElementById("editModal").style.display = "none";
       }
     </script>
+
+    <!-- ==========================================
+         ELIMINACIÓN DE USUARIOS
+         ========================================== -->
+
     <script>
+      /**
+       * Solicita confirmación antes de eliminar
+       * un usuario del sistema.
+       *
+       * @param {number|string} id - Identificador del usuario.
+       */
       function eliminarUsuario(id) {
         Swal.fire({
           title: "¿Eliminar usuario?",
@@ -276,33 +485,63 @@
           confirmButtonText: "Eliminar",
           cancelButtonText: "Cancelar",
         }).then((result) => {
+          /*
+            Solo se ejecuta la eliminación cuando
+            el usuario confirma la operación.
+          */
           if (result.isConfirmed) {
             window.location.href = "/users/delete/" + id;
           }
         });
       }
     </script>
+
+    <!-- ==========================================
+         BÚSQUEDA DINÁMICA DE USUARIOS
+         ========================================== -->
+
     <script>
+      /*
+        Referencia al campo de búsqueda.
+      */
       const buscador = document.getElementById("buscarUsuario");
 
+      /*
+        Escucha los cambios realizados por el usuario
+        mientras escribe en el campo de búsqueda.
+      */
       buscador.addEventListener("keyup", function () {
+        // Convierte el texto introducido a minúsculas.
         const texto = this.value.toLowerCase();
 
+        // Obtiene todas las filas de usuarios.
         const filas = document.querySelectorAll(".fila-usuario");
 
+        // Contador de coincidencias encontradas.
         let encontrados = 0;
 
+        /*
+          Recorre cada fila y comprueba si su contenido
+          coincide con el texto buscado.
+        */
         filas.forEach((fila) => {
           const contenido = fila.textContent.toLowerCase();
 
           if (contenido.includes(texto)) {
+            // Muestra la fila cuando existe coincidencia.
             fila.style.display = "";
+
             encontrados++;
           } else {
+            // Oculta la fila cuando no existe coincidencia.
             fila.style.display = "none";
           }
         });
 
+        /*
+          Obtiene el mensaje que informa al usuario
+          cuando no existen resultados.
+        */
         const mensaje = document.getElementById("sinResultados");
 
         if (encontrados === 0) {
@@ -312,6 +551,8 @@
         }
       });
     </script>
+
+    <!-- Biblioteca para ventanas de confirmación y alertas -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </body>
 </html>

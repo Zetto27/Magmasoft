@@ -1,9 +1,44 @@
+<!--
+==================================================================
+MÓDULO: EDICIÓN DE TRABAJOS
+
+PROYECTO:
+MagmaSoft
+
+DESCRIPCIÓN:
+Vista encargada de la actualización de la información
+de una orden de producción previamente registrada.
+
+CASO DE USO RELACIONADO:
+CU-04 Editar Trabajo
+
+HISTORIA DE USUARIO:
+Como administrador,
+quiero editar la información de una orden de producción,
+para mantener actualizados los datos del cliente,
+la fórmula óptica y las características del trabajo.
+
+ARTEFACTOS RELACIONADOS:
+- Diagrama de Casos de Uso
+- Diagrama de Clases
+- Historias de Usuario
+- Prototipos de Interfaz
+- Modelo de Datos
+- Plan de Trabajo del Proyecto
+
+==================================================================
+-->
+
 <!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
 
     <title>Editar Trabajo</title>
+
+    <!-- =========================================
+         HOJAS DE ESTILO DEL MÓDULO
+    ========================================== -->
 
     <link rel="stylesheet" href="/resources/css/index.css" />
     <link rel="stylesheet" href="/resources/components/botones.css" />
@@ -13,20 +48,38 @@
 
   <body>
     <div class="dashboard-layout">
-        <div class="dashboard-scroll">
-          <section class="dashboard-header">
-            <h2>Editar Trabajo</h2>
+      <div class="dashboard-scroll">
+        <!-- =========================================
+             ENCABEZADO DEL MÓDULO
 
-            <p><%= trabajo.codigo %></p>
-          </section>
+             Muestra la información principal
+             de la orden que será editada.
+        ========================================== -->
 
-          <section class="map-card">
-            <form action="/trabajos/update/<%= trabajo.id %>" method="POST">
-              <%- include('partials/formulario_trabajo') %>
-            </form>
-          </section>
-        </div>
-      </main>
+        <section class="dashboard-header">
+          <h2>Editar Trabajo</h2>
+
+          <p><%= trabajo.codigo %></p>
+        </section>
+
+        <!-- =========================================
+             FORMULARIO DE ACTUALIZACIÓN
+
+             Permite modificar la información
+             registrada previamente para una orden.
+
+             Caso de Uso:
+             Actualizar información de trabajo.
+        ========================================== -->
+
+        <section class="map-card">
+          <form action="/trabajos/update/<%= trabajo.id %>" method="POST">
+            <!-- Formulario reutilizable de captura
+                 de información del trabajo -->
+            <%- include('partials/formulario_trabajo') %>
+          </form>
+        </section>
+      </div>
     </div>
   </body>
 </html>

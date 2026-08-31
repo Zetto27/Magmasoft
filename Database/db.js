@@ -25,5 +25,12 @@ connection.connect((error) => {
 
   console.log("Conexión a la base de datos establecida correctamente.");
 });
+console.log("DB_HOST:", process.env.DB_HOST);
+2;
+console.log("DB_USER:", process.env.DB_USER);
+3;
+console.log("PASSWORD:", process.env.PASSWORD);
+4;
+console.log("DB_NAME:", process.env.DB_NAME);
 
 module.exports = connection;
