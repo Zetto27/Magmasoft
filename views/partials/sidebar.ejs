@@ -1,11 +1,50 @@
+<!--
+==================================================================
+COMPONENTE: MENÚ LATERAL DE NAVEGACIÓN (SIDEBAR)
+
+PROYECTO:
+MagmaSoft
+
+DESCRIPCIÓN:
+Componente reutilizable encargado de la navegación
+principal del sistema.
+
+FUNCIONALIDADES:
+- Acceso al Dashboard.
+- Acceso al módulo de Trabajos.
+- Acceso al módulo de Usuarios.
+- Acceso al módulo de Reportes.
+- Cierre de sesión.
+
+CASOS DE USO RELACIONADOS:
+- CU-01 Iniciar Sesión.
+- CU-02 Gestionar Usuarios.
+- CU-03 Gestionar Trabajos.
+- CU-04 Consultar Reportes.
+- CU-05 Cerrar Sesión.
+
+ARTEFACTOS RELACIONADOS:
+- Diagrama de Casos de Uso.
+- Prototipo de Navegación.
+- Diseño de Interfaz.
+- Historias de Usuario.
+==================================================================
+-->
 <aside class="sidebar">
+  <!-- ==========================================
+    BOTÓN DE COLAPSO DEL MENÚ
+    Permite expandir o contraer el panel lateral para optimizar el espacio disponible en pantalla.
+  ========================================== -->
   <div class="sidebar-top">
     <button class="toggle-btn" onclick="toggleSidebar()">
       <i class="fas fa-bars"></i>
     </button>
   </div>
-
+  <!-- ==========================================
+    MENÚ PRINCIPAL DE NAVEGACIÓN
+  ========================================== -->
   <nav class="sidebar-nav">
+    <!-- Dashboard -->
     <a href="/" class="nav-link <%= page === 'dashboard' ? 'active' : '' %>">
       <i class="fas fa-chart-pie"></i>
       <span>Dashboard</span>
@@ -40,7 +79,10 @@
       <span>Configuración</span>
     </a> -->
   </nav>
-
+  <!-- ==========================================
+    CIERRE DE SESIÓN
+    Finaliza la sesión activa del usuario y redirige al módulo de autenticación.
+  ========================================== -->
   <a href="/logout" class="logout-btn nav-link">
     <i class="fas fa-sign-out-alt"></i>
     <span>Salir</span>

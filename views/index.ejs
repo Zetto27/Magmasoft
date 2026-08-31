@@ -1,35 +1,70 @@
+<!--
+==================================================================
+MÓDULO: ACCESO AL SISTEMA
+
+PROYECTO:
+MagmaSoft
+
+DESCRIPCIÓN:
+Vista de bienvenida para usuarios no autenticados.
+Permite redirigir al proceso de inicio de sesión
+del sistema.
+
+CASO DE USO RELACIONADO:
+CU-01 Iniciar Sesión
+
+HISTORIA DE USUARIO:
+Como usuario del sistema,
+quiero acceder a una página de bienvenida
+que me permita ingresar a la plataforma
+mediante mis credenciales.
+
+ARTEFACTOS RELACIONADOS:
+- Diagrama de Casos de Uso
+- Historias de Usuario
+- Prototipos de Interfaz
+- Diseño de Navegación
+- Plan de Trabajo del Proyecto
+==================================================================
+-->
 <!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
     <title>MagmaSoft</title>
-
-    <link rel="stylesheet" href="/resources/css/index.css" />
-
+    <!-- =========================================
+         HOJA DE ESTILOS PRINCIPAL
+    ========================================== -->
+    <link rel="stylesheet" href="/resources/css/index.css">
+    <!-- Fuente tipográfica utilizada en la interfaz -->
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
   </head>
-
   <body>
+    <!-- =========================================
+         CONTENEDOR PRINCIPAL
+         Muestra la pantalla de bienvenida para
+         usuarios que aún no han iniciado sesión.
+    ========================================== -->
     <div class="logout-container">
       <div class="content">
+        <!-- Logo corporativo del sistema -->
         <img src="/resources/css/img/Logo.png" class="logo" />
-
+        <!-- Mensaje principal de bienvenida -->
         <h1>
           Bienvenido a
-
           <span>MagmaSoft</span>
         </h1>
-
         <div class="line"></div>
-
+        <!-- Mensaje informativo -->
         <p>Debe iniciar sesión para acceder</p>
-
+        <!-- Enlace al módulo de autenticación -->
         <a href="/login" class="login-link">Iniciar sesión</a>
       </div>
-
+      </div>
+      <!-- Imagen decorativa de la pantalla -->
       <img src="/resources/css/img/mountains.png" class="mountains" />
     </div>
   </body>

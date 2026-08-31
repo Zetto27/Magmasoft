@@ -1,4 +1,32 @@
+<!--
+==========================================================
+GESTIÓN DEL MENÚ LATERAL (SIDEBAR)
+
+DESCRIPCIÓN:
+Este script administra el comportamiento del menú
+lateral de navegación del sistema.
+
+FUNCIONALIDADES:
+- Recuperar el estado del menú almacenado.
+- Mantener la preferencia del usuario.
+- Expandir o contraer el menú lateral.
+- Mejorar la experiencia de navegación.
+
+MÓDULO RELACIONADO:
+Navegación Principal del Sistema.
+
+==========================================================
+-->
+
 <script>
+  /**
+   * Inicializa el estado visual del menú lateral
+   * cuando la página termina de cargarse.
+   *
+   * Recupera la preferencia almacenada en localStorage
+   * para mantener la consistencia de la interfaz
+   * entre las diferentes vistas del sistema.
+   */
   document.addEventListener("DOMContentLoaded", () => {
     const layout = document.querySelector(".dashboard-layout");
 
@@ -6,13 +34,22 @@
 
     const collapsed = localStorage.getItem("sidebarCollapsed") === "true";
 
+    // Aplica el estado almacenado previamente.
     if (collapsed) {
       layout.classList.add("collapsed");
     }
 
+    // Elimina la clase temporal utilizada durante la carga.
     document.documentElement.classList.remove("sidebar-precollapsed");
   });
 
+  /**
+   * Alterna el estado del menú lateral.
+   *
+   * Esta función permite expandir o contraer
+   * la barra de navegación principal y almacena
+   * la preferencia del usuario para futuras sesiones.
+   */
   window.toggleSidebar = function () {
     const layout = document.querySelector(".dashboard-layout");
 
@@ -20,6 +57,7 @@
 
     layout.classList.toggle("collapsed");
 
+    // Guarda el estado actual del menú lateral.
     localStorage.setItem(
       "sidebarCollapsed",
       layout.classList.contains("collapsed"),
