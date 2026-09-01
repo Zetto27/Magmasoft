@@ -1,3 +1,36 @@
+<!--
+==================================================================
+MÓDULO: REPORTES Y SEGUIMIENTO DE PRODUCCIÓN
+
+PROYECTO:
+MagmaSoft
+
+DESCRIPCIÓN:
+Vista encargada de la consulta, visualización y análisis
+de las órdenes de trabajo registradas en el sistema.
+Permite aplicar filtros, consultar indicadores de rendimiento
+y visualizar gráficas de producción por etapa y por operario.
+
+CASO DE USO RELACIONADO:
+CU-08 Generar Reportes de Producción
+
+HISTORIA DE USUARIO:
+Como administrador u operario,
+quiero consultar reportes e indicadores de producción,
+para realizar seguimiento al estado de las órdenes de trabajo
+y apoyar la toma de decisiones del proceso productivo.
+
+ARTEFACTOS RELACIONADOS:
+- Diagrama de Casos de Uso
+- Diagrama de Clases
+- Historias de Usuario
+- Prototipos de Interfaz
+- Modelo de Datos
+- Plan de Trabajo del Proyecto
+
+==================================================================
+-->
+
 <!DOCTYPE html>
 <html lang="es">
   <head>
@@ -121,16 +154,17 @@
               <% } %>
             </div>
 
-            <!-- ==========================================
+            <%#
+              ==========================================
                 TABLA
-            =========================================== -->
+            =========================================== 
+            %>
 
             <div class="reporte-tabla-container">
               <table class="reporte-tabla">
                 <thead>
                   <tr>
                     <th>Código</th>
-
                     <th>Cliente</th>
 
                     <th>Tipo de lente</th>
@@ -231,14 +265,16 @@
               </table>
             </div>
           </section>
-          <!-- ==========================================
-                  GRÁFICAS DE PRODUCCIÓN
-             =========================================== -->
+
+          <%# 
+            ==========================================
+            GRÁFICAS DE PRODUCCIÓN
+            =========================================== -
+          %>
 
           <section class="reportes-graficas-grid">
-            <!-- ========================================
-                PRODUCCIÓN POR ETAPA
-            ========================================= -->
+            <%# ================================== RODUCCIÓN POR ETAPA
+            ========================================= %>
 
             <div class="reporte-card reporte-grafica-card">
               <div class="reporte-card-header">
@@ -257,9 +293,11 @@
               </div>
             </div>
 
-            <!-- ========================================
-                TRABAJOS POR OPERARIO
-            ========================================= -->
+            <%#
+            ========================================
+              TRABAJOS POR OPERARIO
+            ========================================= 
+            %>
 
             <div class="reporte-card reporte-grafica-card">
               <div class="reporte-card-header">
@@ -278,9 +316,12 @@
               </div>
             </div>
           </section>
-          <!-- ==========================================
-     INDICADORES DE RENDIMIENTO
-=========================================== -->
+
+          <%#
+            ==========================================
+              INDICADORES DE RENDIMIENTO
+            =========================================== 
+          %>
 
           <section class="reporte-card indicadores-card">
             <div class="reporte-card-header">
@@ -295,7 +336,7 @@
             </div>
 
             <div class="indicadores-grid">
-              <!-- TOTAL -->
+              <%# TOTAL %>
 
               <div class="indicador-item">
                 <div class="indicador-icono azul">
@@ -311,7 +352,7 @@
                 </div>
               </div>
 
-              <!-- ENTREGADAS -->
+              <%# ENTREGADAS %>
 
               <div class="indicador-item">
                 <div class="indicador-icono verde">
@@ -327,7 +368,7 @@
                 </div>
               </div>
 
-              <!-- PRODUCCIÓN -->
+              <%# PRODUCCIÓN %>
 
               <div class="indicador-item">
                 <div class="indicador-icono naranja">
@@ -343,7 +384,7 @@
                 </div>
               </div>
 
-              <!-- PENDIENTES -->
+              <%# PENDIENTES %>
 
               <div class="indicador-item">
                 <div class="indicador-icono morado">

@@ -103,3 +103,54 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+// ==========================================
+// FILTRO DE REPORTES
+// ==========================================
+
+const buscarInput = document.getElementById("buscarReporte");
+const estadoSelect = document.getElementById("filtroEstado");
+const operarioSelect = document.getElementById("filtroOperario");
+
+function filtrarReportes() {
+  const textoBusqueda = buscarInput
+    ? buscarInput.value.toLowerCase().trim()
+    : "";
+
+  const estado = estadoSelect ? estadoSelect.value.toLowerCase() : "";
+
+  const operario = operarioSelect ? operarioSelect.value.toLowerCase() : "";
+
+  const filas = document.querySelectorAll("#tablaReportes tr");
+
+  filas.forEach((fila) => {
+    const codigo = fila.children[0]?.textContent.toLowerCase() || "";
+
+    const cliente = fila.children[1]?.textContent.toLowerCase() || "";
+
+    const estadoFila = fila.dataset.estado?.toLowerCase() || "";
+
+    const operarioFila = fila.dataset.operario?.toLowerCase() || "";
+
+    const coincideBusqueda =
+      codigo.includes(textoBusqueda) || cliente.includes(textoBusqueda);
+
+    const coincideEstado = !estado || estadoFila === estado;
+
+    const coincideOperario = !operario || operarioFila === operario;
+
+    fila.style.display =
+      coincideBusqueda && coincideEstado && coincideOperario ? "" : "none";
+  });
+}
+
+if (buscarInput) {
+  buscarInput.addEventListener("input", filtrarReportes);
+}
+
+if (estadoSelect) {
+  estadoSelect.addEventListener("change", filtrarReportes);
+}
+
+if (operarioSelect) {
+  operarioSelect.addEventListener("change", filtrarReportes);
+}
